@@ -12,7 +12,7 @@ This application connects to a Plex Media Server, imports movie and TV show libr
 - **Local network access** to Plex
 - OPTIONAL
    - **Fanart.tv API Key** [Get an API key](https://fanart.tv/get-an-api-key/)
-   - **ThePosterDB Credentials** [Create a free account][https://theposterdb.com/]
+   - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
 
 ## Getting Started
 1. Clone this repo: `git clone https://github.com/joemaddalone/vogon.git`
