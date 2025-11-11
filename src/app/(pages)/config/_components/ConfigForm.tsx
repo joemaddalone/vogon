@@ -3,7 +3,6 @@
 import { useState, useActionState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Field,
   FieldLabel,
@@ -14,6 +13,8 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Updateable } from "kysely";
 import { Configuration } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { ConfigField } from "./ConfigField";
 
 export default function ConfigForm({ config }: { config: Configuration }) {
 
@@ -22,7 +23,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
     text: string;
   } | null>(null);
 
-
+	const router = useRouter();
 	const [configData, formAction, pending] = useActionState(async (prev: Configuration | null, data: FormData) => {
 		const updateable: Updateable<Configuration> = {
 			plexServerUrl: data.get("plexServerUrl") as string | undefined,
@@ -33,20 +34,24 @@ export default function ConfigForm({ config }: { config: Configuration }) {
 			thePosterDbEmail: data.get("thePosterDbEmail") as string | undefined,
 			thePosterDbPassword: data.get("thePosterDbPassword") as string | undefined,
 		};
-		console.log(updateable);
 		const result = await api.config.save(updateable);
 		if(result.error) {
-			setMessage({
-				type: "error",
-				text: result.error.message,
-			});
+      setMessage({
+        type: "error",
+        text: result.error.message,
+      });
 			return prev;
 		}
 		setMessage({
 			type: "success",
 			text: "Configuration saved successfully",
 		});
-		return result.data as Configuration;
+		router.prefetch("/");
+		router.prefetch("/movie");
+		router.prefetch("/show");
+		router.prefetch("/import");
+		router.refresh();
+		return result.data;
 	}, config);
 
 
@@ -65,161 +70,70 @@ export default function ConfigForm({ config }: { config: Configuration }) {
 
       <form action={formAction}>
         <FieldGroup className="p-4">
-          {/* Plex Server URL */}
-          <Field>
-            <FieldLabel htmlFor="plexServerUrl">
-              Plex Server URL{" "}
-              <span className="text-xs text-muted-foreground">
-                env. PLEX_SERVER_URL
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="plexServerUrl"
-              type="text"
-              name="plexServerUrl"
-              defaultValue={configData?.plexServerUrl || ""}
-              placeholder="http://192.168.1.2:32400"
-              required
-            />
-            <FieldDescription>
-              Your Plex Media Server URL (usually local network IP with port
-              32400)
-            </FieldDescription>
-          </Field>
-
-          {/* Plex Token */}
-          <Field>
-            <FieldLabel htmlFor="plexToken">
-              Plex Token{" "}
-              <span className="text-xs text-muted-foreground">
-                env. PLEX_TOKEN
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="plexToken"
-              name="plexToken"
-              type="password"
-              defaultValue={configData?.plexToken || ""}
-              placeholder="Enter your Plex token"
-              required
-            />
-            <FieldDescription>
-              Your Plex authentication token.{" "}
-              <a
-                href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                How to find your token
-              </a>
-            </FieldDescription>
-          </Field>
-
-          {/* TMDB API Key */}
-          <Field>
-            <FieldLabel htmlFor="tmdbApiKey">
-              TMDB API Key{" "}
-              <span className="text-xs text-muted-foreground">
-                env. TMDB_API_KEY
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="tmdbApiKey"
-              name="tmdbApiKey"
-              type="password"
-              defaultValue={configData?.tmdbApiKey || ""}
-              placeholder="Enter your TMDB API key"
-              required
-            />
-            <FieldDescription>
-              The Movie Database (TMDB) API key for poster lookups.{" "}
-              <a
-                href="https://www.themoviedb.org/settings/api"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Get your API key
-              </a>
-            </FieldDescription>
-          </Field>
+          <ConfigField
+            configData={configData as Configuration}
+            label="Plex Server URL"
+            hint="env. PLEX_SERVER_URL"
+            dataKey="plexServerUrl"
+            placeholder="http://192.168.1.2:32400"
+            required
+          >
+            Your Plex Media Server URL (usually local network IP with port 32400)
+          </ConfigField>
+          <ConfigField
+            configData={configData as Configuration}
+            label="Plex Token"
+            hint="env. PLEX_TOKEN"
+            dataKey="plexToken"
+            placeholder="Enter your Plex token"
+            required
+          >
+            Your Plex authentication token. <a href='https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>How to find your token</a>
+          </ConfigField>
+          <ConfigField
+            configData={configData as Configuration}
+            label="TMDB API Key"
+            hint="env. TMDB_API_KEY"
+            dataKey="tmdbApiKey"
+            placeholder="Enter your TMDB API key"
+            required
+          >
+            The Movie Database (TMDB) API key for poster lookups. <a href='https://www.themoviedb.org/settings/api' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>Get your API key</a>
+          </ConfigField>
         </FieldGroup>
-        {/* Fanart API Key (Optional) */}
         <FieldGroup className="p-4 mt-5 bg-muted">
           <FieldLegend>Optional Fields</FieldLegend>
-          <Field>
-            <FieldLabel htmlFor="fanartApiKey">
-              Fanart.tv API Key (Optional){" "}
-              <span className="text-xs text-muted-foreground">
-                env. FANART_API_KEY
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="fanartApiKey"
-              name="fanartApiKey"
-              type="password"
-              defaultValue={configData?.fanartApiKey || ""}
-              placeholder="Enter your Fanart.tv API key (optional)"
-            />
-            <FieldDescription>
-              Optional: Fanart.tv API key for additional poster sources.{" "}
-              <a
-                href="https://fanart.tv/get-an-api-key/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Get your API key
-              </a>
-            </FieldDescription>
-          </Field>
-          {/* ThePosterDB Email */}
-          <Field>
-            <FieldLabel htmlFor="thePosterDbEmail">
-              ThePosterDB Email{" "}
-              <span className="text-xs text-muted-foreground">
-                env. THEPOSTERDB_EMAIL
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="thePosterDbEmail"
-              name="thePosterDbEmail"
-              type="email"
-              defaultValue={configData?.thePosterDbEmail || ""}
-              placeholder="Enter your ThePosterDB email"
-            />
-            <FieldDescription>
-              Your ThePosterDB email for poster lookups.
-            </FieldDescription>
-          </Field>
-          {/* ThePosterDB Password */}
-          <Field>
-            <FieldLabel htmlFor="thePosterDbPassword">
-              ThePosterDB Password{" "}
-              <span className="text-xs text-muted-foreground">
-                env. THEPOSTERDB_PASSWORD
-              </span>
-            </FieldLabel>
-            <Input
-              className="h-12 px-3 text-lg"
-              id="thePosterDbPassword"
-              name="thePosterDbPassword"
-              type="password"
-              defaultValue={configData?.thePosterDbPassword || ""}
-              placeholder="Enter your ThePosterDB password"
-            />
-            <FieldDescription>
-              Your ThePosterDB password for poster lookups.
-            </FieldDescription>
-          </Field>
-
-          {/* Remove Overlays Checkbox */}
+          <ConfigField
+            configData={configData as Configuration}
+            label="Fanart.tv API Key"
+            hint="env. FANART_API_KEY"
+            dataKey="fanartApiKey"
+            placeholder="Enter your Fanart.tv API key (optional)"
+            required={false}
+          >
+            Optional: Fanart.tv API key for additional poster sources. <a href='https://fanart.tv/get-an-api-key/' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>Get your API key</a>
+          </ConfigField>
+          <ConfigField
+            configData={configData as Configuration}
+            label="ThePosterDB Email"
+            hint="env. THEPOSTERDB_EMAIL"
+            dataKey="thePosterDbEmail"
+            placeholder="Enter your ThePosterDB email"
+            required={false}
+          >
+            Your ThePosterDB email for poster lookups.
+          </ConfigField>
+          <ConfigField
+            configData={configData as Configuration}
+            label="ThePosterDB Password"
+            hint="env. THEPOSTERDB_PASSWORD"
+            dataKey="thePosterDbPassword"
+            placeholder="Enter your ThePosterDB password"
+            type="password"
+            required={false}
+          >
+            Your ThePosterDB password for poster lookups.
+          </ConfigField>
           <Field>
             <div className="flex items-center gap-2">
               <input
@@ -241,8 +155,6 @@ export default function ConfigForm({ config }: { config: Configuration }) {
               <span className="font-bold">(useful for Kometa/PMM users)</span>
             </FieldDescription>
           </Field>
-
-          {/* Message Display */}
           {message && (
             <div
               className={`p-4 rounded-md ${
@@ -254,8 +166,6 @@ export default function ConfigForm({ config }: { config: Configuration }) {
               {message.text}
             </div>
           )}
-
-          {/* Submit Button */}
           <div className="flex gap-4">
             <Button type="submit" disabled={pending}>
               {pending ? (

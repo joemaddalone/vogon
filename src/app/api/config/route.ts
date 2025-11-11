@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { upsertConfiguration, getConfiguration } from "@/lib/client/database";
 import { getClients } from "@/lib/client/getClients";
+import { revalidatePath } from "next/cache";
 
 /**
  * GET /api/config
@@ -92,6 +93,8 @@ export async function POST(request: Request) {
 
     const config = await upsertConfiguration(configToSave);
 
+    // ["/", "/movie", "/show", "/import"].forEach((path) => revalidatePath(path));
+
     return NextResponse.json({
       data: {
         id: config.id,
@@ -100,6 +103,8 @@ export async function POST(request: Request) {
         tmdbApiKey: "••••••••",
         fanartApiKey: config.fanartApiKey ? "••••••••" : null,
         removeOverlays: Boolean(config.removeOverlays),
+        thePosterDbEmail: config.thePosterDbEmail,
+        thePosterDbPassword: config.thePosterDbPassword ? "••••••••" : null,
       },
     });
   } catch (error) {
