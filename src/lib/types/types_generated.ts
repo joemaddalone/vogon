@@ -1,0 +1,55 @@
+import type { ColumnType } from "kysely";
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
+export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+
+export type Configuration = {
+    id: Generated<number>;
+    plexServerUrl: string | null;
+    plexToken: string | null;
+    tmdbApiKey: string | null;
+    fanartApiKey: string | null;
+    removeOverlays: Generated<number>;
+    thePosterDbEmail: string | null;
+    thePosterDbPassword: string | null;
+};
+export type PlexMovie = {
+    id: Generated<number>;
+    ratingKey: string;
+    libraryKey: string;
+    title: string;
+    year: number | null;
+    summary: string | null;
+    thumbUrl: string | null;
+    artUrl: string | null;
+    duration: number | null;
+    rating: number | null;
+    contentRating: string | null;
+    addedAt: number;
+    updatedAt: number;
+    guid: string | null;
+    importedAt: Generated<string>;
+};
+export type PlexShow = {
+    id: Generated<number>;
+    ratingKey: string;
+    libraryKey: string;
+    title: string;
+    year: number | null;
+    summary: string | null;
+    thumbUrl: string | null;
+    artUrl: string | null;
+    duration: number | null;
+    rating: number | null;
+    contentRating: string | null;
+    addedAt: number;
+    updatedAt: number;
+    guid: string | null;
+    importedAt: Generated<string>;
+};
+export type DB = {
+    Configuration: Configuration;
+    PlexMovie: PlexMovie;
+    PlexShow: PlexShow;
+};

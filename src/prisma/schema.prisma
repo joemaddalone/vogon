@@ -1,0 +1,56 @@
+generator kysely {
+  provider = "prisma-kysely"
+  fileName = "../../lib/types/types_generated.ts"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model PlexMovie {
+  id            Int      @id @default(autoincrement())
+  ratingKey     String   @unique
+  libraryKey    String
+  title         String
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  rating        Float?
+  contentRating String?
+  addedAt       Int
+  updatedAt     Int
+  guid          String?
+  importedAt    DateTime @default(now())
+}
+
+model PlexShow {
+  id            Int      @id @default(autoincrement())
+  ratingKey     String   @unique
+  libraryKey    String
+  title         String
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  rating        Float?
+  contentRating String?
+  addedAt       Int
+  updatedAt     Int
+  guid          String?
+  importedAt    DateTime @default(now())
+}
+
+model Configuration {
+  id             Int     @id @default(autoincrement())
+  plexServerUrl  String?
+  plexToken      String?
+  tmdbApiKey     String?
+  fanartApiKey   String?
+  removeOverlays Int     @default(0)
+  thePosterDbEmail String?
+  thePosterDbPassword String?
+}
