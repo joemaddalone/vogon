@@ -2,6 +2,18 @@
 
 This application connects to a Plex Media Server, imports movie and TV show libraries, and lets you replace poster artwork with alternatives from TMDB, Fanart.tv, and other sources.
 
+
+## Requirements
+
+- **Node v20+**
+- **Plex Server**
+- **Plex token**: [How to find your token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/)
+- **TMDB API key**: [Get an API key](https://www.themoviedb.org/settings/api)
+- **Local network access** to Plex
+- OPTIONAL
+   - **Fanart.tv API Key** [Get an API key](https://fanart.tv/get-an-api-key/)
+   - **ThePosterDB Credentials** [Create a free account][https://theposterdb.com/]
+
 ## Getting Started
 1. Clone this repo: `git clone https://github.com/joemaddalone/vogon.git`
 2. Install dependencies: `npm install`
