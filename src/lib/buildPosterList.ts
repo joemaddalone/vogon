@@ -9,8 +9,6 @@ import {
 } from "@/lib/types";
 import { ThePosterDbClient } from "./client/theposterdb";
 
-const config = await getClients();
-
 const errorResponse = {
   error: "Unknown error",
   posters: [],
@@ -83,6 +81,7 @@ const determineTmdbId = async (knownIds: {
 };
 
 export const buildPosters = async (id: string, type: "movie" | "show") => {
+  const config = await getClients();
   const methods = {
     plex: type === "movie" ? api.plex.movieDetail : api.plex.showDetail,
     fanart: type === "movie" ? api.fanart.moviePosters : api.fanart.showPosters,

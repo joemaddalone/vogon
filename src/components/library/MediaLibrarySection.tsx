@@ -48,14 +48,13 @@ export const MediaLibrarySection = <TItem extends object>({
     <div className="max-w-7xl mx-auto mt-8 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-2">{type === "movie" ? "Movie Library" : "Show Library"}</h1>
+          <h1 className="text-4xl font-bold mb-2">
+            {type === "movie" ? "Movie Library" : "Show Library"}
+          </h1>
           <p className="text-muted-foreground">
             {entries.length} total {totalLabel}
           </p>
         </div>
-        <Button onClick={handleReset} variant="outline">
-          Reset Library
-        </Button>
       </div>
 
       <Library
@@ -64,7 +63,12 @@ export const MediaLibrarySection = <TItem extends object>({
         items={entries as unknown as Selectable<PlexMovie | PlexShow>[]}
         pending={loading}
       />
+
+      {entries.length > 0 && (
+        <Button onClick={handleReset} variant="outline">
+          Empty this {type === "movie" ? "Movie" : "Show"} Library
+        </Button>
+      )}
     </div>
   );
 };
-
