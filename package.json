@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 6001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 6001",
     "lint": "eslint",
     "db:prepare":"node scripts/prepare.mjs",
     "db:generate": "npm run db:prepare && npx prisma migrate dev --name init --schema=src/prisma/schema.prisma"

@@ -10,14 +10,6 @@ class PlexClient {
     return await getClients();
   }
 
-  private async init(): Promise<{ plexServerUrl: string; plexToken: string }> {
-    const config = await this.config();
-    if (!config?.plexServerUrl || !config?.plexToken) {
-      throw new Error("Plex server URL and token are required");
-    }
-    return { plexServerUrl: config?.plexServerUrl, plexToken: config?.plexToken };
-  }
-
   /**
    * Make authenticated request to Plex API
    */
@@ -36,14 +28,15 @@ class PlexClient {
       });
 
       if (!response.ok) {
-        throw new Error(`Plex API error: ${response.status} ${response.statusText}`);
+        // throw new Error(`Plex API error: ${response.status} ${response.statusText}`);
+        return { error: `Plex API error: ${response.status} ${response.statusText}` } as T;
       }
 
-      return await response.json();
+      return await response.json() as T;
 
     } catch (error) {
       console.error("Plex API request failed:", error);
-      throw error;
+      return { error: `Plex API request failed: ${error}` } as T;
     }
   }
 

@@ -1,17 +1,22 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 export const PlexError = () => {
-		return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center space-y-4">
-          <p className="text-xl text-muted-foreground">
-            Failed to connect to Plex server.
-          </p>
-          <p className="text-sm text-muted-foreground/70">
-            Please check your connection settings.
-          </p>
-          <p className="text-sm text-muted-foreground/70">
-            Please check your connection settings.
-          </p>
-        </div>
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-center space-y-4">
+        <p className="text-xl text-muted-foreground">
+          Dang, we can&apos;t find your Plex server.
+        </p>
+        <p className="my-4">
+          <Link
+            className="text-white bg-primary hover:bg-primary font-medium rounded-lg text-sm px-5 py-2.5"
+            href="/config"
+          >
+            Go to Configuration <ArrowRight className="w-4 h-4 inline-block" />
+          </Link>
+        </p>
+        <p className="text-sm text-muted-foreground/70"></p>
       </div>
-    );
+    </div>
+  );
 };

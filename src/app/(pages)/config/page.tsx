@@ -4,7 +4,13 @@ import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Field, FieldLabel, FieldDescription, FieldGroup } from "@/components/ui/field";
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldGroup,
+  FieldLegend,
+} from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 
 interface ConfigFormData {
@@ -29,7 +35,10 @@ export default function ConfigPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const loadConfig = async () => {
     setLoading(true);
@@ -62,9 +71,15 @@ export default function ConfigPage() {
     const result = await api.config.save(config);
 
     if (result.error) {
-      setMessage({ type: "error", text: result.error.message || "Failed to save configuration" });
+      setMessage({
+        type: "error",
+        text: result.error.message || "Failed to save configuration",
+      });
     } else {
-      setMessage({ type: "success", text: "Configuration saved successfully!" });
+      setMessage({
+        type: "success",
+        text: "Configuration saved successfully!",
+      });
       // Reload to get masked values
       await loadConfig();
     }
@@ -72,7 +87,10 @@ export default function ConfigPage() {
     setSaving(false);
   };
 
-  const handleChange = (field: keyof ConfigFormData, value: string | boolean | number) => {
+  const handleChange = (
+    field: keyof ConfigFormData,
+    value: string | boolean | number
+  ) => {
     setConfig((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -89,16 +107,26 @@ export default function ConfigPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Configuration</h1>
         <p className="text-muted-foreground">
-          Configure your Plex server and API credentials. All values are stored securely in the local database. <i className="text-sm text-orange-200">Environment variables will take precedence here.</i>
+          Configure your Plex server and API credentials. All values are stored
+          securely in the local database.{" "}
+          <i className="text-sm text-orange-200">
+            Environment variables will take precedence here.
+          </i>
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <FieldGroup>
+        <FieldGroup className="p-4">
           {/* Plex Server URL */}
           <Field>
-            <FieldLabel htmlFor="plexServerUrl">Plex Server URL <span className="text-xs text-muted-foreground">env. PLEX_SERVER_URL</span></FieldLabel>
+            <FieldLabel htmlFor="plexServerUrl">
+              Plex Server URL{" "}
+              <span className="text-xs text-muted-foreground">
+                env. PLEX_SERVER_URL
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="plexServerUrl"
               type="text"
               value={config.plexServerUrl}
@@ -107,14 +135,21 @@ export default function ConfigPage() {
               required
             />
             <FieldDescription>
-              Your Plex Media Server URL (usually local network IP with port 32400)
+              Your Plex Media Server URL (usually local network IP with port
+              32400)
             </FieldDescription>
           </Field>
 
           {/* Plex Token */}
           <Field>
-            <FieldLabel htmlFor="plexToken">Plex Token <span className="text-xs text-muted-foreground">env. PLEX_TOKEN</span></FieldLabel>
+            <FieldLabel htmlFor="plexToken">
+              Plex Token{" "}
+              <span className="text-xs text-muted-foreground">
+                env. PLEX_TOKEN
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="plexToken"
               type="password"
               value={config.plexToken}
@@ -137,8 +172,14 @@ export default function ConfigPage() {
 
           {/* TMDB API Key */}
           <Field>
-            <FieldLabel htmlFor="tmdbApiKey">TMDB API Key <span className="text-xs text-muted-foreground">env. TMDB_API_KEY</span></FieldLabel>
+            <FieldLabel htmlFor="tmdbApiKey">
+              TMDB API Key{" "}
+              <span className="text-xs text-muted-foreground">
+                env. TMDB_API_KEY
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="tmdbApiKey"
               type="password"
               value={config.tmdbApiKey}
@@ -158,11 +199,19 @@ export default function ConfigPage() {
               </a>
             </FieldDescription>
           </Field>
-
-          {/* Fanart API Key (Optional) */}
+        </FieldGroup>
+        {/* Fanart API Key (Optional) */}
+        <FieldGroup className="p-4 mt-5 bg-muted">
+          <FieldLegend>Optional Fields</FieldLegend>
           <Field>
-            <FieldLabel htmlFor="fanartApiKey">Fanart.tv API Key (Optional) <span className="text-xs text-muted-foreground">env. FANART_API_KEY</span></FieldLabel>
+            <FieldLabel htmlFor="fanartApiKey">
+              Fanart.tv API Key (Optional){" "}
+              <span className="text-xs text-muted-foreground">
+                env. FANART_API_KEY
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="fanartApiKey"
               type="password"
               value={config.fanartApiKey}
@@ -183,8 +232,14 @@ export default function ConfigPage() {
           </Field>
           {/* ThePosterDB Email */}
           <Field>
-            <FieldLabel htmlFor="thePosterDbEmail">ThePosterDB Email <span className="text-xs text-muted-foreground">env. THEPOSTERDB_EMAIL</span></FieldLabel>
+            <FieldLabel htmlFor="thePosterDbEmail">
+              ThePosterDB Email{" "}
+              <span className="text-xs text-muted-foreground">
+                env. THEPOSTERDB_EMAIL
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="thePosterDbEmail"
               type="email"
               value={config.thePosterDbEmail}
@@ -197,12 +252,20 @@ export default function ConfigPage() {
           </Field>
           {/* ThePosterDB Password */}
           <Field>
-            <FieldLabel htmlFor="thePosterDbPassword">ThePosterDB Password <span className="text-xs text-muted-foreground">env. THEPOSTERDB_PASSWORD</span></FieldLabel>
+            <FieldLabel htmlFor="thePosterDbPassword">
+              ThePosterDB Password{" "}
+              <span className="text-xs text-muted-foreground">
+                env. THEPOSTERDB_PASSWORD
+              </span>
+            </FieldLabel>
             <Input
+              className="h-12 px-3 text-lg"
               id="thePosterDbPassword"
               type="password"
               value={config.thePosterDbPassword}
-              onChange={(e) => handleChange("thePosterDbPassword", e.target.value)}
+              onChange={(e) =>
+                handleChange("thePosterDbPassword", e.target.value)
+              }
               placeholder="Enter your ThePosterDB password"
             />
             <FieldDescription>
@@ -217,15 +280,21 @@ export default function ConfigPage() {
                 id="removeOverlays"
                 type="checkbox"
                 checked={config.removeOverlays === 1}
-                onChange={(e) => handleChange("removeOverlays", e.target.checked ? 1 : 0)}
+                onChange={(e) =>
+                  handleChange("removeOverlays", e.target.checked ? 1 : 0)
+                }
                 className="h-4 w-4 rounded border-gray-300"
               />
               <FieldLabel htmlFor="removeOverlays" className="mb-0!">
-                Remove Overlays <span className="text-xs text-muted-foreground">env. REMOVE_OVERLAYS</span>
+                Remove Overlays{" "}
+                <span className="text-xs text-muted-foreground">
+                  env. REMOVE_OVERLAYS
+                </span>
               </FieldLabel>
             </div>
             <FieldDescription>
-              Automatically remove Plex overlay labels when updating posters (useful for Kometa/PMM users)
+              Remove Plex overlay labels when updating posters{" "}
+              <span className="font-bold">(useful for Kometa/PMM users)</span>
             </FieldDescription>
           </Field>
 
@@ -260,4 +329,3 @@ export default function ConfigPage() {
     </div>
   );
 }
-

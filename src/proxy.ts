@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getClients } from "@/lib/client/getClients";
 
-const protectedRoutes = ["/movie", "/show", "/import"];
+const protectedRoutes = ["/movie", "/show", "/import", "/"];
 // const publicRoutes = ["/", "/config"];
 
 export async function proxy(request: NextRequest) {

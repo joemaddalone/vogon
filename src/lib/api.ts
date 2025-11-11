@@ -15,7 +15,7 @@ import {
   Updateable,
 } from "./types";
 
-const host = "http://localhost:3000";
+const host = "http://0.0.0.0:6001";
 
 const tryCatch = async function <T>(
   promise: Promise<Response>
