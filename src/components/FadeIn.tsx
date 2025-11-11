@@ -2,7 +2,7 @@
 import { motion } from "motion/react";
 
 export const FadeIn = ({ children, className, component = 'div' }: { children: React.ReactNode, className?: string, component?: React.ElementType }) => {
-	const Component = motion(component) as React.ElementType;
+  const Component = motion.create(component) as React.ElementType;
   return (
     <Component
       className={className}

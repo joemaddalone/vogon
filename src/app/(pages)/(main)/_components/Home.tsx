@@ -5,6 +5,8 @@ import { Film, TvIcon } from "lucide-react";
 import { PlexError } from "./PlexError";
 import { LibraryCard } from "./LibraryCard";
 import { FadeIn } from "@/components/FadeIn";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Home({
   stats,
@@ -15,7 +17,7 @@ export default function Home({
 }) {
   const statsData = stats.data || { movies: 0, shows: 0 };
   const { data: successfulConnection } = use(plexConnection);
-
+  const router = useRouter();
   if (!successfulConnection) {
     return <PlexError />;
   }
@@ -39,6 +41,7 @@ export default function Home({
             <div className="empty-card">
               <Film className="library-icon" />
               <p>No movie libraries found</p>
+              <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
             </div>
           ) : (
             <LibraryCard
@@ -55,6 +58,7 @@ export default function Home({
             <div className="empty-card">
               <TvIcon className="library-icon" />
               <p>No show libraries found</p>
+              <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
             </div>
           ) : (
             <LibraryCard

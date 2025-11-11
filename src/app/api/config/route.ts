@@ -93,8 +93,6 @@ export async function POST(request: Request) {
 
     const config = await upsertConfiguration(configToSave);
 
-    // ["/", "/movie", "/show", "/import"].forEach((path) => revalidatePath(path));
-
     return NextResponse.json({
       data: {
         id: config.id,
