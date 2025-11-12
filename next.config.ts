@@ -2,12 +2,9 @@ import type { NextConfig } from "next";
 
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   serverExternalPackages: ["better-sqlite3"],
-
-  devIndicators: {
-
-  },
+  devIndicators: {},
   images: {
     remotePatterns: [
       {
