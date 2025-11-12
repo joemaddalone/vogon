@@ -195,5 +195,6 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
     knownIds,
     tmdbId,
     tmdbMedia,
+    mediaType: type,
   };
 };
