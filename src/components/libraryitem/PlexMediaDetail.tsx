@@ -1,8 +1,8 @@
 "use client";
 import { use } from "react";
-import { MediaHeader } from "@/components/library/MediaHeader";
-import { PosterPicker } from "@/components/library/PosterPicker";
-import { TMDBError } from "@/components/library/TMDBError";
+import { MediaHeader } from "@/components/libraryitem/MediaHeader";
+import { PosterPicker } from "@/components/libraryitem/PosterPicker";
+import { TMDBError } from "@/components/libraryitem/TMDBError";
 import Image from "next/image";
 import { PlexMovieMetadata, PlexShowMetadata, TMDBDetail } from "@/lib/types";
 

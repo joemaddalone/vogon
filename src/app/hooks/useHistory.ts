@@ -1,1 +1,1 @@
-export { useHistory } from '@/app/contexts/HistoryContext';
+export { useHistory } from '@/components/context/HistoryContext';

@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
-import { PlexMediaDetail } from "@/components/library/PlexMediaDetail";
+import { PlexMediaDetail } from "@/components/libraryitem/PlexMediaDetail";
 import { Spinner } from "@/components/ui/spinner";
 
 export default async function PlexShowPage({
