@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { api } from "@/lib/api";
-import { PosterOption } from "@/components/library/PosterOption";
+import { PosterOption } from "@/components/libraryitem/PosterOption";
 
 type PosterPickerProps = {
   posters: { file_path: string, previewUrl?: string, source?: string }[];

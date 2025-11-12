@@ -1,6 +1,6 @@
 "use client";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { HistoryProvider } from "@/app/contexts/HistoryContext";
+import { ThemeProvider } from "@/components/context/ThemeProvider";
+import { HistoryProvider } from "@/components/context/HistoryContext";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
