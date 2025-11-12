@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
-import { MovieDetails } from "./_components/MovieDetails";
+import { PlexMediaDetail } from "@/components/library/PlexMediaDetail";
 import { Spinner } from "@/components/ui/spinner";
 
 export default async function PlexShowPage({
@@ -21,7 +21,7 @@ export default async function PlexShowPage({
       }
     >
       {/* @ts-expect-error Server Component */}
-      <MovieDetails posterBuilder={posterBuilder} id={id} />
+      <PlexMediaDetail posterBuilder={posterBuilder} id={id} />
     </Suspense>
   );
 }

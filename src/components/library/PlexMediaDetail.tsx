@@ -4,22 +4,23 @@ import { MediaHeader } from "@/components/library/MediaHeader";
 import { PosterPicker } from "@/components/library/PosterPicker";
 import { TMDBError } from "@/components/library/TMDBError";
 import Image from "next/image";
-import { PlexMovieMetadata, TMDBDetail } from "@/lib/types";
+import { PlexMovieMetadata, PlexShowMetadata, TMDBDetail } from "@/lib/types";
 
-export const MovieDetails = ({
+export const PlexMediaDetail = ({
   posterBuilder,
   id,
 }: {
   posterBuilder: Promise<{
-    media: PlexMovieMetadata;
+    media: PlexMovieMetadata | PlexShowMetadata;
     knownIds: Record<string, string>;
     tmdbMedia: TMDBDetail;
     posters: { file_path: string; previewUrl?: string; source?: string }[];
     logos: { file_path: string; source?: string }[];
+    mediaType: "movie" | "show";
   }>;
   id: string;
 }) => {
-  const { media, knownIds, tmdbMedia, posters, logos } = use(posterBuilder);
+  const { media, knownIds, tmdbMedia, posters, logos, mediaType } = use(posterBuilder);
 
   if (!tmdbMedia) {
     return <TMDBError knownIds={knownIds} />;
@@ -43,10 +44,10 @@ export const MovieDetails = ({
           </div>
         </div>
       )}
-      <MediaHeader media={media} logos={logos} mediaType="movie" />
+      <MediaHeader media={media} logos={logos} mediaType={mediaType} />
       <hr className="my-4" />
       <h2 className="my-4 text-2xl font-bold">Posters</h2>
-      <PosterPicker posters={posters} ratingKey={id} mediaType="movie" />
+      <PosterPicker posters={posters} ratingKey={id} mediaType={mediaType} />
     </div>
   );
 };
