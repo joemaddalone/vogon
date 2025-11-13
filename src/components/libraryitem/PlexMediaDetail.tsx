@@ -2,8 +2,10 @@
 import { use } from "react";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { PosterPicker } from "@/components/libraryitem/PosterPicker";
+import { BackdropPicker } from "@/components/libraryitem/BackdropPicker";
 import { TMDBError } from "@/components/libraryitem/TMDBError";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlexMovieMetadata, PlexShowMetadata, TMDBDetail } from "@/lib/types";
 
 export const PlexMediaDetail = ({
@@ -15,12 +17,14 @@ export const PlexMediaDetail = ({
     knownIds: Record<string, string>;
     tmdbMedia: TMDBDetail;
     posters: { file_path: string; previewUrl?: string; source?: string }[];
+    backdrops: { file_path: string; previewUrl?: string; source?: string }[];
     logos: { file_path: string; source?: string }[];
     mediaType: "movie" | "show";
   }>;
   id: string;
 }) => {
-  const { media, knownIds, tmdbMedia, posters, logos, mediaType } = use(posterBuilder);
+  const { media, knownIds, tmdbMedia, posters, backdrops, logos, mediaType } =
+    use(posterBuilder);
 
   if (!tmdbMedia) {
     return <TMDBError knownIds={knownIds} />;
@@ -44,10 +48,29 @@ export const PlexMediaDetail = ({
           </div>
         </div>
       )}
+
       <MediaHeader media={media} logos={logos} mediaType={mediaType} />
-      <hr className="my-4" />
-      <h2 className="my-4 text-2xl font-bold">Posters</h2>
-      <PosterPicker posters={posters} ratingKey={id} mediaType={mediaType} />
+      {/* <hr className="my-4" /> */}
+      <Tabs defaultValue="posters">
+        <TabsList className="mb-8 inline-flex w-full h-9 justify-start rounded-none p-0 bg-background/60 backdrop-blur-sm border-b shadow-lg">
+          <TabsTrigger className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none" value="posters">Posters</TabsTrigger>
+          <TabsTrigger className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none" value="backdrops">Backdrops</TabsTrigger>
+        </TabsList>
+        <TabsContent value="posters">
+          <PosterPicker
+            posters={posters}
+            ratingKey={id}
+            mediaType={mediaType}
+          />
+        </TabsContent>
+        <TabsContent value="backdrops">
+        <BackdropPicker
+            backdrops={backdrops}
+            ratingKey={id}
+            mediaType={mediaType}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

@@ -111,6 +111,16 @@ export const api = {
         })
       );
     },
+    updateBackdrop: async (
+      mediaType: "movie" | "show",
+      ratingKey: string,
+      backdropUrl: string
+    ): Promise<ApiResponse<void>> => {
+      return await tryCatch(fetch(`${host}/api/data/${mediaType}/update`, {
+        method: "POST",
+        body: JSON.stringify({ ratingKey, backdropUrl }),
+      }));
+    },
     resetMedia: async (
       mediaType: "movie" | "show"
     ): Promise<ApiResponse<void>> => {
@@ -150,6 +160,15 @@ export const api = {
           body: JSON.stringify({ ratingKey, posterUrl }),
         })
       );
+    },
+    backdrop: async (
+      ratingKey: string,
+      backdropUrl: string
+    ): Promise<ApiResponse<void>> => {
+      return await tryCatch(fetch(`${host}/api/plex/backdrop`, {
+        method: "POST",
+        body: JSON.stringify({ ratingKey, backdropUrl }),
+      }));
     },
     removeOverlay: async (ratingKey: string): Promise<ApiResponse<void>> => {
       return await tryCatch(fetch(`${host}/api/plex/overlay`, {

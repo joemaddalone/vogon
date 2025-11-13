@@ -87,9 +87,7 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
     fanart: type === "movie" ? api.fanart.moviePosters : api.fanart.showPosters,
     tmdb: type === "movie" ? "detail" : "showDetail",
   };
-  const { data: media } = await methods.plex(
-    id as string
-  );
+  const { data: media } = await methods.plex(id as string);
   if (!media) {
     return { ...errorResponse, error: "Plex movie not found" };
   }
@@ -100,13 +98,19 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
     return { ...errorResponse, error: "TMDB media not found" };
   }
   const posters: { file_path: string; previewUrl?: string; source?: string }[] =
-  [];
+    [];
+  const backdrops: {
+    file_path: string;
+    previewUrl?: string;
+    source?: string;
+  }[] = [];
   const logos: { file_path: string; source?: string }[] = [];
 
   if (config.fanartApiKey) {
     const idForFanart = type === "movie" ? tmdbId : knownIds.tvdbId;
-    const { data: fanartResponse } =
-      await methods.fanart(idForFanart as string);
+    const { data: fanartResponse } = await methods.fanart(
+      idForFanart as string
+    );
     const fa = fanartResponse as FanartMovieResponse | FanartShowResponse;
 
     if (type === "movie") {
@@ -131,6 +135,15 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
             });
           });
       }
+
+      if (fa && "moviebackground" in fa && fa.moviebackground.length > 0) {
+        fa.moviebackground.forEach((background: FanartMovieImage) => {
+          backdrops.push({
+            file_path: background.url,
+            source: "fanart",
+          });
+        });
+      }
     } else if (type === "show") {
       if (fa && "tvposter" in fa && fa.tvposter.length > 0) {
         fa.tvposter.forEach((poster: FanartShowImage) => {
@@ -151,6 +164,15 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
             });
           });
       }
+
+      if (fa && "showbackground" in fa && fa.showbackground.length > 0) {
+        fa.showbackground.forEach((background: FanartShowImage) => {
+          backdrops.push({
+            file_path: background.url,
+            source: "fanart",
+          });
+        });
+      }
     }
   }
 
@@ -161,6 +183,14 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
         source: "tmdb",
       });
     });
+    if (tmdbMedia.images.backdrops && tmdbMedia.images.backdrops.length > 0) {
+      tmdbMedia.images.backdrops.forEach((backdrop: { file_path: string }) => {
+        backdrops.push({
+          file_path: `https://image.tmdb.org/t/p/w500/${backdrop.file_path}`,
+          source: "tmdb",
+        });
+      });
+    }
   }
 
   if (config.thePosterDbEmail && config.thePosterDbPassword) {
@@ -189,6 +219,7 @@ export const buildPosters = async (id: string, type: "movie" | "show") => {
 
   return {
     error: null,
+    backdrops,
     posters,
     logos,
     media,
