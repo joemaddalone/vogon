@@ -9,6 +9,8 @@ import {
   getPlexShows,
   resetPlexMovies,
   resetPlexShows,
+  updateArtUrl,
+  updateShowArtUrl,
   updateShowThumbUrl,
   updateThumbUrl,
 } from "@/lib/client/database";
@@ -21,6 +23,7 @@ type MediaConfig = {
   getAll: () => Promise<unknown[]>;
   reset: () => Promise<void>;
   updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
+  updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
   createMany: (
     items: Array<Insertable<PlexMovie> | Insertable<PlexShow>>
   ) => Promise<void>;
@@ -33,6 +36,7 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     getAll: getPlexMovies,
     reset: resetPlexMovies,
     updateThumb: updateThumbUrl,
+    updateArt: updateArtUrl,
     createMany: createManyPlexMovies,
   },
   show: {
@@ -41,6 +45,7 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     getAll: getPlexShows,
     reset: resetPlexShows,
     updateThumb: updateShowThumbUrl,
+    updateArt: updateShowArtUrl,
     createMany: createManyPlexShows,
   },
 };
@@ -79,32 +84,38 @@ export async function handleMediaReset(mediaType: MediaType) {
 
 export async function handleMediaUpdate(
   mediaType: MediaType,
-  request: Request
+  request: Request,
+
 ) {
   try {
-    const { ratingKey, thumbUrl } = await request.json();
+    const { ratingKey, thumbUrl, artUrl } = await request.json();
 
-    if (!ratingKey || !thumbUrl) {
+    if (!ratingKey || (!thumbUrl && !artUrl)) {
       return NextResponse.json(
-        { error: "ratingKey and thumbUrl are required" },
+        { error: "ratingKey and either thumbUrl or artUrl are required" },
         { status: 400 }
       );
     }
 
     const config = MEDIA_CONFIG[mediaType];
-    await config.updateThumb(ratingKey, thumbUrl);
+    if (thumbUrl) {
+      await config.updateThumb(ratingKey, thumbUrl);
+    }
+    if (artUrl) {
+      await config.updateArt(ratingKey, artUrl);
+    }
 
-    revalidatePath(thumbUrl);
+    revalidatePath(thumbUrl ?? artUrl ?? "");
     revalidatePath(config.cachePath, "page");
     revalidatePath(`/api/data/${mediaType}`);
 
     return NextResponse.json({
-      data: `${mediaType} thumbnail updated successfully`,
+      data: `${mediaType} ${thumbUrl ? "thumbnail" : "art"} updated successfully`,
     });
   } catch (error) {
-    console.error(`Error updating ${mediaType} thumbnail:`, error);
+    console.error(`Error updating ${mediaType}:`, error);
     return NextResponse.json(
-      { error: `Failed to update ${mediaType} thumbnail.` },
+      { error: `Failed to update ${mediaType} media.` },
       { status: 500 }
     );
   }

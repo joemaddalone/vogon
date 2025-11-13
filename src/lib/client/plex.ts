@@ -120,6 +120,37 @@ class PlexClient {
     }
   }
 
+    /**
+   * Update movie poster with a new image URL
+   */
+    async updateMovieBackdrop(ratingKey: string, backdropUrl: string): Promise<void> {
+      const config = await this.config();
+      const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/arts`;
+      const params = new URLSearchParams({
+        "X-Plex-Token": config?.plexToken || "",
+        url: backdropUrl,
+      });
+
+      try {
+        const response = await fetch(`${url}?${params.toString()}`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to update backdrop: ${response.status} ${response.statusText}`);
+        }
+
+        // Lock the poster field to prevent Plex from overwriting it
+        await this.lockBackdropField(ratingKey);
+      } catch (error) {
+        console.error("Failed to update movie backdrop:", error);
+        throw error;
+      }
+    }
+
   /**
    * Lock the poster field to prevent Plex from changing it
    */
@@ -143,6 +174,30 @@ class PlexClient {
       console.warn("Failed to lock poster field:", error);
     }
   }
+
+    /**
+   * Lock the poster field to prevent Plex from changing it
+   */
+    private async lockBackdropField(ratingKey: string): Promise<void> {
+      const config = await this.config();
+      const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
+      const params = new URLSearchParams({
+        "X-Plex-Token": config?.plexToken || "",
+        "art.locked": "1",
+      });
+
+      try {
+        const response = await fetch(`${url}?${params.toString()}`, {
+          method: "PUT",
+        });
+
+        if (!response.ok) {
+          console.warn("Failed to lock backdrop field");
+        }
+      } catch (error) {
+        console.warn("Failed to lock backdrop field:", error);
+      }
+    }
 
   /**
    * Get metadata including labels

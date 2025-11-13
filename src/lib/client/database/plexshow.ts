@@ -13,6 +13,10 @@ export const updateShowThumbUrl = async (ratingKey: string, thumbUrl: string): P
   await db.updateTable("PlexShow").set({ thumbUrl }).where("ratingKey", "=", ratingKey).execute();
 };
 
+export const updateShowArtUrl = async (ratingKey: string, artUrl: string): Promise<void> => {
+  await db.updateTable("PlexShow").set({ artUrl }).where("ratingKey", "=", ratingKey).execute();
+};
+
 export const getShowRecordCount = async (): Promise<number> => {
   const { count } = await db
   .selectFrom("PlexShow")
