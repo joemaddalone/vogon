@@ -54,7 +54,7 @@ export const MediaGridControl = () => {
             <Button
               className="button-group-button"
               size="sm"
-              variant={sortField === "title" ? "secondary" : "ghost"}
+              variant={sortField === "title" ? "default" : "outline"}
               onClick={() => handleSortFieldChange("title")}
             >
               Title {getSortIcon("title")}
@@ -62,7 +62,7 @@ export const MediaGridControl = () => {
             <Button
               className="button-group-button"
               size="sm"
-              variant={sortField === "year" ? "secondary" : "ghost"}
+              variant={sortField === "year" ? "default" : "outline"}
               onClick={() => handleSortFieldChange("year")}
             >
               Year {getSortIcon("year")}
@@ -74,7 +74,7 @@ export const MediaGridControl = () => {
             <Button
               className="button-group-button"
               size="sm"
-              variant={view === "grid" ? "secondary" : "ghost"}
+              variant={view === "grid" ? "default" : "outline"}
               onClick={() => setView("grid")}
             >
               Grid <LayoutGridIcon strokeWidth={1.5} className="ml-2 h-4 w-4" />
@@ -82,7 +82,7 @@ export const MediaGridControl = () => {
             <Button
               className="button-group-button"
               size="sm"
-              variant={view === "rows" ? "secondary" : "ghost"}
+              variant={view === "rows" ? "default" : "outline"}
               onClick={() => setView("rows")}
             >
               Rows <Rows3Icon strokeWidth={1.5} className="ml-2 h-4 w-4" />

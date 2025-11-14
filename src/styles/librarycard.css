@@ -2,7 +2,7 @@
     @apply relative overflow-hidden outline outline-border rounded-2xl bg-gradient-to-br from-background via-background to-muted/20 p-12 transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5;
 
     .highlight {
-      @apply absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+      @apply absolute inset-0 bg-primary/60 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500;
     }
 
     .library-icon {

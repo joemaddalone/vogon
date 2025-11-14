@@ -117,7 +117,7 @@ export function PaginationControls() {
             ) : (
               <Button
                 key={page}
-                variant={currentPage === page ? "secondary" : "ghost"}
+                variant={currentPage === page ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setCurrentPage(page as number)}
                 className="page-number"

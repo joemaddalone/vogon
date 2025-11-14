@@ -8,11 +8,7 @@ import { api } from "@/lib/api";
 import { motion } from "motion/react";
 import { Film, TvIcon } from "lucide-react";
 
-export const PlexLibraries = ({
-  libraries,
-}: {
-  libraries: PlexLibrary[];
-}) => {
+export const PlexLibraries = ({ libraries }: { libraries: PlexLibrary[] }) => {
   const router = useRouter();
   const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +25,11 @@ export const PlexLibraries = ({
       return;
     }
 
-    const { error: importError } = await api.data.import(data, libraryKey, libraryType as "movie" | "show");
+    const { error: importError } = await api.data.import(
+      data,
+      libraryKey,
+      libraryType as "movie" | "show"
+    );
     setImporting(null);
     if (importError) {
       setError(importError.message);
@@ -51,8 +51,10 @@ export const PlexLibraries = ({
           Select Plex Library
         </h1>
         <p className="text-lg text-muted-foreground/90 font-light leading-relaxed max-w-2xl">
-          Choose a library to import and manage poster artwork. Be sure the library actually contains movies or TV shows.
-          If the library contains other types of media you won&apos;t have much luck finding posters for it.
+          Choose a library to import and manage poster artwork. Be sure the
+          library actually contains movies or TV shows. If the library contains
+          other types of media you won&apos;t have much luck finding posters for
+          it.
         </p>
       </motion.div>
 
@@ -85,9 +87,9 @@ export const PlexLibraries = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-background via-background to-muted/20 p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
+              className="group relative overflow-hidden border-border border-b rounded-2xl bg-secondary p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0" />
 
               <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div className="flex items-start gap-4">
@@ -117,7 +119,9 @@ export const PlexLibraries = ({
                       Importing...
                     </>
                   ) : (
-                    `Import ${library.type === "movie" ? "Movie" : "TV Show"} Library`
+                    `Import ${
+                      library.type === "movie" ? "Movie" : "TV Show"
+                    } Library`
                   )}
                 </Button>
               </div>
