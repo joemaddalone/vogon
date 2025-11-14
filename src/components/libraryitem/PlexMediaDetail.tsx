@@ -9,10 +9,12 @@ import ImageLoader from "@/components/ImageLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   PlexMovieMetadata,
+  PlexSeasonMetadata,
   PlexSeasonResponse,
   PlexShowMetadata,
   TMDBDetail,
 } from "@/lib/types";
+import Link from "next/link";
 
 export const PlexMediaDetail = ({
   posterBuilder,
@@ -21,13 +23,14 @@ export const PlexMediaDetail = ({
   posterBuilder: Promise<{
     media:
       | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[] })
-      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[] });
+      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[] })
+      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[] });
     knownIds: Record<string, string>;
     tmdbMedia: TMDBDetail;
     posters: { file_path: string; previewUrl?: string; source?: string }[];
     backdrops: { file_path: string; previewUrl?: string; source?: string }[];
     logos: { file_path: string; source?: string }[];
-    mediaType: "movie" | "show";
+    mediaType: "movie" | "show" | "season";
   }>;
   id: string;
 }) => {
@@ -61,7 +64,7 @@ export const PlexMediaDetail = ({
           </div>
         </div>
       )}
-
+      {/** @ts-expect-error - MediaHeader expects a PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata **/}
       <MediaHeader media={media} logos={logos} mediaType={mediaType} />
       {/* <hr className="my-4" /> */}
       <Tabs defaultValue="posters">
@@ -72,12 +75,14 @@ export const PlexMediaDetail = ({
           >
             Posters
           </TabsTrigger>
-          <TabsTrigger
-            className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
-            value="backdrops"
-          >
-            Backdrops
-          </TabsTrigger>
+          {mediaType !== "season" && (
+            <TabsTrigger
+              className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+              value="backdrops"
+            >
+              Backdrops
+            </TabsTrigger>
+          )}
           {hasSeasons && (
             <TabsTrigger
               className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
@@ -94,31 +99,40 @@ export const PlexMediaDetail = ({
             mediaType={mediaType}
           />
         </TabsContent>
-        <TabsContent value="backdrops">
-          <BackdropPicker
-            backdrops={backdrops}
-            ratingKey={id}
-            mediaType={mediaType}
-          />
-        </TabsContent>
-        {hasSeasons && (
+        {mediaType !== "season" && (
+          <TabsContent value="backdrops">
+            <BackdropPicker
+              backdrops={backdrops}
+              ratingKey={id}
+              mediaType={mediaType}
+            />
+          </TabsContent>
+        )}
+        {mediaType === "show" && hasSeasons && (
           <TabsContent value="seasons">
             <ul className="backdrop-list">
-            {media.seasons?.map((season) => (
-              <figure key={season.ratingKey} className="relative">
-              <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
-                <ImageLoader
-                  src={season.thumbUrl || ""}
-                  alt={season.title || ""}
-                  width={500}
-                  height={500}
-                  unoptimized
-                  className="transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <figcaption className="mt-5 text-center">{season.title}</figcaption>
-            </figure>
-            ))}
+              {media.seasons?.map((season) => (
+                <Link
+                  href={`/show/${id}/${season.ratingKey}`}
+                  key={season.ratingKey}
+                >
+                  <figure key={season.ratingKey} className="relative">
+                    <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
+                      <ImageLoader
+                        src={season.thumbUrl || ""}
+                        alt={season.title || ""}
+                        width={500}
+                        height={500}
+                        unoptimized
+                        className="transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+                    <figcaption className="mt-5 text-center">
+                      {season.title}
+                    </figcaption>
+                  </figure>
+                </Link>
+              ))}
             </ul>
           </TabsContent>
         )}

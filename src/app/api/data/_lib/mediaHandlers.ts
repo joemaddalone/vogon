@@ -191,6 +191,8 @@ export async function handleMediaImport(
 
 export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
   const seasons: Insertable<PlexSeason>[] = [];
+  // temp fix to dupes in database
+  await resetPlexSeasons();
 
   for (const item of items) {
     const showSeasons = await plex.getShowSeasons(item.ratingKey);

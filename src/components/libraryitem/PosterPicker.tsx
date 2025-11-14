@@ -9,7 +9,7 @@ import { PosterOption } from "@/components/libraryitem/PosterOption";
 type PosterPickerProps = {
   posters: { file_path: string, previewUrl?: string, source?: string }[];
   ratingKey: string;
-  mediaType: "movie" | "show";
+  mediaType: "movie" | "show" | "season";
 };
 
 export const PosterPicker = ({
@@ -30,11 +30,13 @@ export const PosterPicker = ({
       if(movie) {
         await api.data.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "");
       }
-    } else {
+    } else if(mediaType === "show") {
       const show = await api.plex.showDetail(ratingKey);
       if(show) {
         await api.data.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
       }
+    } else if(mediaType === "season") {
+      console.log("season");
     }
 
     setCurrentIndex(index);

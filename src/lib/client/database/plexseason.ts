@@ -15,6 +15,16 @@ export const getPlexSeasonByShow = async (
     .execute();
 };
 
+export const getPlexSeason = async (
+  ratingKey: string
+): Promise<Selectable<PlexSeason>> => {
+  return await db
+    .selectFrom("PlexSeason")
+    .where("ratingKey", "=", ratingKey)
+    .selectAll()
+    .executeTakeFirstOrThrow();
+};
+
 export const resetPlexSeasons = async (): Promise<void> => {
   await db.deleteFrom("PlexSeason").execute();
 };
@@ -35,7 +45,7 @@ export const createManyPlexSeasons = async (
   await db.transaction().execute(async (tx) => {
     for (const plexSeason of plexSeasons) {
       await tx
-        .insertInto("PlexSeason")
+        .replaceInto("PlexSeason")
         .values(plexSeason)
         .executeTakeFirstOrThrow();
     }

@@ -13,6 +13,7 @@ import {
   Configuration,
   Selectable,
   Updateable,
+  PlexSeasonMetadata,
 } from "./types";
 
 const host = "http://localhost:6001";
@@ -51,6 +52,9 @@ export const api = {
     },
     showDetail: async (id: string): Promise<ApiResponse<TMDBDetail>> => {
       return await tryCatch(fetch(`${host}/api/tmdb/show/detail?id=${id}`));
+    },
+    seasonDetail: async (id: string, seasonNumber?: number): Promise<ApiResponse<TMDBDetail>> => {
+      return await tryCatch(fetch(`${host}/api/tmdb/season/detail?id=${id}${seasonNumber ? `&season_number=${seasonNumber}` : ""}`));
     },
     find: async (
       external_id: string,
@@ -149,6 +153,11 @@ export const api = {
       id: string
     ): Promise<ApiResponse<PlexShowMetadata>> => {
       return await tryCatch(fetch(`${host}/api/plex/show/${id}/details`));
+    },
+    seasonDetail: async (
+      id: string
+    ): Promise<ApiResponse<PlexSeasonMetadata>> => {
+      return await tryCatch(fetch(`${host}/api/plex/season/${id}/details`));
     },
     poster: async (
       ratingKey: string,

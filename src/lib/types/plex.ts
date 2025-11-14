@@ -109,3 +109,10 @@ export type PlexShowMetadata = PlexShowResponse & {
   librarySectionID: number;
   librarySectionKey: string;
 }
+
+export type PlexSeasonMetadata = PlexSeasonResponse & {
+  Guid: Record<string, string>[],
+  librarySectionTitle: string;
+  librarySectionID: number;
+  librarySectionKey: string;
+}
