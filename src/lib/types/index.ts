@@ -6,3 +6,4 @@ export * from './theposterdb';
 export * from './errors';
 export * from './plex';
 export * from './api';
+export * from './media';
