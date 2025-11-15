@@ -53,6 +53,31 @@ export type PlexShowResponse = {
   artUrl?: string;
 }
 
+export type PlexSeasonResponse = {
+  ratingKey: string;
+  parentRatingKey: string;
+  key: string;
+  guid: string;
+  parentGuid: string;
+  parentSlug?: string;
+  parentStudio?: string;
+  type: string;
+  title: string;
+  titleSort?: string;
+  parentKey: string;
+  parentTitle?: string;
+  summary?: string;
+  index?: number;
+  parentIndex?: number;
+  year?: number;
+  thumb?: string;
+  art?: string;
+  thumbUrl?: string;
+  artUrl?: string;
+  parentThumb?: string;
+  parentTheme?: string;
+}
+
 export type PlexResponse<T> = {
   MediaContainer: {
     size: number;
@@ -79,6 +104,13 @@ export type PlexMovieMetadata = PlexMovieResponse & {
 }
 
 export type PlexShowMetadata = PlexShowResponse & {
+  Guid: Record<string, string>[],
+  librarySectionTitle: string;
+  librarySectionID: number;
+  librarySectionKey: string;
+}
+
+export type PlexSeasonMetadata = PlexSeasonResponse & {
   Guid: Record<string, string>[],
   librarySectionTitle: string;
   librarySectionID: number;

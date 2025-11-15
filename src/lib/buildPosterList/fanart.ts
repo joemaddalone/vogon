@@ -3,6 +3,7 @@ import {
   FanartMovieImage,
   FanartMovieResponse,
   FanartShowImage,
+  FanartSeasonImage,
   FanartShowResponse,
   FetchedMedia,
 } from "@/lib/types";
@@ -47,6 +48,7 @@ export const movie = async (id: string) => {
 
   return { fanart_posters: p, fanart_backdrops: b, fanart_logos: l };
 };
+
 export const show = async (id: string) => {
   const p: FetchedMedia[] = [];
   const b: FetchedMedia[] = [];
@@ -84,3 +86,23 @@ export const show = async (id: string) => {
   }
   return { fanart_posters: p, fanart_backdrops: b, fanart_logos: l };
 };
+
+
+export const season = async (id: string, seasonNumber: number) => {
+  const p: FetchedMedia[] = [];
+  const b: FetchedMedia[] = [];
+  const l: FetchedMedia[] = [];
+  const { data: fanartResponse } = await api.fanart.showPosters(id as string);
+  const fa = fanartResponse as FanartShowResponse;
+
+  if (fa && "seasonposter" in fa && fa.seasonposter.length > 0) {
+    fa.seasonposter.filter((poster: FanartSeasonImage) => poster.season === seasonNumber.toString()).forEach((poster: FanartSeasonImage) => {
+      p.push({
+        file_path: poster.url,
+        source: "fanart",
+        season: seasonNumber.toString(),
+      });
+    });
+  }
+  return { fanart_posters: p, fanart_backdrops: b, fanart_logos: l };
+}

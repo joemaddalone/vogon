@@ -1,4 +1,4 @@
-import { PlexLibraryResponse, PlexMovieResponse, PlexResponse, PlexMovieMetadata } from "@/lib/types";
+import { PlexLibraryResponse, PlexMovieResponse, PlexResponse, PlexMovieMetadata, PlexSeasonResponse } from "@/lib/types";
 import { getClients } from "./getClients";
 
 class PlexClient {
@@ -87,6 +87,20 @@ class PlexClient {
       thumbUrl: movie.thumb ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}` : '',
       artUrl: movie.art ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}` : '',
     };
+  }
+
+  async getShowSeasons(ratingKey: string): Promise<PlexSeasonResponse[]> {
+    const config = await this.config();
+    const response = await this.request<PlexResponse<PlexSeasonResponse>>(
+      `/library/metadata/${ratingKey}/children`
+    );
+    const items =  response?.MediaContainer?.Metadata || [];
+
+    return items.map((season) => ({
+      ...season,
+      thumb: season.thumb ? `${config?.plexServerUrl}${season.thumb}?X-Plex-Token=${config?.plexToken}` : undefined,
+      art: season.art ? `${config?.plexServerUrl}${season.art}?X-Plex-Token=${config?.plexToken}` : undefined,
+    }));
   }
 
   /**

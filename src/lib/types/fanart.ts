@@ -61,3 +61,8 @@ export type FanartShowImage = {
   likes: number;
   url: string;
 };
+
+
+export type FanartSeasonImage = FanartShowImage & {
+  season?: string;
+};

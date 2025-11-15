@@ -1,7 +1,8 @@
 "use client";
-import { PlexMovieMetadata, PlexShowMetadata } from "@/lib/types";
+import { PlexMovieMetadata, PlexShowMetadata, PlexSeason } from "@/lib/types";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { useHistory } from "@/app/hooks/useHistory";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -10,14 +11,16 @@ export const MediaHeader = ({
   logos,
 	mediaType
 }: {
-  media: PlexMovieMetadata | PlexShowMetadata;
+  media: PlexMovieMetadata | PlexShowMetadata | PlexSeason & { duration?: number, contentRating?: string };
   logos: { file_path: string }[];
-  mediaType: "movie" | "show";
+  mediaType: "movie" | "show" | "season";
 }) => {
+  const router = useRouter();
   const { history, back } = useHistory();
   // get next to last item in history
   const nextToLast = history[history.length - 2];
   const backToLibrary = nextToLast === `/${mediaType}`;
+  const backToParent = mediaType === "season" ? `/show/${(media as PlexSeason)?.parentRatingKey}` : '';
   // Format duration from milliseconds to hours and minutes
   const formatDuration = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -71,7 +74,9 @@ export const MediaHeader = ({
                 />
               ) : (
                 <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight bg-linear-to-br from-foreground via-foreground to-foreground/60 bg-clip-text text-transparent leading-tight">
-                  {media?.title}
+                  {mediaType === "season" ? (
+                    `${(media as PlexSeason)?.parentTitle} - ${media?.title}`
+                  ): media?.title }
                 </h1>
               )}
 
@@ -111,13 +116,23 @@ export const MediaHeader = ({
               </div>
             )}
 
-            {backToLibrary && (
+            {backToLibrary && mediaType !== "season" && (
               <Button
                 onClick={back}
                 variant="secondary"
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
                 <ArrowLeft className="w-4 h-4" /> Back to {mediaType === "movie" ? "Movies" : "Shows"}
+              </Button>
+            )}
+
+            {mediaType === "season" && (
+              <Button
+                onClick={() => router.push(backToParent)}
+                variant="secondary"
+                className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
+              >
+                <ArrowLeft className="w-4 h-4" /> Back to {(media as PlexSeason)?.parentTitle}
               </Button>
             )}
           </div>

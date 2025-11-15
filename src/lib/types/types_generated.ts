@@ -31,6 +31,22 @@ export type PlexMovie = {
     guid: string | null;
     importedAt: Generated<string>;
 };
+export type PlexSeason = {
+    id: Generated<number>;
+    ratingKey: string;
+    parentRatingKey: string;
+    type: string;
+    title: string;
+    parentKey: string;
+    parentTitle: string | null;
+    summary: string | null;
+    index: number | null;
+    year: number | null;
+    thumbUrl: string | null;
+    artUrl: string | null;
+    parentThumb: string | null;
+    parentTheme: string | null;
+};
 export type PlexShow = {
     id: Generated<number>;
     ratingKey: string;
@@ -51,5 +67,6 @@ export type PlexShow = {
 export type DB = {
     Configuration: Configuration;
     PlexMovie: PlexMovie;
+    PlexSeason: PlexSeason;
     PlexShow: PlexShow;
 };
