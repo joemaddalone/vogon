@@ -20,7 +20,7 @@ export default async function ImportLibraryPage() {
         </div>
       }
     >
-      <Libraries libraries={data} />
+      <Libraries libraries={data} error={error as unknown as string} />
     </Suspense>
   );
 }

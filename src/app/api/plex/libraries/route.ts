@@ -14,6 +14,9 @@ export async function GET() {
       (lib) => lib.type === "movie" || lib.type === "show"
     ).sort((a, b) => a.type.localeCompare(b.type));
 
+    // wait 3 seconds
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     return NextResponse.json({
       data: movieLibraries,
     });
