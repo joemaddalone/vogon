@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { PlexConnectionError } from "./_components/PlexConnectionError";
-import { PlexLibraries } from "./_components/PlexLibraries";
+import { Libraries } from "./_components/Libraries";
 import { api } from "@/lib/api";
 
 export default async function ImportLibraryPage() {
@@ -20,7 +20,7 @@ export default async function ImportLibraryPage() {
         </div>
       }
     >
-      <PlexLibraries libraries={data} />
+      <Libraries libraries={data} />
     </Suspense>
   );
 }

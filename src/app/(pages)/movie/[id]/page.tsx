@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
-import { PlexMediaDetail } from "@/components/libraryitem/PlexMediaDetail";
+import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { Spinner } from "@/components/ui/spinner";
 
-export default async function PlexShowPage({
+export default async function MoviePage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -20,7 +20,7 @@ export default async function PlexShowPage({
         </div>
       }
     >
-      <PlexMediaDetail posterBuilder={posterBuilder} id={id} />
+      <MediaDetail posterBuilder={posterBuilder} id={id} />
     </Suspense>
   );
 }

@@ -16,7 +16,7 @@ import {
 } from "@/lib/types";
 import Link from "next/link";
 
-export const PlexMediaDetail = ({
+export const MediaDetail = ({
   posterBuilder,
   id,
 }: {
