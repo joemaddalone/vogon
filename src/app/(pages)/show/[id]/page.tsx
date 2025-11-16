@@ -16,7 +16,6 @@ export default async function PlexShowPage({
     <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]">
           <Spinner className="size-16 text-gray-500" />
     </div>}>
-      {/* @ts-expect-error Server Component */}
       <PlexMediaDetail posterBuilder={posterBuilder} id={id} />
     </Suspense>
   );

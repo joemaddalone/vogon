@@ -20,7 +20,6 @@ export default async function PlexShowPage({
         </div>
       }
     >
-      {/* @ts-expect-error Server Component */}
       <PlexMediaDetail posterBuilder={posterBuilder} id={id} />
     </Suspense>
   );

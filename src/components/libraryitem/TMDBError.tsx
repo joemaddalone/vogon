@@ -1,4 +1,4 @@
-export const TMDBError = ({ knownIds }: { knownIds: Record<string, string> }) => {
+export const TMDBError = ({ knownIds }: { knownIds: Record<string, string | null> }) => {
   return (
     <div className="flex flex-col items-center justify-center mw-[600px] mx-auto">
       <div className="text-2xl font-bold">

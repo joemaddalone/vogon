@@ -26,7 +26,6 @@ export default async function PlexSeasonPage({
       }
     >
       <div>
-        {/* @ts-expect-error Server Component */}
         <PlexMediaDetail posterBuilder={posterBuilder} id={season} mediaType="season" />
       </div>
     </Suspense>

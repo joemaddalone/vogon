@@ -24,20 +24,21 @@ export const PlexMediaDetail = ({
     media:
       | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[] })
       | (PlexShowMetadata & { seasons?: PlexSeasonResponse[] })
-      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[] });
-    knownIds: Record<string, string>;
-    tmdbMedia: TMDBDetail;
+      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[] })
+      | null;
+    knownIds: Record<string, string | null>;
+    tmdbMedia: TMDBDetail | null;
     posters: { file_path: string; previewUrl?: string; source?: string }[];
-    backdrops: { file_path: string; previewUrl?: string; source?: string }[];
+    backdrops?: { file_path: string; previewUrl?: string; source?: string }[];
     logos: { file_path: string; source?: string }[];
-    mediaType: "movie" | "show" | "season";
+    mediaType?: "movie" | "show" | "season";
   }>;
   id: string;
 }) => {
-  const { media, knownIds, tmdbMedia, posters, backdrops, logos, mediaType } =
+  const { media, knownIds, tmdbMedia, posters, backdrops = [], logos, mediaType } =
     use(posterBuilder);
 
-  if (!tmdbMedia) {
+  if (!tmdbMedia || !media || !mediaType) {
     return <TMDBError knownIds={knownIds} />;
   }
 
