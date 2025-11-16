@@ -4,9 +4,9 @@ import { buildPosters } from "@/lib/buildPosterList";
 import { getPlexSeason } from "@/lib/client/database";
 import { Spinner } from "@/components/ui/spinner";
 import { PlexSeason } from "@/lib/types";
-import { PlexMediaDetail } from "@/components/libraryitem/PlexMediaDetail";
+import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 
-export default async function PlexSeasonPage({
+export default async function SeasonPage({
   params,
 }: {
   params: Promise<{ id: string; season: string }>;
@@ -26,7 +26,7 @@ export default async function PlexSeasonPage({
       }
     >
       <div>
-        <PlexMediaDetail posterBuilder={posterBuilder} id={season} mediaType="season" />
+        <MediaDetail posterBuilder={posterBuilder} id={season} />
       </div>
     </Suspense>
   );

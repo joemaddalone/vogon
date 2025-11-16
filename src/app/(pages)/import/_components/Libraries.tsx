@@ -8,7 +8,7 @@ import { api } from "@/lib/api";
 import { motion } from "motion/react";
 import { Film, TvIcon } from "lucide-react";
 
-export const PlexLibraries = ({ libraries }: { libraries: PlexLibrary[] }) => {
+export const Libraries = ({ libraries }: { libraries: PlexLibrary[] }) => {
   const router = useRouter();
   const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

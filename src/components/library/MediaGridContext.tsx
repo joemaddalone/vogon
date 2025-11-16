@@ -3,6 +3,7 @@
 import { createContext, useContext, useCallback, useMemo, useReducer, ReactNode, useRef, useEffect, useTransition } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import type { PlexMovie, PlexShow, Selectable } from "@/lib/types";
+import { Route } from "next";
 
 
 const removeArticle = (title: string) => {
@@ -140,7 +141,7 @@ export function MediaGridProvider({
     if (newQueryString !== currentQueryString) {
       const newUrl = newQueryString ? `${pathname}?${newQueryString}` : pathname;
       startTransition(() => {
-        router.replace(newUrl, { scroll: false });
+        router.replace(newUrl as Route, { scroll: false });
       });
     }
   }, [pathname, router, startTransition]);
