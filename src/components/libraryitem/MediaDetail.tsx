@@ -67,7 +67,6 @@ export const MediaDetail = ({
       )}
       {/** @ts-expect-error - MediaHeader expects a PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata **/}
       <MediaHeader media={media} logos={logos} mediaType={mediaType} />
-      {/* <hr className="my-4" /> */}
       <Tabs defaultValue="posters">
         <TabsList className="mb-8 inline-flex w-full h-9 justify-start rounded-none p-0 bg-background/60 backdrop-blur-sm border-b shadow-lg">
           <TabsTrigger

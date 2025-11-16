@@ -4,12 +4,8 @@ import { buildPosters } from "@/lib/buildPosterList";
 import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { Spinner } from "@/components/ui/spinner";
 
-export default async function ShowPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default async function ShowPage(props: PageProps<"/show/[id]">) {
+  const { id } = await props.params;
   const posterBuilder = buildPosters(id,"show");
 
   return (

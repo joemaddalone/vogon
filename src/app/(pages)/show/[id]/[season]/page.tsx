@@ -1,17 +1,13 @@
 export const dynamic = "force-dynamic";
+import { PlexSeason } from "@/lib/types";
 import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
 import { getPlexSeason } from "@/lib/client/database";
 import { Spinner } from "@/components/ui/spinner";
-import { PlexSeason } from "@/lib/types";
 import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 
-export default async function SeasonPage({
-  params,
-}: {
-  params: Promise<{ id: string; season: string }>;
-}) {
-  const { id, season } = await params;
+export default async function SeasonPage(props: PageProps<"/show/[id]/[season]">) {
+  const { id, season } = await props.params;
 
   const { id: seasonId, ...rest } = await getPlexSeason(season);
   const seasonData = { ...rest } as PlexSeason;
