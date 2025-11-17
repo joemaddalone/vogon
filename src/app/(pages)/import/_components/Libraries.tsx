@@ -1,33 +1,27 @@
 "use client";
-import { PlexLibrary } from "@/lib/types/plex";
-import { motion } from "motion/react";
+import { PlexLibraryResponse, ApiResponse } from "@/lib/types";
 import { LibrariesHeader } from "./LibrariesHeader";
-import { LibrariesError } from "./LibrariesError";
 import { LibraryImport } from "./LibraryImport";
+import { PlexConnectionError } from "./PlexConnectionError";
+import { Empty } from "./Empty";
+import { use } from 'react';
 
-export const Libraries = ({ libraries, error }: { libraries: PlexLibrary[], error?: string }) => {
+export const Libraries = ({libs}: { libs: Promise<ApiResponse<PlexLibraryResponse[]>>}) => {
+
+  const { data, error } = use(libs)
+
+  if (error) {
+    return <PlexConnectionError error={error.toString()} />;
+  }
+
   return (
     <div className="max-w-4xl mx-auto mt-12">
       <LibrariesHeader />
-
-      {error && (
-        <LibrariesError error={error} />
-      )}
-
-      {libraries.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center py-20"
-        >
-          <p className="text-xl text-muted-foreground font-light">
-            No libraries found in your Plex server.
-          </p>
-        </motion.div>
+      {data?.length === 0 ? (
+        <Empty />
       ) : (
         <div className="grid gap-6">
-          {libraries.map((library, index) => (
+          {data?.map((library, index) => (
             <LibraryImport key={library.key} library={library} index={index} />
           ))}
         </div>

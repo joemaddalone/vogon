@@ -1,25 +1,25 @@
 export const dynamic = "force-dynamic";
-import { PlexShow } from "@/lib/types";
-import { LibraryError } from "@/components/library/LibraryError";
 import { MediaLibrarySection } from "@/components/library/MediaLibrarySection";
 import { api } from "@/lib/api";
+import { Spinner } from "@/components/ui/spinner";
+import { Suspense } from "react";
 
 export default async function ShowsPage() {
-  let loading = true
-  const { data, error } = await api.data.shows();
-  loading = false;
-
-  if (error) {
-    return <LibraryError error={error.message} />;
-  }
+  const libLoader = api.data.shows();
 
   return (
-    // <MovieLibrary movies={data as unknown as PlexMovie[]} loading={loading} />
+    <Suspense
+    fallback={
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Spinner className="size-16 text-gray-500" />
+      </div>
+    }
+  >
     <MediaLibrarySection
-      items={data as unknown as PlexShow[]}
-      loading={loading}
+      libLoader={libLoader}
       totalLabel="shows"
       type="show"
     />
+    </Suspense>
   );
 }

@@ -1,4 +1,4 @@
 export type ApiResponse<T> =
-| { data: null, error: Error }
-| { data: T, error: null }
+| { data: undefined, error: Error }
+| { data: T, error: undefined }
 | { data: T, error: Error }

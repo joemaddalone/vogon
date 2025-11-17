@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { upsertConfiguration, getConfiguration } from "@/lib/client/database";
 import { getClients } from "@/lib/client/getClients";
-import { revalidatePath } from "next/cache";
 
 /**
  * GET /api/config

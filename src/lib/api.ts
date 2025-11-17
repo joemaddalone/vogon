@@ -1,6 +1,6 @@
 import { MovieResultItem } from "@lorenzopant/tmdb";
 import {
-  PlexLibrary,
+  PlexLibraryResponse,
   PlexMovie,
   PlexMovieMetadata,
   PlexShowMetadata,
@@ -26,11 +26,11 @@ const tryCatch = async function <T>(
     const data = await response.json();
     return {
       data: data.data,
-      error: data.error ? new Error(data.error) : null,
+      error: data.error ? new Error(data.error) : undefined,
     };
   } catch (error) {
     console.error("API error:", error);
-    return { data: null, error: error as Error };
+    return { data: undefined, error: error as Error };
   }
 };
 
@@ -138,7 +138,7 @@ export const api = {
     },
   },
   plex: {
-    libraries: async (): Promise<ApiResponse<PlexLibrary[]>> => {
+    libraries: async (): Promise<ApiResponse<PlexLibraryResponse[]>> => {
       return await tryCatch(fetch(`${host}/api/plex/libraries`));
     },
     library: async (libraryKey: string): Promise<ApiResponse<PlexMovie[]>> => {

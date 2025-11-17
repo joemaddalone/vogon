@@ -136,7 +136,7 @@ export const buildPosters = async (
   }
 
   return {
-    error: null,
+    error: undefined,
     backdrops,
     posters,
     logos,

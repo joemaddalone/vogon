@@ -1,38 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Library } from "@/components/library/Library";
 import { LibraryError } from "@/components/library/LibraryError";
-import { Selectable, PlexShow, PlexMovie } from "@/lib/types";
+import { Selectable, PlexShow, PlexMovie, ApiResponse } from "@/lib/types";
 import { api } from "@/lib/api";
 
-type MediaLibrarySectionProps<TItem> = {
-  items: TItem[];
-  loading: boolean;
+type MediaLibrarySectionProps = {
+  libLoader: Promise<ApiResponse<PlexMovie[]> | ApiResponse<PlexShow[]>>;
   totalLabel: string;
   type: "movie" | "show";
 };
 
-export const MediaLibrarySection = <TItem extends object>({
-  items,
-  loading,
+export const MediaLibrarySection = ({
+  libLoader,
   totalLabel,
   type,
-}: MediaLibrarySectionProps<TItem>) => {
+}: MediaLibrarySectionProps) => {
   const [error, setError] = useState<string | null>(null);
-  const [entries, setEntries] = useState(items);
+  const { data, error: libError } = use(libLoader);
 
-  useEffect(() => {
-    setEntries(items);
-  }, [items]);
+
 
   const handleReset = async () => {
     setError(null);
 
     try {
       await (type === "movie" ? api.data.resetMovies() : api.data.resetShows());
-      setEntries([]);
+      // setEntries([]);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to reset library";
@@ -40,8 +36,8 @@ export const MediaLibrarySection = <TItem extends object>({
     }
   };
 
-  if (error) {
-    return <LibraryError error={error} />;
+  if (libError) {
+    return <LibraryError error={libError.message} />;
   }
 
   return (
@@ -52,19 +48,19 @@ export const MediaLibrarySection = <TItem extends object>({
             {type === "movie" ? "Movie Library" : "Show Library"}
           </h1>
           <p className="text-muted-foreground">
-            {entries.length} total {totalLabel}
+            {data?.length} total {totalLabel}
           </p>
         </div>
       </div>
 
       <Library
-        key={entries.length}
+        key={data?.length}
         type={type}
-        items={entries as unknown as Selectable<PlexMovie | PlexShow>[]}
-        pending={loading}
+        items={data as unknown as Selectable<PlexMovie | PlexShow>[]}
+        pending={false}
       />
 
-      {entries.length > 0 && (
+      {data?.length > 0 && (
         <Button onClick={handleReset} variant="outline">
           Empty this {type === "movie" ? "Movie" : "Show"} Library
         </Button>
