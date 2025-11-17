@@ -78,6 +78,44 @@ export type PlexSeasonResponse = {
   parentTheme?: string;
 }
 
+export type PlexEpisodeResponse = {
+  ratingKey: string;
+  key: string;
+  skipParent: boolean;
+  parentRatingKey: string;
+  grandparentRatingKey: string;
+  guid: string;
+  parentGuid: string;
+  grandparentGuid?: string;
+  grandparentSlug?: string;
+  type: string;
+  title: string;
+  grandparentKey?: string;
+  parentKey: string;
+  grandparentTitle?: string;
+  parentTitle?: string;
+  contentRating?: string;
+  summary?: string;
+  index?: number;
+  parentIndex?: number;
+  audienceRating?: number;
+  year?: number;
+  thumb?: string;
+  art?: string;
+  parentThumb?: string;
+  grandparentThumb?: string;
+  grandparentArt?: string;
+  grandparentTheme?: string;
+  duration?: number;
+  originallyAvailableAt?: string;
+  addedAt?: number;
+  updatedAt?: number;
+  audienceRatingImage?: string;
+  chapterSource?: string;
+  thumbUrl?: string;
+  artUrl?: string;
+}
+
 export type PlexResponse<T> = {
   MediaContainer: {
     size: number;

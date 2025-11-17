@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
   Insertable,
+  PlexEpisode,
+  PlexEpisodeResponse,
   PlexMovie,
   PlexSeason,
   PlexSeasonResponse,
@@ -21,6 +23,8 @@ import {
   updateShowThumbUrl,
   updateThumbUrl,
   resetPlexSeasons,
+  createManyPlexEpisodes,
+  resetPlexEpisodes,
 } from "@/lib/client/database";
 
 type MediaType = "movie" | "show";
@@ -172,8 +176,8 @@ export async function handleMediaImport(
     await config.createMany(normalizedItems);
 
     if (mediaType === "show") {
-       // purposely not awaiting this for now.
-       handleMediaImportSeasons(normalizedItems as Insertable<PlexShow>[]);
+      // purposely not awaiting this for now.
+      handleMediaImportSeasons(normalizedItems as Insertable<PlexShow>[]);
     }
 
     return NextResponse.json({
@@ -191,8 +195,10 @@ export async function handleMediaImport(
 
 export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
   const seasons: Insertable<PlexSeason>[] = [];
+  const episodes: Insertable<PlexEpisode>[] = [];
   // temp fix to dupes in database
   await resetPlexSeasons();
+  await resetPlexEpisodes();
 
   for (const item of items) {
     const showSeasons = await plex.getShowSeasons(item.ratingKey);
@@ -207,14 +213,41 @@ export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
         parentTitle: season.parentTitle,
         summary: season.summary,
         index: season.index,
-        thumbUrl: season.thumb,
-        artUrl: season.art,
+        thumbUrl: season.thumbUrl,
+        artUrl: season.artUrl,
         parentThumb: season.parentThumb,
         parentTheme: season.parentTheme,
       });
     });
   }
+
   if (seasons.length > 0) {
-    await createManyPlexSeasons(seasons);
+    createManyPlexSeasons(seasons);
+  }
+
+  if (process.env.ENABLE_EPISODES === "true") {
+    for (const season of seasons) {
+      const seasonEpisodes: PlexEpisodeResponse[] =
+        await plex.getSeasonEpisodes(season.ratingKey);
+      seasonEpisodes.forEach((episode) => {
+        episodes.push({
+          ratingKey: episode.ratingKey,
+          parentRatingKey: episode.parentRatingKey,
+          title: episode.title,
+          index: episode.index,
+          parentIndex: episode.parentIndex,
+          year: episode.year,
+          summary: episode.summary,
+          thumbUrl: episode.thumbUrl,
+          artUrl: episode.artUrl,
+          duration: episode.duration,
+          guid: episode.guid,
+        });
+      });
+    }
+
+    if (episodes.length > 0) {
+      createManyPlexEpisodes(episodes);
+    }
   }
 }
