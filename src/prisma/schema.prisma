@@ -44,6 +44,22 @@ model PlexShow {
   importedAt    DateTime @default(now())
 }
 
+model PlexEpisode {
+  id            Int      @id @default(autoincrement())
+  ratingKey     String
+  parentRatingKey String
+  title         String
+  index         Int?
+  parentIndex   Int?
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  guid          String?
+  importedAt    DateTime @default(now())
+}
+
 model PlexSeason {
   id            Int      @id @default(autoincrement())
   ratingKey     String

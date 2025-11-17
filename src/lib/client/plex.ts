@@ -1,10 +1,15 @@
-import { PlexLibraryResponse, PlexMovieResponse, PlexResponse, PlexMovieMetadata, PlexSeasonResponse } from "@/lib/types";
+import {
+  PlexLibraryResponse,
+  PlexMovieResponse,
+  PlexResponse,
+  PlexMovieMetadata,
+  PlexSeasonResponse,
+  PlexEpisodeResponse,
+} from "@/lib/types";
 import { getClients } from "./getClients";
 
 class PlexClient {
-  constructor() {
-
-  }
+  constructor() {}
 
   private async config() {
     return await getClients();
@@ -29,11 +34,12 @@ class PlexClient {
 
       if (!response.ok) {
         // throw new Error(`Plex API error: ${response.status} ${response.statusText}`);
-        return { error: `Plex API error: ${response.status} ${response.statusText}` } as T;
+        return {
+          error: `Plex API error: ${response.status} ${response.statusText}`,
+        } as T;
       }
 
-      return await response.json() as T;
-
+      return (await response.json()) as T;
     } catch (error) {
       console.error("Plex API request failed:", error);
       return { error: `Plex API request failed: ${error}` } as T;
@@ -44,7 +50,9 @@ class PlexClient {
    * Get all libraries from Plex server
    */
   async getLibraries(): Promise<PlexLibraryResponse[]> {
-    const response = await this.request<PlexResponse<PlexLibraryResponse>>("/library/sections");
+    const response = await this.request<PlexResponse<PlexLibraryResponse>>(
+      "/library/sections"
+    );
     return response.MediaContainer.Directory || [];
   }
 
@@ -60,18 +68,21 @@ class PlexClient {
     // Add full URL to thumbnails
     return items.map((movie) => ({
       ...movie,
-      thumbUrl: movie.thumb ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}` : undefined,
-      artUrl: movie.art ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}` : undefined,
+      thumbUrl: movie.thumb
+        ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
+      artUrl: movie.art
+        ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
     }));
   }
-
-
-
 
   /**
    * Get detailed metadata for a specific movie
    */
-  async getMovieDetails(ratingKey: string): Promise<Partial<PlexMovieMetadata>> {
+  async getMovieDetails(
+    ratingKey: string
+  ): Promise<Partial<PlexMovieMetadata>> {
     const config = await this.config();
     const response = await this.request<PlexResponse<PlexMovieResponse>>(
       `/library/metadata/${ratingKey}`
@@ -84,8 +95,12 @@ class PlexClient {
 
     return {
       ...movie,
-      thumbUrl: movie.thumb ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}` : '',
-      artUrl: movie.art ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}` : '',
+      thumbUrl: movie.thumb
+        ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}`
+        : "",
+      artUrl: movie.art
+        ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}`
+        : "",
     };
   }
 
@@ -94,12 +109,33 @@ class PlexClient {
     const response = await this.request<PlexResponse<PlexSeasonResponse>>(
       `/library/metadata/${ratingKey}/children`
     );
-    const items =  response?.MediaContainer?.Metadata || [];
+    const items = response?.MediaContainer?.Metadata || [];
 
     return items.map((season) => ({
       ...season,
-      thumb: season.thumb ? `${config?.plexServerUrl}${season.thumb}?X-Plex-Token=${config?.plexToken}` : undefined,
-      art: season.art ? `${config?.plexServerUrl}${season.art}?X-Plex-Token=${config?.plexToken}` : undefined,
+      thumbUrl: season.thumb
+        ? `${config?.plexServerUrl}${season.thumb}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
+      artUrl: season.art
+        ? `${config?.plexServerUrl}${season.art}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
+    }));
+  }
+
+  async getSeasonEpisodes(ratingKey: string): Promise<PlexEpisodeResponse[]> {
+    const config = await this.config();
+    const response = await this.request<PlexResponse<PlexEpisodeResponse>>(
+      `/library/metadata/${ratingKey}/children`
+    );
+    const items = response?.MediaContainer?.Metadata || [];
+    return items.map((episode) => ({
+      ...episode,
+      thumbUrl: episode.thumb
+        ? `${config?.plexServerUrl}${episode.thumb}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
+      artUrl: episode.art
+        ? `${config?.plexServerUrl}${episode.art}?X-Plex-Token=${config?.plexToken}`
+        : undefined,
     }));
   }
 
@@ -123,7 +159,9 @@ class PlexClient {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to update poster: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to update poster: ${response.status} ${response.statusText}`
+        );
       }
 
       // Lock the poster field to prevent Plex from overwriting it
@@ -134,36 +172,41 @@ class PlexClient {
     }
   }
 
-    /**
+  /**
    * Update movie poster with a new image URL
    */
-    async updateMovieBackdrop(ratingKey: string, backdropUrl: string): Promise<void> {
-      const config = await this.config();
-      const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/arts`;
-      const params = new URLSearchParams({
-        "X-Plex-Token": config?.plexToken || "",
-        url: backdropUrl,
+  async updateMovieBackdrop(
+    ratingKey: string,
+    backdropUrl: string
+  ): Promise<void> {
+    const config = await this.config();
+    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/arts`;
+    const params = new URLSearchParams({
+      "X-Plex-Token": config?.plexToken || "",
+      url: backdropUrl,
+    });
+
+    try {
+      const response = await fetch(`${url}?${params.toString()}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
       });
 
-      try {
-        const response = await fetch(`${url}?${params.toString()}`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to update backdrop: ${response.status} ${response.statusText}`);
-        }
-
-        // Lock the poster field to prevent Plex from overwriting it
-        await this.lockBackdropField(ratingKey);
-      } catch (error) {
-        console.error("Failed to update movie backdrop:", error);
-        throw error;
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update backdrop: ${response.status} ${response.statusText}`
+        );
       }
+
+      // Lock the poster field to prevent Plex from overwriting it
+      await this.lockBackdropField(ratingKey);
+    } catch (error) {
+      console.error("Failed to update movie backdrop:", error);
+      throw error;
     }
+  }
 
   /**
    * Lock the poster field to prevent Plex from changing it
@@ -189,29 +232,29 @@ class PlexClient {
     }
   }
 
-    /**
+  /**
    * Lock the poster field to prevent Plex from changing it
    */
-    private async lockBackdropField(ratingKey: string): Promise<void> {
-      const config = await this.config();
-      const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
-      const params = new URLSearchParams({
-        "X-Plex-Token": config?.plexToken || "",
-        "art.locked": "1",
+  private async lockBackdropField(ratingKey: string): Promise<void> {
+    const config = await this.config();
+    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
+    const params = new URLSearchParams({
+      "X-Plex-Token": config?.plexToken || "",
+      "art.locked": "1",
+    });
+
+    try {
+      const response = await fetch(`${url}?${params.toString()}`, {
+        method: "PUT",
       });
 
-      try {
-        const response = await fetch(`${url}?${params.toString()}`, {
-          method: "PUT",
-        });
-
-        if (!response.ok) {
-          console.warn("Failed to lock backdrop field");
-        }
-      } catch (error) {
-        console.warn("Failed to lock backdrop field:", error);
+      if (!response.ok) {
+        console.warn("Failed to lock backdrop field");
       }
+    } catch (error) {
+      console.warn("Failed to lock backdrop field:", error);
     }
+  }
 
   /**
    * Get metadata including labels
@@ -222,17 +265,21 @@ class PlexClient {
     title: string;
     labels: string[];
   }> {
-    const response = await this.request<PlexResponse<PlexMovieResponse & {
-      librarySectionID: string;
-      Label?: Array<{ tag: string }>;
-    }>>(`/library/metadata/${ratingKey}`);
+    const response = await this.request<
+      PlexResponse<
+        PlexMovieResponse & {
+          librarySectionID: string;
+          Label?: Array<{ tag: string }>;
+        }
+      >
+    >(`/library/metadata/${ratingKey}`);
 
     const metadata = response.MediaContainer.Metadata?.[0];
     if (!metadata) {
       throw new Error("Metadata not found");
     }
 
-    const labels = metadata.Label?.map(label => label.tag) || [];
+    const labels = metadata.Label?.map((label) => label.tag) || [];
 
     return {
       librarySectionID: metadata.librarySectionID,
@@ -273,7 +320,9 @@ class PlexClient {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to unlock label field: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to unlock label field: ${response.status} ${response.statusText}`
+        );
       }
     } catch (error) {
       console.error("Failed to unlock label field:", error);
@@ -316,7 +365,9 @@ class PlexClient {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to remove Overlay label: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to remove Overlay label: ${response.status} ${response.statusText}`
+        );
       }
 
       return response.status >= 200 && response.status < 300;
@@ -404,7 +455,7 @@ class PlexClient {
    * Wait for a specified number of milliseconds
    */
   private async wait(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -428,7 +479,9 @@ class PlexClient {
         };
       }
 
-      const otherLabels = metadata.labels.filter(label => label !== "Overlay");
+      const otherLabels = metadata.labels.filter(
+        (label) => label !== "Overlay"
+      );
       const typeId = this.getTypeId(metadata.type);
 
       await this.unlockLabelField(ratingKey);
@@ -462,7 +515,8 @@ class PlexClient {
       } else {
         return {
           success: false,
-          message: "WARNING: Overlay label still appears to be present despite successful API calls",
+          message:
+            "WARNING: Overlay label still appears to be present despite successful API calls",
           title: metadata.title,
         };
       }
@@ -470,7 +524,9 @@ class PlexClient {
       console.error("Error removing Overlay:", error);
       return {
         success: false,
-        message: `ERROR: ${error instanceof Error ? error.message : "Unknown error"}`,
+        message: `ERROR: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       };
     }
   }
@@ -480,13 +536,14 @@ class PlexClient {
    */
   async testConnection(): Promise<boolean> {
     try {
-      const response = await this.request<{ MediaContainer: { machineIdentifier: string } }>("/");
+      const response = await this.request<{
+        MediaContainer: { machineIdentifier: string };
+      }>("/");
       return !!response.MediaContainer.machineIdentifier;
     } catch {
       return false;
     }
   }
 }
-
 
 export const plex = new PlexClient();

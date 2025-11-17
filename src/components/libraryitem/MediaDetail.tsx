@@ -12,9 +12,11 @@ import {
   PlexSeasonMetadata,
   PlexSeasonResponse,
   PlexShowMetadata,
+  PlexEpisode,
   TMDBDetail,
 } from "@/lib/types";
 import Link from "next/link";
+import { EpisodesList } from "./EpisodesList";
 
 export const MediaDetail = ({
   posterBuilder,
@@ -22,9 +24,9 @@ export const MediaDetail = ({
 }: {
   posterBuilder: Promise<{
     media:
-      | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[] })
-      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[] })
-      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[] })
+      | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
+      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
+      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
       | null;
     knownIds: Record<string, string | null>;
     tmdbMedia: TMDBDetail | null;
@@ -46,6 +48,11 @@ export const MediaDetail = ({
     mediaType === "show" &&
     media?.seasons?.length !== undefined &&
     media?.seasons?.length > 0;
+
+  const hasEpisodes =
+    mediaType === "season" &&
+    media?.episodes?.length !== undefined &&
+    media?.episodes?.length > 0;
 
   return (
     <div>
@@ -73,7 +80,7 @@ export const MediaDetail = ({
             className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
             value="posters"
           >
-            Posters
+            {mediaType === "season" ? "Seaosn Posters" : "Posters"}
           </TabsTrigger>
           {mediaType !== "season" && (
             <TabsTrigger
@@ -91,6 +98,14 @@ export const MediaDetail = ({
               Seasons
             </TabsTrigger>
           )}
+          {hasEpisodes && (
+            <TabsTrigger
+              className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+              value="episodes"
+            >
+              Episodes
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="posters">
           <PosterPicker
@@ -98,6 +113,8 @@ export const MediaDetail = ({
             ratingKey={id}
             mediaType={mediaType}
           />
+
+
         </TabsContent>
         {mediaType !== "season" && (
           <TabsContent value="backdrops">
@@ -106,6 +123,11 @@ export const MediaDetail = ({
               ratingKey={id}
               mediaType={mediaType}
             />
+          </TabsContent>
+        )}
+        {hasEpisodes && (
+          <TabsContent value="episodes">
+            <EpisodesList episodes={media.episodes || []} />
           </TabsContent>
         )}
         {mediaType === "show" && hasSeasons && (

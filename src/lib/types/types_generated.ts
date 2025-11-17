@@ -14,6 +14,21 @@ export type Configuration = {
     thePosterDbEmail: string | null;
     thePosterDbPassword: string | null;
 };
+export type PlexEpisode = {
+    id: Generated<number>;
+    ratingKey: string;
+    parentRatingKey: string;
+    title: string;
+    index: number | null;
+    parentIndex: number | null;
+    year: number | null;
+    summary: string | null;
+    thumbUrl: string | null;
+    artUrl: string | null;
+    duration: number | null;
+    guid: string | null;
+    importedAt: Generated<string>;
+};
 export type PlexMovie = {
     id: Generated<number>;
     ratingKey: string;
@@ -66,6 +81,7 @@ export type PlexShow = {
 };
 export type DB = {
     Configuration: Configuration;
+    PlexEpisode: PlexEpisode;
     PlexMovie: PlexMovie;
     PlexSeason: PlexSeason;
     PlexShow: PlexShow;

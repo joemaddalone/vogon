@@ -3,7 +3,7 @@ import { plex } from "@/lib/client/plex";
 import  { getPlexSeasonByShow } from "@/lib/client/database";
 
 /**
- * GET /api/plex/movie/[id]/details
+ * GET /api/plex/show/[id]/details
  * Get movie details from local database
  */
 export async function GET(
