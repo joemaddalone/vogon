@@ -59,9 +59,9 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
             <TvIcon className="w-8 h-8 mt-1 text-foreground/80 shrink-0" />
           )}
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">
+            <h3>
               {library.title}
-            </h2>
+            </h3>
             <p>
               {library.type === "movie" ? "Movie" : "TV Show"} Library
             </p>

@@ -23,7 +23,7 @@ export const MediaGrid = ({ pending, itemType }: { pending: boolean, itemType: "
 
       {!pending && items.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">No items in library</p>
+          <p className="mx-auto">No items in library</p>
           <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
         </div>
       )}

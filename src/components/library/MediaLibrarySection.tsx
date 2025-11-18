@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Library } from "@/components/library/Library";
 import { LibraryError } from "@/components/library/LibraryError";
 import { Selectable, PlexShow, PlexMovie, ApiResponse } from "@/lib/types";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
 type MediaLibrarySectionProps = {
@@ -18,6 +19,7 @@ export const MediaLibrarySection = ({
   totalLabel,
   type,
 }: MediaLibrarySectionProps) => {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { data, error: libError } = use(libLoader);
 
@@ -28,7 +30,7 @@ export const MediaLibrarySection = ({
 
     try {
       await (type === "movie" ? api.data.resetMovies() : api.data.resetShows());
-      // setEntries([]);
+      router.refresh();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to reset library";
