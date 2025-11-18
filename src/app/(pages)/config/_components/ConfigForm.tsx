@@ -59,7 +59,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
     <div className="container max-w-2xl mx-auto py-8 px-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Configuration</h1>
-        <p className="text-muted-foreground">
+        <p>
           Configure your Plex server and API credentials. All values are stored
           securely in the local database.{" "}
           <i className="text-sm text-orange-200">

@@ -30,7 +30,7 @@ export const MediaGrid = ({ pending, itemType }: { pending: boolean, itemType: "
 
       {!pending && items.length > 0 && totalFilteredCount === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">No items found matching your search</p>
+          <p className="mx-auto">No items found matching your search</p>
         </div>
       )}
 

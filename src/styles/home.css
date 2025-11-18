@@ -1,0 +1,18 @@
+.home-page {
+  .description {
+    @apply text-xl md:text-2xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed;
+  }
+
+  .empty-card {
+    @apply text-center py-16 px-8 rounded-2xl bg-muted/30;
+
+    .library-icon {
+      @apply w-12 h-12 mx-auto mb-4 text-muted-foreground/40;
+    }
+
+    p {
+      @apply text-base text-muted-foreground/70;
+    }
+  }
+
+}

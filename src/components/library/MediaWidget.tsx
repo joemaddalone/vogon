@@ -45,8 +45,8 @@ export const MediaWidget = ({
           )}
           {/* Overview Hover Overlay */}
           {movieData.summary && mode === "grid" && (
-            <div className="widget-overview absolute inset-0 bg-black/75 bg-opacity-80 text-white p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <p className="text-sm leading-relaxed text-center text-shadow-lg/30">
+            <div className="widget-overview absolute inset-0 bg-black/75 bg-opacity-80  p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <p className="text-sm leading-relaxed text-center text-shadow-lg/30 text-white!">
                 {movieData.summary.length > 250
                   ? movieData.summary.slice(0, 250) + "..."
                   : movieData.summary}
@@ -57,9 +57,9 @@ export const MediaWidget = ({
       {/* Film Information Section */}
       <div className="p-4 min-h-[165px]">
         {/* Title */}
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 text-balance break-before-all hyphens-manual w-[240px]">
+        <h4 className="text-balance break-before-all hyphens-manual w-[240px]">
           {movieData.title}
-        </h3>
+        </h4>
 
 
         {/* Release Date */}
