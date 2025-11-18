@@ -1,10 +1,8 @@
 "use client";
 import { use } from "react";
-import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { PosterPicker } from "@/components/libraryitem/PosterPicker";
 import { BackdropPicker } from "@/components/libraryitem/BackdropPicker";
 import { TMDBError } from "@/components/libraryitem/TMDBError";
-import Image from "next/image";
 import ImageLoader from "@/components/ImageLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -37,7 +35,7 @@ export const MediaDetail = ({
   }>;
   id: string;
 }) => {
-  const { media, knownIds, tmdbMedia, posters, backdrops = [], logos, mediaType } =
+  const { media, knownIds, tmdbMedia, posters, backdrops = [], mediaType } =
     use(posterBuilder);
 
   if (!tmdbMedia || !media || !mediaType) {
@@ -56,24 +54,6 @@ export const MediaDetail = ({
 
   return (
     <div>
-      {media.artUrl && (
-        <div className="fixed inset-0 pointer-events-none top-0 left-0 w-full h-full object-cover ">
-          <div className="absolute top-0 left-0 w-full h-full z-[-1] object-cover">
-            <Image
-              src={media.artUrl}
-              alt={media.title}
-              width={0}
-              height={0}
-              sizes="100vw"
-              className="w-full h-full object-cover dark:opacity-40 opacity-30"
-              unoptimized
-              priority={true}
-            />
-          </div>
-        </div>
-      )}
-      {/** @ts-expect-error - MediaHeader expects a PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata **/}
-      <MediaHeader media={media} logos={logos} mediaType={mediaType} />
       <Tabs defaultValue="posters">
         <TabsList className="mb-8 inline-flex w-full h-9 justify-start rounded-none p-0 bg-background/60 backdrop-blur-sm border-b shadow-lg">
           <TabsTrigger

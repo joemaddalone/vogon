@@ -18,11 +18,21 @@ export const getPlexSeasonByShow = async (
 export const getPlexSeason = async (
   ratingKey: string
 ): Promise<Selectable<PlexSeason>> => {
-  return await db
-    .selectFrom("PlexSeason")
-    .where("ratingKey", "=", ratingKey)
-    .selectAll()
-    .executeTakeFirstOrThrow();
+    return await db
+      .selectFrom("PlexSeason")
+      .where("ratingKey", "=", ratingKey)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
+};
+
+
+export const updateSeasonThumbUrl = async (ratingKey: string, thumbUrl: string): Promise<void> => {
+  await db.updateTable("PlexSeason").set({ thumbUrl }).where("ratingKey", "=", ratingKey).execute();
+};
+
+export const updateSeasonArtUrl = async (ratingKey: string, artUrl: string): Promise<void> => {
+  await db.updateTable("PlexSeason").set({ artUrl }).where("ratingKey", "=", ratingKey).execute();
 };
 
 export const resetPlexSeasons = async (): Promise<void> => {

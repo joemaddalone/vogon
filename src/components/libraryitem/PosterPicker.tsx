@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { api } from "@/lib/api";
 import { PosterOption } from "@/components/libraryitem/PosterOption";
 
@@ -36,7 +35,10 @@ export const PosterPicker = ({
         await api.data.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
       }
     } else if(mediaType === "season") {
-      console.log("season");
+      const season = await api.plex.seasonDetail(ratingKey);
+      if(season) {
+        await api.data.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
+      }
     }
 
     setCurrentIndex(index);

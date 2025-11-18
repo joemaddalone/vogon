@@ -104,7 +104,7 @@ export const api = {
       return await tryCatch(fetch(`${host}/api/data/stats`));
     },
     updatePoster: async (
-      mediaType: "movie" | "show",
+      mediaType: "movie" | "show" | "season",
       ratingKey: string,
       thumbUrl: string
     ): Promise<ApiResponse<void>> => {

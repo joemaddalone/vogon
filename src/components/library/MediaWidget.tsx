@@ -18,6 +18,7 @@ export const MediaWidget = ({
   // Full mode render
   return (
     <Link href={`/${itemType === "movie" ? "movie" : "show"}/${movieData.ratingKey}`}
+      scroll={true}
       className={`bg-white dark:bg-black/50 rounded-lg shadow-md overflow-hidden ${className} w-full widget-block`}
     >
       {/* Poster Section */}

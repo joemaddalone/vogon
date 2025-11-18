@@ -21,13 +21,16 @@ import {
   updateArtUrl,
   updateShowArtUrl,
   updateShowThumbUrl,
+  updateSeasonThumbUrl,
+  updateSeasonArtUrl,
   updateThumbUrl,
   resetPlexSeasons,
   createManyPlexEpisodes,
   resetPlexEpisodes,
+  getPlexSeasons,
 } from "@/lib/client/database";
 
-type MediaType = "movie" | "show";
+type MediaType = "movie" | "show" | "season";
 
 type MediaConfig = {
   label: string;
@@ -37,7 +40,7 @@ type MediaConfig = {
   updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
   updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
   createMany: (
-    items: Array<Insertable<PlexMovie> | Insertable<PlexShow>>
+    items: Array<Insertable<PlexMovie> | Insertable<PlexShow> | Insertable<PlexSeason>>
   ) => Promise<void>;
 };
 
@@ -49,6 +52,7 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     reset: resetPlexMovies,
     updateThumb: updateThumbUrl,
     updateArt: updateArtUrl,
+    // @ts-expect-error - createManyPlexMovies expects an array of Insertable<PlexMovie>
     createMany: createManyPlexMovies,
   },
   show: {
@@ -58,7 +62,18 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     reset: resetPlexShows,
     updateThumb: updateShowThumbUrl,
     updateArt: updateShowArtUrl,
+    // @ts-expect-error - createManyPlexShows expects an array of Insertable<PlexShow>
     createMany: createManyPlexShows,
+  },
+  season: {
+    label: "seasons",
+    cachePath: "/season",
+    getAll: getPlexSeasons,
+    reset: resetPlexSeasons,
+    updateThumb: updateSeasonThumbUrl,
+    updateArt: updateSeasonArtUrl,
+    // @ts-expect-error - createManyPlexSeasons expects an array of Insertable<PlexSeason>
+    createMany: createManyPlexSeasons,
   },
 };
 
