@@ -1,11 +1,11 @@
 import { db } from "./database";
 import { Insertable, Selectable, PlexEpisode } from "@/lib/types";
 
-export const getPlexEpisodes = async (): Promise<Selectable<PlexEpisode>[]> => {
+export const list = async (): Promise<Selectable<PlexEpisode>[]> => {
   return await db.selectFrom("PlexEpisode").selectAll().execute();
 };
 
-export const getEpisodeBySeason = async (
+export const byParent = async (
   ratingKey: string
 ): Promise<Selectable<PlexEpisode>[]> => {
   return await db
@@ -15,7 +15,7 @@ export const getEpisodeBySeason = async (
     .execute();
 };
 
-export const getPlexEpisode = async (
+export const item = async (
   ratingKey: string
 ): Promise<Selectable<PlexEpisode>> => {
   return await db
@@ -25,11 +25,11 @@ export const getPlexEpisode = async (
     .executeTakeFirstOrThrow();
 };
 
-export const resetPlexEpisodes = async (): Promise<void> => {
+export const reset = async (): Promise<void> => {
   await db.deleteFrom("PlexEpisode").execute();
 };
 
-export const createPlexEpisode = async (
+export const create = async (
   plexEpisode: Insertable<PlexEpisode>
 ): Promise<Selectable<PlexEpisode>> => {
   return await db
@@ -39,7 +39,7 @@ export const createPlexEpisode = async (
     .executeTakeFirstOrThrow();
 };
 
-export const createManyPlexEpisodes = async (
+export const createMany = async (
   plexEpisodes: Insertable<PlexEpisode>[]
 ): Promise<void> => {
   await db.transaction().execute(async (tx) => {
@@ -54,10 +54,10 @@ export const createManyPlexEpisodes = async (
 
 
 export const plexEpisode = {
-  list: getPlexEpisodes,
-  bySeason: getEpisodeBySeason,
-  get: getPlexEpisode,
-  reset: resetPlexEpisodes,
-  create: createPlexEpisode,
-  createMany: createManyPlexEpisodes,
+  list: list,
+  bySeason: byParent,
+  get: item,
+  reset: reset,
+  create: create,
+  createMany: createMany,
 }

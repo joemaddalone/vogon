@@ -6,15 +6,15 @@ import { Spinner } from "@/components/ui/spinner";
 import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
-import { getPlexSeason } from "@/lib/client/database";
+import { dataManager as DM } from "@/lib/client/database";
 
 export default async function SeasonPage(props: PageProps<"/show/[id]/[season]">) {
   const { id, season } = await props.params;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id: seasonId, ...rest } = await getPlexSeason(season);
+  const { id: seasonId, ...rest } = await DM.plex.season.get(season);
   const seasonData = { ...rest } as PlexSeason;
-  const media = (await getPlexSeason(season));
+  const media = (await DM.plex.season.get(season));
   const posterBuilder = buildPosters(id, "season", seasonData?.index || 0, season);
 
   return (

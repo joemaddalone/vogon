@@ -1,23 +1,23 @@
 import { db } from "./database";
 import { Insertable, Selectable, PlexMovie } from "@/lib/types";
 
-export const getPlexMovies = async (): Promise<Selectable<PlexMovie>[]> => {
+export const list = async (): Promise<Selectable<PlexMovie>[]> => {
   return await db.selectFrom("PlexMovie").selectAll().execute();
 };
 
-export const resetPlexMovies = async (): Promise<void> => {
+export const reset = async (): Promise<void> => {
   await db.deleteFrom("PlexMovie").execute();
 };
 
-export const updateThumbUrl = async (ratingKey: string, thumbUrl: string): Promise<void> => {
+export const updateThumb = async (ratingKey: string, thumbUrl: string): Promise<void> => {
   await db.updateTable("PlexMovie").set({ thumbUrl }).where("ratingKey", "=", ratingKey).execute();
 };
 
-export const updateArtUrl = async (ratingKey: string, artUrl: string): Promise<void> => {
+export const updateArt = async (ratingKey: string, artUrl: string): Promise<void> => {
   await db.updateTable("PlexMovie").set({ artUrl }).where("ratingKey", "=", ratingKey).execute();
 };
 
-export const getRecordCount = async (): Promise<number> => {
+export const count = async (): Promise<number> => {
   const { count } = await db
   .selectFrom("PlexMovie")
   .select(db.fn.countAll().as("count"))
@@ -25,7 +25,7 @@ export const getRecordCount = async (): Promise<number> => {
   return Number(count);
 };
 
-export const getPlexMovie = async (
+export const item = async (
   id: number
 ): Promise<Selectable<PlexMovie> | undefined> => {
   return await db
@@ -35,7 +35,7 @@ export const getPlexMovie = async (
     .executeTakeFirstOrThrow();
 };
 
-export const createPlexMovie = async (
+export const create = async (
   plexMovie: Insertable<PlexMovie>
 ): Promise<Selectable<PlexMovie>> => {
   return await db
@@ -45,7 +45,7 @@ export const createPlexMovie = async (
     .executeTakeFirstOrThrow();
 };
 
-export const createManyPlexMovies = async (
+export const createMany = async (
   plexMovies: Insertable<PlexMovie>[]
 ): Promise<void> => {
   await db.transaction().execute(async (tx) => {
@@ -59,12 +59,12 @@ export const createManyPlexMovies = async (
 };
 
 export const plexMovie = {
-  list: getPlexMovies,
-  reset: resetPlexMovies,
-  updateThumb: updateThumbUrl,
-  updateArt: updateArtUrl,
-  count: getRecordCount,
-  get: getPlexMovie,
-  create: createPlexMovie,
-  createMany: createManyPlexMovies,
+  list: list,
+  reset: reset,
+  updateThumb: updateThumb,
+  updateArt: updateArt,
+  count: count,
+  get: item,
+  create: create,
+  createMany: createMany,
 }
