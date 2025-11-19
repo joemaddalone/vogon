@@ -9,8 +9,8 @@
     "lint": "eslint",
     "db:prepare": "node scripts/prepare.mjs",
     "db:delete": "node scripts/delete.mjs",
-    "db:reset": "npm run db:delete && npm run db:prepare && npm run db:generate",
-    "db:generate": "npm run db:prepare && npx prisma migrate dev --name init --schema=src/prisma/schema.prisma"
+    "db:reset": "npx prisma migrate dev --name init --schema=src/prisma/schema.prisma",
+    "db:generate": "npm run db:delete && npm run db:prepare && npm run db:reset"
   },
   "dependencies": {
     "@lorenzopant/tmdb": "^1.0.0",
