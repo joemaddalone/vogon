@@ -7,6 +7,9 @@ export async function getClients() {
   const envConfig = {
     plexServerUrl: process.env.PLEX_SERVER_URL,
     plexToken: process.env.PLEX_TOKEN,
+    jellyfinServerUrl: process.env.JELLYFIN_SERVER_URL,
+    jellyfinApiKey: process.env.JELLYFIN_API_KEY,
+    jellyfinUserId: process.env.JELLYFIN_USER_ID,
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,

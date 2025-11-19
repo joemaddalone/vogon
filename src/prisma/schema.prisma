@@ -77,10 +77,80 @@ model PlexSeason {
   parentTheme   String?
 }
 
+model JellyfinMovie {
+  id            Int      @id @default(autoincrement())
+  itemId        String   @unique
+  libraryId     String
+  title         String
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  rating        Float?
+  contentRating String?
+  dateCreated   String?
+  providerIds   String?
+  importedAt    DateTime @default(now())
+}
+
+model JellyfinShow {
+  id            Int      @id @default(autoincrement())
+  itemId        String   @unique
+  libraryId     String
+  title         String
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  rating        Float?
+  contentRating String?
+  dateCreated   String?
+  providerIds   String?
+  importedAt    DateTime @default(now())
+}
+
+model JellyfinSeason {
+  id              Int      @id @default(autoincrement())
+  itemId          String
+  seriesId        String
+  seriesName      String?
+  type            String
+  title           String
+  summary         String?
+  index           Int?
+  year            Int?
+  thumbUrl        String?
+  artUrl          String?
+  parentThumb     String?
+  providerIds     String?
+  importedAt      DateTime @default(now())
+}
+
+model JellyfinEpisode {
+  id            Int      @id @default(autoincrement())
+  itemId        String
+  seriesId      String
+  seasonId      String
+  title         String
+  index         Int?
+  parentIndex   Int?
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  duration      Int?
+  providerIds   String?
+  importedAt    DateTime @default(now())
+}
+
 model Configuration {
   id             Int     @id @default(autoincrement())
   plexServerUrl  String?
   plexToken      String?
+  jellyfinServerUrl  String?
+  jellyfinApiKey     String?
+  jellyfinUserId     String?
   tmdbApiKey     String?
   fanartApiKey   String?
   removeOverlays Int     @default(0)
