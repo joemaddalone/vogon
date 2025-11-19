@@ -11,23 +11,19 @@ import {
 } from "@/lib/types";
 import { plex } from "@/lib/client/plex";
 import {
-  createManyPlexMovies,
   createManyPlexShows,
   createManyPlexSeasons,
-  getPlexMovies,
   getPlexShows,
-  resetPlexMovies,
   resetPlexShows,
-  updateArtUrl,
   updateShowArtUrl,
   updateShowThumbUrl,
   updateSeasonThumbUrl,
   updateSeasonArtUrl,
-  updateThumbUrl,
   resetPlexSeasons,
   createManyPlexEpisodes,
   resetPlexEpisodes,
   getPlexSeasons,
+  dataManager as DM
 } from "@/lib/client/database";
 
 type MediaType = "movie" | "show" | "season";
@@ -48,12 +44,12 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
   movie: {
     label: "movies",
     cachePath: "/movie",
-    getAll: getPlexMovies,
-    reset: resetPlexMovies,
-    updateThumb: updateThumbUrl,
-    updateArt: updateArtUrl,
+    getAll: DM.plex.movie.list,
+    reset: DM.plex.movie.reset,
+    updateThumb: DM.plex.movie.updateThumb,
+    updateArt: DM.plex.movie.updateArt,
     // @ts-expect-error - createManyPlexMovies expects an array of Insertable<PlexMovie>
-    createMany: createManyPlexMovies,
+    createMany: DM.plex.movie.createMany,
   },
   show: {
     label: "shows",

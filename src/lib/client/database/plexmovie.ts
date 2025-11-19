@@ -65,3 +65,14 @@ export const createManyPlexMovies = async (
     }
   });
 };
+
+export const plexMovie = {
+  list: getPlexMovies,
+  reset: resetPlexMovies,
+  updateThumb: updateThumbUrl,
+  updateArt: updateArtUrl,
+  count: getRecordCount,
+  get: getPlexMovie,
+  create: createPlexMovie,
+  createMany: createManyPlexMovies,
+}

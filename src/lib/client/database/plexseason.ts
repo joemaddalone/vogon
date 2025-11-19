@@ -61,3 +61,12 @@ export const createManyPlexSeasons = async (
     }
   });
 };
+
+export const plexSeason = {
+  getSeasons: getPlexSeasons,
+  getSeasonByShow: getPlexSeasonByShow,
+  getPlexSeason: getPlexSeason,
+  resetPlexSeasons: resetPlexSeasons,
+  createPlexSeason: createPlexSeason,
+  createManyPlexSeasons: createManyPlexSeasons,
+}
