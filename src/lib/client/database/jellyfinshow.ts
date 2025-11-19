@@ -1,23 +1,23 @@
 import { db } from "./database";
 import { Insertable, Selectable, JellyfinShow } from "@/lib/types";
 
-export const getJellyfinShows = async (): Promise<Selectable<JellyfinShow>[]> => {
+export const list = async (): Promise<Selectable<JellyfinShow>[]> => {
   return await db.selectFrom("JellyfinShow").selectAll().execute();
 };
 
-export const resetJellyfinShows = async (): Promise<void> => {
+export const reset = async (): Promise<void> => {
   await db.deleteFrom("JellyfinShow").execute();
 };
 
-export const updateShowThumbUrl = async (itemId: string, thumbUrl: string): Promise<void> => {
+export const updateThumb = async (itemId: string, thumbUrl: string): Promise<void> => {
   await db.updateTable("JellyfinShow").set({ thumbUrl }).where("itemId", "=", itemId).execute();
 };
 
-export const updateShowArtUrl = async (itemId: string, artUrl: string): Promise<void> => {
+export const updateArt = async (itemId: string, artUrl: string): Promise<void> => {
   await db.updateTable("JellyfinShow").set({ artUrl }).where("itemId", "=", itemId).execute();
 };
 
-export const getShowRecordCount = async (): Promise<number> => {
+export const count = async (): Promise<number> => {
   const { count } = await db
   .selectFrom("JellyfinShow")
   .select(db.fn.countAll().as("count"))
@@ -25,7 +25,7 @@ export const getShowRecordCount = async (): Promise<number> => {
   return Number(count);
 };
 
-export const getJellyfinShow = async (
+export const item = async (
   id: number
 ): Promise<Selectable<JellyfinShow> | undefined> => {
   return await db
@@ -35,7 +35,7 @@ export const getJellyfinShow = async (
     .executeTakeFirstOrThrow();
 };
 
-export const getJellyfinShowByItemId = async (
+export const byItemId = async (
   itemId: string
 ): Promise<Selectable<JellyfinShow> | undefined> => {
   return await db
@@ -45,7 +45,7 @@ export const getJellyfinShowByItemId = async (
     .executeTakeFirst();
 };
 
-export const createJellyfinShow = async (
+export const create = async (
   jellyfinShow: Insertable<JellyfinShow>
 ): Promise<Selectable<JellyfinShow>> => {
   return await db
@@ -55,7 +55,7 @@ export const createJellyfinShow = async (
     .executeTakeFirstOrThrow();
 };
 
-export const createManyJellyfinShows = async (
+export const createMany = async (
   jellyfinShows: Insertable<JellyfinShow>[]
 ): Promise<void> => {
   await db.transaction().execute(async (tx) => {
@@ -68,3 +68,14 @@ export const createManyJellyfinShows = async (
   });
 };
 
+export const jellyfinShow = {
+  list: list,
+  reset: reset,
+  updateThumb: updateThumb,
+  updateArt: updateArt,
+  count: count,
+  get: item,
+  byItemId: byItemId,
+  create: create,
+  createMany: createMany,
+}

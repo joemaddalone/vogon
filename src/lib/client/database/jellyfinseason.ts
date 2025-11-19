@@ -1,11 +1,11 @@
 import { db } from "./database";
 import { Insertable, Selectable, JellyfinSeason } from "@/lib/types";
 
-export const getJellyfinSeasons = async (): Promise<Selectable<JellyfinSeason>[]> => {
+export const list = async (): Promise<Selectable<JellyfinSeason>[]> => {
   return await db.selectFrom("JellyfinSeason").selectAll().execute();
 };
 
-export const getJellyfinSeasonsBySeriesId = async (
+export const bySeries = async (
   seriesId: string
 ): Promise<Selectable<JellyfinSeason>[]> => {
   return await db
@@ -15,19 +15,19 @@ export const getJellyfinSeasonsBySeriesId = async (
     .execute();
 };
 
-export const resetJellyfinSeasons = async (): Promise<void> => {
+export const reset = async (): Promise<void> => {
   await db.deleteFrom("JellyfinSeason").execute();
 };
 
-export const updateSeasonThumbUrl = async (itemId: string, thumbUrl: string): Promise<void> => {
+export const updateThumb = async (itemId: string, thumbUrl: string): Promise<void> => {
   await db.updateTable("JellyfinSeason").set({ thumbUrl }).where("itemId", "=", itemId).execute();
 };
 
-export const updateSeasonArtUrl = async (itemId: string, artUrl: string): Promise<void> => {
+export const updateArt = async (itemId: string, artUrl: string): Promise<void> => {
   await db.updateTable("JellyfinSeason").set({ artUrl }).where("itemId", "=", itemId).execute();
 };
 
-export const getSeasonRecordCount = async (): Promise<number> => {
+export const count = async (): Promise<number> => {
   const { count } = await db
   .selectFrom("JellyfinSeason")
   .select(db.fn.countAll().as("count"))
@@ -35,7 +35,7 @@ export const getSeasonRecordCount = async (): Promise<number> => {
   return Number(count);
 };
 
-export const getJellyfinSeason = async (
+export const item = async (
   id: number
 ): Promise<Selectable<JellyfinSeason> | undefined> => {
   return await db
@@ -45,7 +45,7 @@ export const getJellyfinSeason = async (
     .executeTakeFirstOrThrow();
 };
 
-export const getJellyfinSeasonByItemId = async (
+export const byItemId = async (
   itemId: string
 ): Promise<Selectable<JellyfinSeason> | undefined> => {
   return await db
@@ -55,7 +55,7 @@ export const getJellyfinSeasonByItemId = async (
     .executeTakeFirst();
 };
 
-export const createJellyfinSeason = async (
+export const create = async (
   jellyfinSeason: Insertable<JellyfinSeason>
 ): Promise<Selectable<JellyfinSeason>> => {
   return await db
@@ -65,7 +65,7 @@ export const createJellyfinSeason = async (
     .executeTakeFirstOrThrow();
 };
 
-export const createManyJellyfinSeasons = async (
+export const createMany = async (
   jellyfinSeasons: Insertable<JellyfinSeason>[]
 ): Promise<void> => {
   await db.transaction().execute(async (tx) => {
@@ -77,4 +77,17 @@ export const createManyJellyfinSeasons = async (
     }
   });
 };
+
+export const jellyfinSeason = {
+  list: list,
+  bySeries: bySeries,
+  reset: reset,
+  updateThumb: updateThumb,
+  updateArt: updateArt,
+  count: count,
+  get: item,
+  byItemId: byItemId,
+  create: create,
+  createMany: createMany,
+}
 

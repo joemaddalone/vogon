@@ -1,9 +1,10 @@
 export * from "./database";
 export * from "./configuration";
 export * from "./jellyfinmovie";
-export * from "./jellyfinshow";
-export * from "./jellyfinseason";
-export * from "./jellyfinepisode";
+import { jellyfinShow } from "./jellyfinshow";
+import { jellyfinSeason } from "./jellyfinseason";
+import { jellyfinEpisode } from "./jellyfinepisode";
+import { jellyfinMovie } from "./jellyfinmovie";
 import { plexMovie } from "./plexmovie";
 import { plexEpisode } from "./plexepisode";
 import { plexShow } from "./plexshow";
@@ -15,5 +16,11 @@ export const dataManager = {
 		episode: plexEpisode,
 		show: plexShow,
 		season: plexSeason,
+	},
+	jellyfin: {
+		movie: jellyfinMovie,
+		show: jellyfinShow,
+		season: jellyfinSeason,
+		episode: jellyfinEpisode,
 	}
 }
