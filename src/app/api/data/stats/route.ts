@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getRecordCountShows, dataManager as DM } from "@/lib/client/database";
+import { dataManager as DM } from "@/lib/client/database";
 
 /**
  * GET /api/plex/library/movies
@@ -7,7 +7,7 @@ import { getRecordCountShows, dataManager as DM } from "@/lib/client/database";
 export async function GET() {
   try {
     const count = await DM.plex.movie.count();
-    const countShows = await getRecordCountShows();
+    const countShows = await DM.plex.show.count();
     return NextResponse.json({
       data: {
         movies: count,

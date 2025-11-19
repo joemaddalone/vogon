@@ -54,10 +54,10 @@ export const createManyPlexEpisodes = async (
 
 
 export const plexEpisode = {
-  getEpisodes: getPlexEpisodes,
-  getEpisodeBySeason: getEpisodeBySeason,
-  getPlexEpisode: getPlexEpisode,
-  resetPlexEpisodes: resetPlexEpisodes,
-  createPlexEpisode: createPlexEpisode,
-  createManyPlexEpisodes: createManyPlexEpisodes,
+  list: getPlexEpisodes,
+  bySeason: getEpisodeBySeason,
+  get: getPlexEpisode,
+  reset: resetPlexEpisodes,
+  create: createPlexEpisode,
+  createMany: createManyPlexEpisodes,
 }

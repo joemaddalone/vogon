@@ -10,21 +10,7 @@ import {
   PlexShow,
 } from "@/lib/types";
 import { plex } from "@/lib/client/plex";
-import {
-  createManyPlexShows,
-  createManyPlexSeasons,
-  getPlexShows,
-  resetPlexShows,
-  updateShowArtUrl,
-  updateShowThumbUrl,
-  updateSeasonThumbUrl,
-  updateSeasonArtUrl,
-  resetPlexSeasons,
-  createManyPlexEpisodes,
-  resetPlexEpisodes,
-  getPlexSeasons,
-  dataManager as DM
-} from "@/lib/client/database";
+import { dataManager as DM } from "@/lib/client/database";
 
 type MediaType = "movie" | "show" | "season";
 
@@ -53,23 +39,23 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
   },
   show: {
     label: "shows",
-    cachePath: "/show",
-    getAll: getPlexShows,
-    reset: resetPlexShows,
-    updateThumb: updateShowThumbUrl,
-    updateArt: updateShowArtUrl,
+      cachePath: "/show",
+      getAll: DM.plex.show.list,
+    reset: DM.plex.show.reset,
+    updateThumb: DM.plex.show.updateThumb,
+    updateArt: DM.plex.show.updateArt,
     // @ts-expect-error - createManyPlexShows expects an array of Insertable<PlexShow>
-    createMany: createManyPlexShows,
+    createMany: DM.plex.show.createMany,
   },
   season: {
     label: "seasons",
     cachePath: "/season",
-    getAll: getPlexSeasons,
-    reset: resetPlexSeasons,
-    updateThumb: updateSeasonThumbUrl,
-    updateArt: updateSeasonArtUrl,
+    getAll: DM.plex.season.list,
+    reset: DM.plex.season.reset,
+    updateThumb: DM.plex.season.updateThumb,
+    updateArt: DM.plex.season.updateArt,
     // @ts-expect-error - createManyPlexSeasons expects an array of Insertable<PlexSeason>
-    createMany: createManyPlexSeasons,
+    createMany: DM.plex.season.createMany,
   },
 };
 
@@ -94,7 +80,7 @@ export async function handleMediaReset(mediaType: MediaType) {
     const config = MEDIA_CONFIG[mediaType];
     await config.reset();
     if (mediaType === "show") {
-      await resetPlexSeasons();
+      await DM.plex.season.reset();
     }
     return NextResponse.json({
       data: `${config.label} reset successfully`,
@@ -208,8 +194,8 @@ export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
   const seasons: Insertable<PlexSeason>[] = [];
   const episodes: Insertable<PlexEpisode>[] = [];
   // temp fix to dupes in database
-  await resetPlexSeasons();
-  await resetPlexEpisodes();
+  await DM.plex.season.reset();
+  await DM.plex.episode.reset();
 
   for (const item of items) {
     const showSeasons = await plex.getShowSeasons(item.ratingKey);
@@ -233,7 +219,7 @@ export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
   }
 
   if (seasons.length > 0) {
-    createManyPlexSeasons(seasons);
+    DM.plex.season.createMany(seasons);
   }
 
   if (process.env.ENABLE_EPISODES === "true") {
@@ -258,7 +244,7 @@ export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
     }
 
     if (episodes.length > 0) {
-      createManyPlexEpisodes(episodes);
+      DM.plex.episode.createMany(episodes);
     }
   }
 }

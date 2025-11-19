@@ -63,10 +63,12 @@ export const createManyPlexSeasons = async (
 };
 
 export const plexSeason = {
-  getSeasons: getPlexSeasons,
-  getSeasonByShow: getPlexSeasonByShow,
-  getPlexSeason: getPlexSeason,
-  resetPlexSeasons: resetPlexSeasons,
-  createPlexSeason: createPlexSeason,
-  createManyPlexSeasons: createManyPlexSeasons,
+  list: getPlexSeasons,
+  byShow: getPlexSeasonByShow,
+  updateThumb: updateSeasonThumbUrl,
+  updateArt: updateSeasonArtUrl,
+  get: getPlexSeason,
+  reset: resetPlexSeasons,
+  create: createPlexSeason,
+  createMany: createManyPlexSeasons,
 }

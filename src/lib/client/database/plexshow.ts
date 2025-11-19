@@ -59,12 +59,12 @@ export const createManyPlexShows = async (
 };
 
 export const plexShow = {
-  getShows: getPlexShows,
-  resetPlexShows: resetPlexShows,
-  updateShowThumbUrl: updateShowThumbUrl,
-  updateShowArtUrl: updateShowArtUrl,
-  getShowRecordCount: getShowRecordCount,
-  getPlexShow: getPlexShow,
-  createPlexShow: createPlexShow,
-  createManyPlexShows: createManyPlexShows,
+  list: getPlexShows,
+  reset: resetPlexShows,
+  updateThumb: updateShowThumbUrl,
+  updateArt: updateShowArtUrl,
+  count: getShowRecordCount,
+  get: getPlexShow,
+  create: createPlexShow,
+  createMany: createManyPlexShows,
 }

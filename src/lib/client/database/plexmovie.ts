@@ -25,14 +25,6 @@ export const getRecordCount = async (): Promise<number> => {
   return Number(count);
 };
 
-export const getRecordCountShows = async (): Promise<number> => {
-  const { count } = await db
-  .selectFrom("PlexShow")
-  .select(db.fn.countAll().as("count"))
-  .executeTakeFirstOrThrow();
-  return Number(count);
-};
-
 export const getPlexMovie = async (
   id: number
 ): Promise<Selectable<PlexMovie> | undefined> => {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { plex } from "@/lib/client/plex";
-import { getEpisodeBySeason } from "@/lib/client/database";
+import { dataManager as DM } from "@/lib/client/database";
 
 /**
  * GET /api/plex/season/[id]/details
@@ -13,7 +13,7 @@ export async function GET(
   try {
     const { id } = await params;
     const show = await plex.getMovieDetails(id);
-    const episodes = await getEpisodeBySeason(id);
+    const episodes = await DM.plex.episode.bySeason(id);
 
     const data = {...show, episodes: episodes };
 
