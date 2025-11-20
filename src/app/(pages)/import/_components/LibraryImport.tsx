@@ -23,7 +23,7 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
       return;
     }
 
-    const { error: importError } = await api.data.import(
+    const { error: importError } = await api.data.plex.import(
       data,
       libraryKey,
       libraryType as "movie" | "show"

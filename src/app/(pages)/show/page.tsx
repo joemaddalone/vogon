@@ -5,7 +5,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Suspense } from "react";
 
 export default async function ShowsPage() {
-  const libLoader = api.data.shows();
+  const libLoader = api.data.plex.shows();
 
   return (
     <Suspense

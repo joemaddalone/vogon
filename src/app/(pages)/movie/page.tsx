@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
 export default async function MoviesPage() {
-  const libLoader = api.data.movies();
+  const libLoader = api.data.plex.movies();
 
   return (
     <Suspense

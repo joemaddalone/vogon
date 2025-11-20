@@ -27,17 +27,17 @@ export const PosterPicker = ({
     if(mediaType === "movie") {
       const movie = await api.plex.movieDetail(ratingKey);
       if(movie) {
-        await api.data.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "");
       }
     } else if(mediaType === "show") {
       const show = await api.plex.showDetail(ratingKey);
       if(show) {
-        await api.data.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
       }
     } else if(mediaType === "season") {
       const season = await api.plex.seasonDetail(ratingKey);
       if(season) {
-        await api.data.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
       }
     }
 

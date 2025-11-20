@@ -28,12 +28,12 @@ export const BackdropPicker = ({
     if(mediaType === "movie") {
       const movie = await api.plex.movieDetail(ratingKey);
       if(movie) {
-        await api.data.updateBackdrop(mediaType, ratingKey, movie.data?.artUrl || "");
+        await api.data.plex.updateBackdrop(mediaType, ratingKey, movie.data?.artUrl || "");
       }
     } else {
       const show = await api.plex.showDetail(ratingKey);
       if(show) {
-        await api.data.updateBackdrop(mediaType, ratingKey, show.data?.artUrl || "");
+        await api.data.plex.updateBackdrop(mediaType, ratingKey, show.data?.artUrl || "");
       }
     }
 

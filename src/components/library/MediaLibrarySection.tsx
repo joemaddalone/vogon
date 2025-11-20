@@ -29,7 +29,7 @@ export const MediaLibrarySection = ({
     setError(null);
 
     try {
-      await (type === "movie" ? api.data.resetMovies() : api.data.resetShows());
+      await (type === "movie" ? api.data.plex.resetMovies() : api.data.plex.resetShows());
       router.refresh();
     } catch (err) {
       const message =

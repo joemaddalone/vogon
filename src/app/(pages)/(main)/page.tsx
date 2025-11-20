@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import Home from "./_components/Home";
 
 export default async function HomePage() {
-  const stats = await api.data.stats();
+  const stats = await api.data.plex.stats();
   const plexConnection = api.plex.test();
 
   return (
