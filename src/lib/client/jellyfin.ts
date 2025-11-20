@@ -1,7 +1,6 @@
 import {
   JellyfinLibraryResponse,
   JellyfinMovieResponse,
-  JellyfinShowResponse,
   JellyfinSeasonResponse,
   JellyfinEpisodeResponse,
   JellyfinResponse,
@@ -23,13 +22,12 @@ class JellyfinClient {
   private async request<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
     const config = await this.config();
     const url = `${config?.jellyfinServerUrl}${endpoint}`;
-    const queryParams = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
-      ...params,
-    });
 
+    // Build query params (don't add api_key to query string)
+    const queryParams = new URLSearchParams(params || {});
+    const fullUrl = queryParams.toString() ? `${url}?${queryParams.toString()}` : url;
     try {
-      const response = await fetch(`${url}?${queryParams.toString()}`, {
+      const response = await fetch(fullUrl, {
         headers: {
           Accept: "application/json",
           "X-Emby-Authorization": `MediaBrowser Token="${config?.jellyfinApiKey}"`,
@@ -68,9 +66,10 @@ class JellyfinClient {
     const response = await this.request<JellyfinResponse<JellyfinMovieResponse>>(
       `/Users/${config?.jellyfinUserId}/Items`,
       {
+        IncludeItemTypes: "Series,Movie",
         ParentId: libraryId,
         Recursive: "true",
-        Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
+        // Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
       }
     );
     const items = response.Items || [];
@@ -179,12 +178,9 @@ class JellyfinClient {
 
     // Upload to Jellyfin
     const url = `${config?.jellyfinServerUrl}/Items/${itemId}/Images/Primary`;
-    const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
-    });
 
     try {
-      const response = await fetch(`${url}?${params.toString()}`, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": imageResponse.headers.get("content-type") || "image/jpeg",
@@ -222,12 +218,9 @@ class JellyfinClient {
 
     // Upload to Jellyfin
     const url = `${config?.jellyfinServerUrl}/Items/${itemId}/Images/Backdrop/0`;
-    const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
-    });
 
     try {
-      const response = await fetch(`${url}?${params.toString()}`, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": imageResponse.headers.get("content-type") || "image/jpeg",
@@ -256,16 +249,13 @@ class JellyfinClient {
   private async lockPosterField(itemId: string): Promise<void> {
     const config = await this.config();
     const url = `${config?.jellyfinServerUrl}/Items/${itemId}`;
-    const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
-    });
 
     try {
       // Get current item metadata
       const item = await this.getMovieDetails(itemId);
 
       // Update with locked image field
-      const response = await fetch(`${url}?${params.toString()}`, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -291,16 +281,13 @@ class JellyfinClient {
   private async lockBackdropField(itemId: string): Promise<void> {
     const config = await this.config();
     const url = `${config?.jellyfinServerUrl}/Items/${itemId}`;
-    const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
-    });
 
     try {
       // Get current item metadata
       const item = await this.getMovieDetails(itemId);
 
       // Update with locked image field
-      const response = await fetch(`${url}?${params.toString()}`, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -327,7 +314,6 @@ class JellyfinClient {
     const config = await this.config();
     const url = `${config?.jellyfinServerUrl}/Items/${itemId}/Refresh`;
     const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
       MetadataRefreshMode: "FullRefresh",
       ImageRefreshMode: "Default",
       ReplaceAllMetadata: "false",
@@ -357,7 +343,6 @@ class JellyfinClient {
     const config = await this.config();
     const url = `${config?.jellyfinServerUrl}/Items/${libraryId}/Refresh`;
     const params = new URLSearchParams({
-      api_key: config?.jellyfinApiKey || "",
       Recursive: "true",
       MetadataRefreshMode: "Default",
       ImageRefreshMode: "Default",
@@ -386,7 +371,8 @@ class JellyfinClient {
     try {
       const response = await this.request<JellyfinSystemInfo>("/System/Info");
       return !!response.Id;
-    } catch {
+    } catch (error) {
+      console.error("Failed to test Jellyfin connection:", error);
       return false;
     }
   }

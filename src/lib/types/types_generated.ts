@@ -19,23 +19,23 @@ export type Configuration = {
 };
 export type JellyfinEpisode = {
     id: Generated<number>;
-    itemId: string;
-    seriesId: string;
-    seasonId: string;
+    ratingKey: string;
+    parentRatingKey: string;
     title: string;
     index: number | null;
     parentIndex: number | null;
     year: number | null;
     summary: string | null;
     thumbUrl: string | null;
+    artUrl: string | null;
     duration: number | null;
-    providerIds: string | null;
+    guid: string | null;
     importedAt: Generated<string>;
 };
 export type JellyfinMovie = {
     id: Generated<number>;
-    itemId: string;
-    libraryId: string;
+    ratingKey: string;
+    libraryKey: string;
     title: string;
     year: number | null;
     summary: string | null;
@@ -44,30 +44,29 @@ export type JellyfinMovie = {
     duration: number | null;
     rating: number | null;
     contentRating: string | null;
-    dateCreated: string | null;
-    providerIds: string | null;
+    guid: string | null;
     importedAt: Generated<string>;
 };
 export type JellyfinSeason = {
     id: Generated<number>;
-    itemId: string;
-    seriesId: string;
-    seriesName: string | null;
+    ratingKey: string;
+    parentRatingKey: string;
     type: string;
     title: string;
+    parentKey: string;
+    parentTitle: string | null;
     summary: string | null;
     index: number | null;
     year: number | null;
     thumbUrl: string | null;
     artUrl: string | null;
     parentThumb: string | null;
-    providerIds: string | null;
-    importedAt: Generated<string>;
+    parentTheme: string | null;
 };
 export type JellyfinShow = {
     id: Generated<number>;
-    itemId: string;
-    libraryId: string;
+    ratingKey: string;
+    libraryKey: string;
     title: string;
     year: number | null;
     summary: string | null;
@@ -76,8 +75,7 @@ export type JellyfinShow = {
     duration: number | null;
     rating: number | null;
     contentRating: string | null;
-    dateCreated: string | null;
-    providerIds: string | null;
+    guid: string | null;
     importedAt: Generated<string>;
 };
 export type PlexEpisode = {
@@ -107,8 +105,6 @@ export type PlexMovie = {
     duration: number | null;
     rating: number | null;
     contentRating: string | null;
-    addedAt: number;
-    updatedAt: number;
     guid: string | null;
     importedAt: Generated<string>;
 };
@@ -140,8 +136,6 @@ export type PlexShow = {
     duration: number | null;
     rating: number | null;
     contentRating: string | null;
-    addedAt: number;
-    updatedAt: number;
     guid: string | null;
     importedAt: Generated<string>;
 };

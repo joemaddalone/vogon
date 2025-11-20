@@ -25,57 +25,70 @@ export function Navigation() {
             vogon
           </Link>
           <div className="flex flex-wrap gap-2">
+            <TooltipElement content="Jellyfin">
+              <Link
+                href="/jellyfin"
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                  isActive("/jellyfin")
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                }`}
+              >
+                <Film className="h-4 w-4" />
+                <span className="hidden lg:inline">Jellyfin</span>
+              </Link>
+            </TooltipElement>
             <TooltipElement content="Movies">
-                <Link
-                  href="/movie"
-                  className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
-                    isActive("/movie")
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                      : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
-                  }`}
-                >
-                  <Film className="h-4 w-4" />
-                  <span className="hidden lg:inline">Movies</span>
-                </Link>
-              </TooltipElement>
+              <Link
+                href="/movie"
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                  isActive("/movie")
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                }`}
+              >
+                <Film className="h-4 w-4" />
+                <span className="hidden lg:inline">Movies</span>
+              </Link>
+            </TooltipElement>
             <TooltipElement content="Shows">
-                <Link
-              href="/show"
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
-                isActive("/show")
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
-              }`}
-            >
-              <TvIcon className="h-4 w-4" />
-              <span className="hidden lg:inline">Shows</span>
-            </Link>
+              <Link
+                href="/show"
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                  isActive("/show")
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                }`}
+              >
+                <TvIcon className="h-4 w-4" />
+                <span className="hidden lg:inline">Shows</span>
+              </Link>
             </TooltipElement>
             <TooltipElement content="Import Library">
               <Link
-              href="/import"
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
-                isActive("/import")
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
-              }`}
-            >
-              <Library className="h-4 w-4" />
-              <span className="hidden lg:inline">Import Library</span>
-            </Link>
+                href="/import"
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                  isActive("/import")
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                }`}
+              >
+                <Library className="h-4 w-4" />
+                <span className="hidden lg:inline">Import Library</span>
+              </Link>
             </TooltipElement>
             <TooltipElement content="Config">
-            <Link
-              href="/config"
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
-                isActive("/config")
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
-              }`}
-            >
-              <Settings className="h-4 w-4" />
-              <span className="hidden lg:inline">Config</span>
-            </Link>
+              <Link
+                href="/config"
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                  isActive("/config")
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                }`}
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden lg:inline">Config</span>
+              </Link>
             </TooltipElement>
           </div>
         </div>

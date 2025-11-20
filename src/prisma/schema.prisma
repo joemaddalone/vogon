@@ -20,8 +20,6 @@ model PlexMovie {
   duration      Int?
   rating        Float?
   contentRating String?
-  addedAt       Int
-  updatedAt     Int
   guid          String?
   importedAt    DateTime @default(now())
 }
@@ -38,122 +36,118 @@ model PlexShow {
   duration      Int?
   rating        Float?
   contentRating String?
-  addedAt       Int
-  updatedAt     Int
   guid          String?
   importedAt    DateTime @default(now())
 }
 
 model PlexEpisode {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String
+  id              Int      @id @default(autoincrement())
+  ratingKey       String
   parentRatingKey String
-  title         String
-  index         Int?
-  parentIndex   Int?
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  guid          String?
-  importedAt    DateTime @default(now())
+  title           String
+  index           Int?
+  parentIndex     Int?
+  year            Int?
+  summary         String?
+  thumbUrl        String?
+  artUrl          String?
+  duration        Int?
+  guid            String?
+  importedAt      DateTime @default(now())
 }
 
 model PlexSeason {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String
+  id              Int     @id @default(autoincrement())
+  ratingKey       String
   parentRatingKey String
-  type          String
-  title         String
-  parentKey     String
-  parentTitle   String?
-  summary       String?
-  index         Int?
-  year          Int?
-  thumbUrl         String?
-  artUrl         String?
-  parentThumb   String?
-  parentTheme   String?
-}
-
-model JellyfinMovie {
-  id            Int      @id @default(autoincrement())
-  itemId        String   @unique
-  libraryId     String
-  title         String
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  rating        Float?
-  contentRating String?
-  dateCreated   String?
-  providerIds   String?
-  importedAt    DateTime @default(now())
-}
-
-model JellyfinShow {
-  id            Int      @id @default(autoincrement())
-  itemId        String   @unique
-  libraryId     String
-  title         String
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  rating        Float?
-  contentRating String?
-  dateCreated   String?
-  providerIds   String?
-  importedAt    DateTime @default(now())
-}
-
-model JellyfinSeason {
-  id              Int      @id @default(autoincrement())
-  itemId          String
-  seriesId        String
-  seriesName      String?
   type            String
   title           String
+  parentKey       String
+  parentTitle     String?
   summary         String?
   index           Int?
   year            Int?
   thumbUrl        String?
   artUrl          String?
   parentThumb     String?
-  providerIds     String?
-  importedAt      DateTime @default(now())
+  parentTheme     String?
 }
 
-model JellyfinEpisode {
+model JellyfinMovie {
   id            Int      @id @default(autoincrement())
-  itemId        String
-  seriesId      String
-  seasonId      String
+  ratingKey     String   @unique
+  libraryKey    String
   title         String
-  index         Int?
-  parentIndex   Int?
   year          Int?
   summary       String?
   thumbUrl      String?
+  artUrl        String?
   duration      Int?
-  providerIds   String?
+  rating        Float?
+  contentRating String?
+  guid          String?
   importedAt    DateTime @default(now())
 }
 
+model JellyfinShow {
+  id            Int      @id @default(autoincrement())
+  ratingKey     String   @unique
+  libraryKey    String
+  title         String
+  year          Int?
+  summary       String?
+  thumbUrl      String?
+  artUrl        String?
+  duration      Int?
+  rating        Float?
+  contentRating String?
+  guid          String?
+  importedAt    DateTime @default(now())
+}
+
+model JellyfinSeason {
+  id              Int     @id @default(autoincrement())
+  ratingKey       String
+  parentRatingKey String
+  type            String
+  title           String
+  parentKey       String
+  parentTitle     String?
+  summary         String?
+  index           Int?
+  year            Int?
+  thumbUrl        String?
+  artUrl          String?
+  parentThumb     String?
+  parentTheme     String?
+}
+
+model JellyfinEpisode {
+  id              Int      @id @default(autoincrement())
+  ratingKey       String
+  parentRatingKey String
+  title           String
+  index           Int?
+  parentIndex     Int?
+  year            Int?
+  summary         String?
+  thumbUrl        String?
+  artUrl          String?
+  duration        Int?
+  guid            String?
+  importedAt      DateTime @default(now())
+}
+
 model Configuration {
-  id             Int     @id @default(autoincrement())
-  plexServerUrl  String?
-  plexToken      String?
-  jellyfinServerUrl  String?
-  jellyfinApiKey     String?
-  jellyfinUserId     String?
-  tmdbApiKey     String?
-  fanartApiKey   String?
-  removeOverlays Int     @default(0)
-  thePosterDbEmail String?
+  id                  Int     @id @default(autoincrement())
+  plexServerUrl       String?
+  plexToken           String?
+  jellyfinServerUrl   String?
+  jellyfinApiKey      String?
+  jellyfinUserId      String?
+  tmdbApiKey          String?
+  fanartApiKey        String?
+  removeOverlays      Int     @default(0)
+  thePosterDbEmail    String?
   thePosterDbPassword String?
 }
