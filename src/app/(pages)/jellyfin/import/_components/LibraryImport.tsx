@@ -1,0 +1,86 @@
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { api } from "@/lib/api";
+import { JellyfinLibraryResponse } from "@/lib/types";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Film, TvIcon } from "lucide-react";
+
+export const LibraryImport = ({ library, index }: { library: JellyfinLibraryResponse, index: number }) => {
+	const [importing, setImporting] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
+	const importLibrary = async (libraryKey: string, libraryType: string) => {
+    setImporting(libraryKey);
+    setError(null);
+    const libType = libraryType === "movies" ? "movie" : "show";
+    const { data, error } = await api.jellyfin.library(libraryKey);
+    if (error) {
+      setError(error.message);
+      setImporting(null);
+      return;
+    }
+
+    const { error: importError } = await api.data.jellyfin.import(
+      data,
+      libraryKey,
+      libType as "movie" | "show"
+    );
+    setImporting(null);
+    if (importError) {
+      setError(importError.message);
+      return;
+    }
+    router.push(`/jellyfin/${libType === "movie" ? "movie" : "show"}`);
+  };
+  return (
+    <motion.div
+      key={library.Id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group relative overflow-hidden border-border border-b rounded-2xl bg-secondary p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
+    >
+      <div className="absolute inset-0" />
+			{error && (
+        <div className="text-red-500">
+          well shit that didnt work..
+        </div>
+      )}
+
+      <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="flex items-start gap-4">
+          {library.CollectionType === "movies" ? (
+            <Film className="w-8 h-8 mt-1 text-foreground/80 shrink-0" />
+          ) : (
+            <TvIcon className="w-8 h-8 mt-1 text-foreground/80 shrink-0" />
+          )}
+          <div>
+            <h3>
+              {library.Name}
+            </h3>
+            <p>
+              {library.CollectionType === "movies" ? "Movie" : "TV Show"} Library
+            </p>
+          </div>
+        </div>
+        <Button
+          onClick={() => importLibrary(library.Id, library.CollectionType)}
+          disabled={importing !== null}
+          size="lg"
+          className="rounded-xl font-medium transition-all duration-300 hover:scale-105 whitespace-nowrap"
+        >
+          {importing === library.Id ? (
+            <>
+              <Spinner className="size-4" />
+              Importing...
+            </>
+          ) : (
+            `Import ${library.CollectionType === "movies" ? "Movie" : "TV Show"} Library`
+          )}
+        </Button>
+      </div>
+    </motion.div>
+  );
+};

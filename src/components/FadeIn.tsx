@@ -1,7 +1,16 @@
 "use client";
 import { motion } from "motion/react";
+import React from "react";
 
-export const FadeIn = ({ children, className, component = 'div' }: { children: React.ReactNode, className?: string, component?: React.ElementType }) => {
+export const FadeIn = ({
+  children,
+  className,
+  component = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  component?: React.ElementType;
+}) => {
   const Component = motion.create(component) as React.ElementType;
   return (
     <Component
@@ -13,5 +22,3 @@ export const FadeIn = ({ children, className, component = 'div' }: { children: R
     </Component>
   );
 };
-
-

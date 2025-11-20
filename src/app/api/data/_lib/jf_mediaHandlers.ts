@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
   Insertable,
-  PlexEpisode,
-  PlexEpisodeResponse,
-  PlexMovie,
-  PlexSeason,
-  PlexSeasonResponse,
-  PlexShow,
+  JellyfinEpisode,
+  JellyfinEpisodeResponse,
+  JellyfinMovie,
+  JellyfinMovieResponse,
+  JellyfinSeason,
+  JellyfinSeasonResponse,
+  JellyfinShow,
+  JellyfinShowResponse,
 } from "@/lib/types";
-import { plex } from "@/lib/client/plex";
+import { jellyfin } from "@/lib/client/jellyfin";
 import { dataManager as DM } from "@/lib/client/database";
 
 type MediaType = "movie" | "show" | "season";
@@ -22,7 +24,7 @@ type MediaConfig = {
   updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
   updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
   createMany: (
-    items: Array<Insertable<PlexMovie> | Insertable<PlexShow> | Insertable<PlexSeason>>
+    items: Array<Insertable<JellyfinMovie> | Insertable<JellyfinShow> | Insertable<JellyfinSeason>>
   ) => Promise<void>;
 };
 
@@ -30,32 +32,32 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
   movie: {
     label: "movies",
     cachePath: "/movie",
-    getAll: DM.plex.movie.list,
+    getAll: DM.jellyfin.movie.list,
     reset: DM.plex.movie.reset,
-    updateThumb: DM.plex.movie.updateThumb,
-    updateArt: DM.plex.movie.updateArt,
-    // @ts-expect-error - createManyPlexMovies expects an array of Insertable<PlexMovie>
-    createMany: DM.plex.movie.createMany,
+    updateThumb: DM.jellyfin.movie.updateThumb,
+    updateArt: DM.jellyfin.movie.updateArt,
+    // @ts-expect-error - createManyJellyfinMovies expects an array of Insertable<JellyfinMovie>
+    createMany: DM.jellyfin.movie.createMany,
   },
   show: {
     label: "shows",
       cachePath: "/show",
-      getAll: DM.plex.show.list,
-    reset: DM.plex.show.reset,
-    updateThumb: DM.plex.show.updateThumb,
-    updateArt: DM.plex.show.updateArt,
-    // @ts-expect-error - createManyPlexShows expects an array of Insertable<PlexShow>
-    createMany: DM.plex.show.createMany,
+      getAll: DM.jellyfin.show.list,
+    reset: DM.jellyfin.show.reset,
+    updateThumb: DM.jellyfin.show.updateThumb,
+    updateArt: DM.jellyfin.show.updateArt,
+    // @ts-expect-error - createManyJellyfinShows expects an array of Insertable<JellyfinShow>
+    createMany: DM.jellyfin.show.createMany,
   },
   season: {
     label: "seasons",
     cachePath: "/season",
-    getAll: DM.plex.season.list,
-    reset: DM.plex.season.reset,
-    updateThumb: DM.plex.season.updateThumb,
-    updateArt: DM.plex.season.updateArt,
-    // @ts-expect-error - createManyPlexSeasons expects an array of Insertable<PlexSeason>
-    createMany: DM.plex.season.createMany,
+    getAll: DM.jellyfin.season.list,
+    reset: DM.jellyfin.season.reset,
+    updateThumb: DM.jellyfin.season.updateThumb,
+    updateArt: DM.jellyfin.season.updateArt,
+    // @ts-expect-error - createManyJellyfinSeasons expects an array of Insertable<JellyfinSeason>
+    createMany: DM.jellyfin.season.createMany,
   },
 };
 
@@ -80,7 +82,7 @@ export async function handleMediaReset(mediaType: MediaType) {
     const config = MEDIA_CONFIG[mediaType];
     await config.reset();
     if (mediaType === "show") {
-      await DM.plex.season.reset();
+      await DM.jellyfin.season.reset();
     }
     return NextResponse.json({
       data: `${config.label} reset successfully`,
@@ -118,7 +120,7 @@ export async function handleMediaUpdate(
 
     revalidatePath(thumbUrl ?? artUrl ?? "");
     revalidatePath(config.cachePath, "page");
-    revalidatePath(`/api/data/${mediaType}`);
+    revalidatePath(`/api/data/jellyfin/${mediaType}`);
 
     return NextResponse.json({
       data: `${mediaType} ${
@@ -140,7 +142,7 @@ export async function handleMediaImport(
 ) {
   try {
     const body = await request.json();
-    const { items, libraryKey } = body;
+    const { items, libraryKey }: { items: JellyfinMovieResponse[] | JellyfinShowResponse[], libraryKey: string } = body;
 
     if (!items || !Array.isArray(items) || !libraryKey) {
       return NextResponse.json(
@@ -151,28 +153,31 @@ export async function handleMediaImport(
       );
     }
 
+    console.log(items);
+    console.log(libraryKey);
+    console.log(mediaType);
+
     const normalizedItems = items.map(
-      (item: Insertable<PlexMovie> | Insertable<PlexShow>) => ({
-        ratingKey: String(item.ratingKey ?? ""),
+      (item:  JellyfinMovieResponse | JellyfinShowResponse) => ({
+        ratingKey: String(item.Id ?? ""),
         libraryKey: String(libraryKey),
-        title: String(item.title ?? ""),
-        year: item.year as number | null,
-        summary: item.summary ?? null,
+        title: String(item.Name ?? ""),
+        year: item.ProductionYear as number | null,
+        summary: item.Overview ?? null,
         thumbUrl: item.thumbUrl ?? null,
         artUrl: item.artUrl ?? null,
-        duration: item.duration ?? null,
-        rating: item.rating ?? null,
-        contentRating: item.contentRating ?? null,
-        guid: item.guid ?? null,
-      })
-    );
+        duration: item.RunTimeTicks ?? null,
+        rating: item.OfficialRating ?? null,
+        contentRating: item.CommunityRating ?? null,
+      } as Insertable<JellyfinMovie>)
+    ) as Insertable<JellyfinMovie>[];
 
     const config = MEDIA_CONFIG[mediaType];
     await config.createMany(normalizedItems);
 
     if (mediaType === "show") {
       // purposely not awaiting this for now.
-      handleMediaImportSeasons(normalizedItems as Insertable<PlexShow>[]);
+      handleMediaImportSeasons(normalizedItems as Insertable<JellyfinShow>[]);
     }
 
     return NextResponse.json({
@@ -188,61 +193,57 @@ export async function handleMediaImport(
   }
 }
 
-export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
-  const seasons: Insertable<PlexSeason>[] = [];
-  const episodes: Insertable<PlexEpisode>[] = [];
+export async function handleMediaImportSeasons(items: Insertable<JellyfinShow>[]) {
+  const seasons: Insertable<JellyfinSeason>[] = [];
+  const episodes: Insertable<JellyfinEpisode>[] = [];
   // temp fix to dupes in database
-  await DM.plex.season.reset();
-  await DM.plex.episode.reset();
+  await DM.jellyfin.season.reset();
+  await DM.jellyfin.episode.reset();
 
   for (const item of items) {
-    const showSeasons = await plex.getShowSeasons(item.ratingKey);
-    showSeasons.forEach((season: PlexSeasonResponse) => {
+    const showSeasons = await jellyfin.getShowSeasons(item.ratingKey);
+    showSeasons.forEach((season: JellyfinSeasonResponse) => {
       seasons.push({
-        ratingKey: season.ratingKey,
+        ratingKey: season.Id,
         parentRatingKey: item.ratingKey,
-        title: season.title,
-        year: season.year,
-        type: season.type,
-        parentKey: season.parentKey,
-        parentTitle: season.parentTitle,
-        summary: season.summary,
-        index: season.index,
+        title: season.Name,
+        year: season.ProductionYear,
+        type: season.Type,
+        parentKey: season.SeriesId,
+        parentTitle: season.SeriesName,
+        summary: season.Overview,
+        index: season.IndexNumber,
         thumbUrl: season.thumbUrl,
         artUrl: season.artUrl,
-        parentThumb: season.parentThumb,
-        parentTheme: season.parentTheme,
       });
     });
   }
 
   if (seasons.length > 0) {
-    DM.plex.season.createMany(seasons);
+    DM.jellyfin.season.createMany(seasons);
   }
 
   if (process.env.ENABLE_EPISODES === "true") {
     for (const season of seasons) {
-      const seasonEpisodes: PlexEpisodeResponse[] =
-        await plex.getSeasonEpisodes(season.ratingKey);
+      const seasonEpisodes: JellyfinEpisodeResponse[] =
+        await jellyfin.getSeasonEpisodes(season.ratingKey);
       seasonEpisodes.forEach((episode) => {
         episodes.push({
-          ratingKey: episode.ratingKey,
-          parentRatingKey: episode.parentRatingKey,
-          title: episode.title,
-          index: episode.index,
-          parentIndex: episode.parentIndex,
-          year: episode.year,
-          summary: episode.summary,
+          ratingKey: episode.Id,
+          parentRatingKey: season.ratingKey,
+          title: episode.Name,
+          index: episode.IndexNumber,
+          parentIndex: episode.ParentIndexNumber,
+          year: episode.ProductionYear,
+          summary: episode.Overview,
           thumbUrl: episode.thumbUrl,
-          artUrl: episode.artUrl,
-          duration: episode.duration,
-          guid: episode.guid,
+          duration: episode.RunTimeTicks,
         });
       });
     }
 
     if (episodes.length > 0) {
-      DM.plex.episode.createMany(episodes);
+      DM.jellyfin.episode.createMany(episodes);
     }
   }
 }

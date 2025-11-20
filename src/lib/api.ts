@@ -14,6 +14,11 @@ import {
   Selectable,
   Updateable,
   PlexSeasonMetadata,
+  JellyfinLibraryResponse,
+  JellyfinMovieResponse,
+  JellyfinShowResponse,
+  JellyfinShow,
+  JellyfinMovie,
 } from "./types";
 
 const host = "http://localhost:6001";
@@ -117,9 +122,7 @@ export const api = {
       shows: async (): Promise<ApiResponse<PlexShow[]>> => {
         return await tryCatch(fetch(`${host}/api/data/show`));
       },
-      stats: async (): Promise<
-        ApiResponse<{ movies: number; shows: number }>
-      > => {
+      stats: async (): Promise<ApiResponse<{ movies: number; shows: number }>> => {
         return await tryCatch(fetch(`${host}/api/data/stats`));
       },
       updatePoster: async (
@@ -139,12 +142,10 @@ export const api = {
         ratingKey: string,
         backdropUrl: string
       ): Promise<ApiResponse<void>> => {
-        return await tryCatch(
-          fetch(`${host}/api/data/${mediaType}/update`, {
-            method: "POST",
-            body: JSON.stringify({ ratingKey, backdropUrl }),
-          })
-        );
+        return await tryCatch(fetch(`${host}/api/data/${mediaType}/update`, {
+          method: "POST",
+          body: JSON.stringify({ ratingKey, backdropUrl }),
+        }));
       },
       resetMedia: async (
         mediaType: "movie" | "show"
@@ -157,6 +158,35 @@ export const api = {
       resetShows: async (): Promise<ApiResponse<void>> => {
         return await tryCatch(fetch(`${host}/api/data/show/reset`));
       },
+    },
+    jellyfin: {
+      stats: async (): Promise<ApiResponse<{ movies: number; shows: number }>> => {
+        return await tryCatch(fetch(`${host}/api/data/jellyfin/stats`));
+      },
+      import: async (
+        items: JellyfinMovieResponse[] | JellyfinShowResponse[],
+        libraryKey: string,
+        mediaType: "movie" | "show"
+      ): Promise<ApiResponse<string>> => {
+        return await tryCatch(fetch(`${host}/api/data/jellyfin/${mediaType}/import`, { method: "POST", body: JSON.stringify({ items, libraryKey }) }));
+      },
+      movies: async (): Promise<ApiResponse<JellyfinMovie[]>> => {
+        return await tryCatch(fetch(`${host}/api/data/jellyfin/movie`));
+      },
+      shows: async (): Promise<ApiResponse<JellyfinShow[]>> => {
+        return await tryCatch(fetch(`${host}/api/data/jellyfin/show`));
+      },
+    },
+  },
+  jellyfin: {
+    test: async (): Promise<ApiResponse<boolean>> => {
+      return await tryCatch(fetch(`${host}/api/jellyfin/test`));
+    },
+    libraries: async (): Promise<ApiResponse<JellyfinLibraryResponse[]>> => {
+      return await tryCatch(fetch(`${host}/api/jellyfin/libraries`));
+    },
+    library: async (libraryKey: string): Promise<ApiResponse<JellyfinMovieResponse[] | JellyfinShowResponse[]>> => {
+      return await tryCatch(fetch(`${host}/api/jellyfin/library/${libraryKey}`));
     },
   },
   plex: {
