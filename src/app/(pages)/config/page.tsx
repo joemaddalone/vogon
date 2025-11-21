@@ -5,9 +5,11 @@ import { Suspense } from "react";
 import ConfigForm from "./_components/ConfigForm";
 import { ServerForm } from "./_components/ServerForm";
 import { Configuration } from "@/lib/types";
+import { Servers } from "./_components/Servers";
 
 export default async function ConfigPage() {
   const result = await api.config.get();
+  const servers = await api.server.get();
   const config = result.data as unknown as Configuration;
   const servers = await api.server.get();
   const server = servers?.data?.[0];
@@ -29,3 +31,6 @@ export default async function ConfigPage() {
     </Suspense>
   )
 }
+
+
+// <Servers servers={servers.data} />

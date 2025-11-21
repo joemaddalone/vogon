@@ -42,6 +42,8 @@ export type Server = {
     userid: string | null;
     type: string;
 };
+
+
 export type DB = {
     Configuration: Configuration;
     Media: Media;

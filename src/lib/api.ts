@@ -49,6 +49,29 @@ export const api = {
           body: JSON.stringify(config),
         })
       );
+    }
+  },
+  server: {
+    get: async (id?: number): Promise<ApiResponse<Selectable<Server>[]>> => {
+      return await tryCatch(fetch(`${host}/api/data/server${id ? `/${id}` : ""}`));
+    },
+    create: async (server: Insertable<Server>): Promise<ApiResponse<Server>> => {
+      return await tryCatch(fetch(`${host}/api/data/server`, {
+        method: "POST",
+        body: JSON.stringify(server),
+      }));
+    },
+    update: async (server: Updateable<Server>): Promise<ApiResponse<Server>> => {
+      return await tryCatch(fetch(`${host}/api/data/server`, {
+        method: "PUT",
+        body: JSON.stringify(server),
+      }));
+    },
+    delete: async (id: number): Promise<ApiResponse<void>> => {
+      return await tryCatch(fetch(`${host}/api/data/server`, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }));
     },
   },
   server: {
