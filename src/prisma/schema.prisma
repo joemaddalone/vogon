@@ -8,89 +8,43 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model PlexMovie {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String   @unique
-  libraryKey    String
-  title         String
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  rating        Float?
-  contentRating String?
-  addedAt       Int
-  updatedAt     Int
-  guid          String?
-  importedAt    DateTime @default(now())
-}
-
-model PlexShow {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String   @unique
-  libraryKey    String
-  title         String
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  rating        Float?
-  contentRating String?
-  addedAt       Int
-  updatedAt     Int
-  guid          String?
-  importedAt    DateTime @default(now())
-}
-
-model PlexEpisode {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String
-  parentRatingKey String
-  title         String
-  index         Int?
-  parentIndex   Int?
-  year          Int?
-  summary       String?
-  thumbUrl      String?
-  artUrl        String?
-  duration      Int?
-  guid          String?
-  importedAt    DateTime @default(now())
-}
-
-model PlexSeason {
-  id            Int      @id @default(autoincrement())
-  ratingKey     String
-  parentRatingKey String
-  type          String
-  title         String
-  parentKey     String
-  parentTitle   String?
-  summary       String?
-  index         Int?
-  year          Int?
-  thumbUrl         String?
-  artUrl         String?
-  parentThumb   String?
-  parentTheme   String?
+model Media {
+  id              Int     @id @default(autoincrement())
+  artUrl          String?
+  contentRating   String?
+  duration        Int?
+  guid            String?
+  index           Int?
+  libraryKey      String?
+  parentIndex     Int?
+  parentKey       String?
+  parentRatingKey String?
+  parentTheme     String?
+  parentThumb     String?
+  parentTitle     String?
+  rating          Float?
+  ratingKey       String  @unique
+  summary         String?
+  thumbUrl        String?
+  title           String
+  type            Int     @default(0)
+  year            Int?
 }
 
 model Configuration {
-  id             Int     @id @default(autoincrement())
-  tmdbApiKey     String?
-  fanartApiKey   String?
-  removeOverlays Int     @default(0)
-  thePosterDbEmail String?
+  id                  Int     @id @default(autoincrement())
+  tmdbApiKey          String?
+  fanartApiKey        String?
+  removeOverlays      Int     @default(0)
+  thePosterDbEmail    String?
   thePosterDbPassword String?
 }
 
 model Server {
-  id            Int      @id @default(autoincrement())
-  name          String
-  url           String
-  token         String
-  userid        String?
-  type          String
+  id     Int     @id @default(autoincrement())
+  name   String
+  url    String
+  token  String
+  userid String?
+  type   String
 }

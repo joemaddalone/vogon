@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useCallback, useMemo, useReducer, ReactNode, useRef, useEffect, useTransition } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import type { PlexMovie, PlexShow, Selectable } from "@/lib/types";
+import type { Media,Selectable } from "@/lib/types";
 import { Route } from "next";
 
 
@@ -15,7 +15,7 @@ type SortField = "title" | "year";
 type SortDirection = "asc" | "desc";
 
 interface MediaGridState {
-  items: Selectable<PlexMovie>[] | Selectable<PlexShow>[];
+  items: Selectable<Media>[];
   itemsPerPage: number;
 }
 
@@ -36,15 +36,15 @@ interface MediaGridContextValue extends MediaGridState {
   setItemsPerPage: (count: number) => void;
 
   // Computed values
-  filteredAndSortedItems: Selectable<PlexMovie>[] | Selectable<PlexShow>[];
-  paginatedMovies: Selectable<PlexMovie>[];
+  filteredAndSortedItems: Selectable<Media>[];
+  paginatedMovies: Selectable<Media>[];
   totalPages: number;
   totalFilteredCount: number;
 }
 
 // Actions (simplified - only for local state)
 type Action =
-  | { type: "SET_ITEMS"; payload: Selectable<PlexMovie>[] | Selectable<PlexShow>[] }
+  | { type: "SET_ITEMS"; payload: Selectable<Media>[] }
   | { type: "SET_ITEMS_PER_PAGE"; payload: number };
 
 // Reducer (simplified - only handles local state)
@@ -65,7 +65,7 @@ const MediaGridContext = createContext<MediaGridContextValue | null>(null);
 // Provider Props
 interface MediaGridProviderProps {
   children: ReactNode;
-  initialItems: Selectable<PlexMovie>[] | Selectable<PlexShow>[];
+  initialItems: Selectable<Media>[];
   initialItemsPerPage?: number;
 }
 
@@ -194,7 +194,7 @@ export function MediaGridProvider({
 
   // Computed: Filter and Sort (using URL as source of truth)
   const filteredAndSortedItems = useMemo(() => {
-    // state.items is either PlexMovie[] or PlexShow[]
+    // state.items is Media[]
     let result = [...state.items];
 
     // Filter

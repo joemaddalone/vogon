@@ -1,13 +1,13 @@
 import { MediaGridProvider } from "./MediaGridContext";
 import { MediaGrid } from "./MediaGrid";
-import { PlexMovie, Selectable, PlexShow } from "@/lib/types";
+import { Media, Selectable } from "@/lib/types";
 
 export const Library = ({
   items,
   pending,
   type,
 }: {
-  items: Selectable<PlexMovie>[] | Selectable<PlexShow>[];
+  items: Selectable<Media>[] ;
   pending: boolean;
   type: "movie" | "show";
 }) => {

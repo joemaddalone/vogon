@@ -1,5 +1,5 @@
 "use client";
-import { PlexMovieMetadata, PlexShowMetadata, PlexSeason } from "@/lib/types";
+import { Media, PlexMovieMetadata, PlexShowMetadata } from "@/lib/types";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { useHistory } from "@/app/hooks/useHistory";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export const MediaHeader = ({
   media:
     | PlexMovieMetadata
     | PlexShowMetadata
-    | (PlexSeason & { duration?: number; contentRating?: string });
+    | Media;
   logos: { file_path: string }[];
   mediaType: "movie" | "show" | "season";
 }) => {
@@ -27,7 +27,7 @@ export const MediaHeader = ({
     nextToLast === `/${mediaType}` && mediaType !== "season";
   const backToParent =
     mediaType === "season"
-      ? `/show/${(media as PlexSeason)?.parentRatingKey}`
+      ? `/show/${(media as unknown as Media)?.parentRatingKey}`
       : "";
   // Format duration from milliseconds to hours and minutes
   const formatDuration = (ms: number) => {
@@ -83,7 +83,7 @@ export const MediaHeader = ({
               ) : (
                 <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight bg-linear-to-br from-foreground via-foreground to-foreground/60 bg-clip-text text-transparent leading-tight">
                   {mediaType === "season"
-                    ? `${(media as PlexSeason)?.parentTitle} - ${media?.title}`
+                    ? `${(media as Media)?.parentTitle} - ${media?.title}`
                     : media?.title}
                 </h1>
               )}
@@ -133,7 +133,7 @@ export const MediaHeader = ({
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
                 <ArrowLeft className="w-4 h-4" /> Back to{" "}
-                {(media as PlexSeason)?.parentTitle}
+                {(media as Media)?.parentTitle}
               </Button>
             )}
 

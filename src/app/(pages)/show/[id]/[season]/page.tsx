@@ -1,5 +1,5 @@
 export const dynamic = "force-dynamic";
-import { PlexSeason } from "@/lib/types";
+import { Media } from "@/lib/types";
 import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
 import { Spinner } from "@/components/ui/spinner";
@@ -13,7 +13,7 @@ export default async function SeasonPage(props: PageProps<"/show/[id]/[season]">
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id: seasonId, ...rest } = await DM.plex.season.get(season);
-  const seasonData = { ...rest } as PlexSeason;
+  const seasonData = { ...rest } as unknown as Media;
   const media = (await DM.plex.season.get(season));
   const posterBuilder = buildPosters(id, "season", seasonData?.index || 0, season);
 
@@ -26,9 +26,9 @@ export default async function SeasonPage(props: PageProps<"/show/[id]/[season]">
       </div>
     }
   >
-    {/* @ts-expect-error - MediaBackdrop expects a PlexSeasonMetadata */}
+    {/* @ts-expect-error - MediaBackdrop expects a Media */}
     <MediaBackdrop media={media} />
-    <MediaHeader media={media as unknown as PlexSeason} logos={[]} mediaType="season" />
+    <MediaHeader media={media as unknown as Media} logos={[]} mediaType="season" />
     <Suspense
       key="media-detail"
       fallback={

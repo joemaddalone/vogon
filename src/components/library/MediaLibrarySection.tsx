@@ -4,12 +4,12 @@ import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Library } from "@/components/library/Library";
 import { LibraryError } from "@/components/library/LibraryError";
-import { Selectable, PlexShow, PlexMovie, ApiResponse } from "@/lib/types";
+import { Selectable, Media, ApiResponse } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
 type MediaLibrarySectionProps = {
-  libLoader: Promise<ApiResponse<PlexMovie[]> | ApiResponse<PlexShow[]>>;
+  libLoader: Promise<ApiResponse<Media[]>>;
   totalLabel: string;
   type: "movie" | "show";
 };
@@ -58,7 +58,7 @@ export const MediaLibrarySection = ({
       <Library
         key={data?.length}
         type={type}
-        items={data as unknown as Selectable<PlexMovie | PlexShow>[]}
+        items={data as unknown as Selectable<Media>[]}
         pending={false}
       />
 
