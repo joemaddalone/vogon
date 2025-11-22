@@ -26,8 +26,6 @@ export default function ConfigForm({ config }: { config: Configuration }) {
 	const router = useRouter();
 	const [configData, formAction, pending] = useActionState(async (prev: Configuration | null, data: FormData) => {
 		const updateable: Updateable<Configuration> = {
-			plexServerUrl: data.get("plexServerUrl") as string | undefined,
-			plexToken: data.get("plexToken") as string | undefined,
 			tmdbApiKey: data.get("tmdbApiKey") as string | undefined,
 			fanartApiKey: data.get("fanartApiKey") as string | undefined,
 			removeOverlays: data.get("removeOverlays") as unknown as number | undefined,
@@ -56,21 +54,10 @@ export default function ConfigForm({ config }: { config: Configuration }) {
 
 
   return (
-    <div className="container max-w-2xl mx-auto py-8 px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Configuration</h1>
-        <p>
-          Configure your Plex server and API credentials. All values are stored
-          securely in the local database.{" "}
-          <i className="text-sm text-orange-200">
-            Environment variables will take precedence here.
-          </i>
-        </p>
-      </div>
-
+    <div className="container max-w-2xl mx-auto px-4">
       <form action={formAction}>
         <FieldGroup className="p-4">
-          <ConfigField
+          {/* <ConfigField
             configData={configData as Configuration}
             label="Plex Server URL"
             hint="env. PLEX_SERVER_URL"
@@ -89,7 +76,11 @@ export default function ConfigForm({ config }: { config: Configuration }) {
             required
           >
             Your Plex authentication token. <a href='https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>How to find your token</a>
-          </ConfigField>
+          </ConfigField> */}
+        </FieldGroup>
+        <FieldGroup className="p-4 mt-5 bg-muted">
+          <FieldLegend>API Configuration</FieldLegend>
+
           <ConfigField
             configData={configData as Configuration}
             label="TMDB API Key"
@@ -100,9 +91,8 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           >
             The Movie Database (TMDB) API key for poster lookups. <a href='https://www.themoviedb.org/settings/api' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>Get your API key</a>
           </ConfigField>
-        </FieldGroup>
-        <FieldGroup className="p-4 mt-5 bg-muted">
-          <FieldLegend>Optional Fields</FieldLegend>
+
+
           <ConfigField
             configData={configData as Configuration}
             label="Fanart.tv API Key"
@@ -150,7 +140,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
                 </span>
               </FieldLabel>
             </div>
-            <FieldDescription>
+            <FieldDescription className="text-sm!">
               Remove Plex overlay labels when updating posters{" "}
               <span className="font-bold">(useful for Kometa/PMM users)</span>
             </FieldDescription>
@@ -174,7 +164,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
                   Saving...
                 </>
               ) : (
-                "Save Configuration"
+                "Save API Configuration"
               )}
             </Button>
           </div>

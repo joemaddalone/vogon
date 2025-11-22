@@ -6,8 +6,6 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type Configuration = {
     id: Generated<number>;
-    plexServerUrl: string | null;
-    plexToken: string | null;
     tmdbApiKey: string | null;
     fanartApiKey: string | null;
     removeOverlays: Generated<number>;
@@ -79,10 +77,19 @@ export type PlexShow = {
     guid: string | null;
     importedAt: Generated<string>;
 };
+export type Server = {
+    id: Generated<number>;
+    name: string;
+    url: string;
+    token: string;
+    userid: string | null;
+    type: string;
+};
 export type DB = {
     Configuration: Configuration;
     PlexEpisode: PlexEpisode;
     PlexMovie: PlexMovie;
     PlexSeason: PlexSeason;
     PlexShow: PlexShow;
+    Server: Server;
 };

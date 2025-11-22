@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
   const config = await getClients();
-	if (isProtectedRoute && !config?.plexToken) {
+	if (isProtectedRoute && (!config?.plexToken || !config?.plexServerUrl || !config?.tmdbApiKey)) {
     return NextResponse.redirect(new URL('/config', request.nextUrl), { status: 307 })
   }
 

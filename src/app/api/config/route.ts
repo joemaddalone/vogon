@@ -17,13 +17,11 @@ export async function GET() {
     // Mask sensitive data
     return NextResponse.json({
       data: {
-        plexServerUrl: config.plexServerUrl,
-        plexToken: config.plexToken ? "••••••••" : null,
-        tmdbApiKey: config.tmdbApiKey ? "••••••••" : null,
-        fanartApiKey: config.fanartApiKey ? "••••••••" : null,
+        tmdbApiKey: config.tmdbApiKey || null,
+        fanartApiKey: config.fanartApiKey || null,
         removeOverlays: config.removeOverlays ?? 0,
-        thePosterDbEmail: config.thePosterDbEmail,
-        thePosterDbPassword: config.thePosterDbPassword ? "••••••••" : null,
+        thePosterDbEmail: config.thePosterDbEmail || null,
+        thePosterDbPassword: config.thePosterDbPassword || null,
       },
     });
   } catch (error) {
@@ -44,8 +42,6 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const {
-      plexServerUrl,
-      plexToken,
       tmdbApiKey,
       fanartApiKey,
       removeOverlays,
@@ -54,9 +50,9 @@ export async function POST(request: Request) {
     } = body;
 
     // Validate required fields
-    if (!plexServerUrl || !plexToken || !tmdbApiKey) {
+    if (!tmdbApiKey) {
       return NextResponse.json(
-        { error: "Plex Server URL, Plex Token, and TMDB API Key are required" },
+        { error: "TMDB API Key is required" },
         { status: 400 }
       );
     }
@@ -65,29 +61,11 @@ export async function POST(request: Request) {
     const existingConfig = await getConfiguration();
 
     const configToSave = {
-      plexServerUrl,
-      plexToken:
-        plexToken === "••••••••" && existingConfig?.plexToken
-          ? existingConfig.plexToken
-          : plexToken,
-      tmdbApiKey:
-        tmdbApiKey === "••••••••" && existingConfig?.tmdbApiKey
-          ? existingConfig.tmdbApiKey
-          : tmdbApiKey,
-      fanartApiKey:
-        fanartApiKey === "••••••••" && existingConfig?.fanartApiKey
-          ? existingConfig.fanartApiKey
-          : fanartApiKey || null,
+      tmdbApiKey: tmdbApiKey !== null ? tmdbApiKey : existingConfig?.tmdbApiKey,
+      fanartApiKey: fanartApiKey !== null ? fanartApiKey : existingConfig?.fanartApiKey,
       removeOverlays: removeOverlays ? 1 : 0,
-      thePosterDbEmail:
-        thePosterDbEmail === "••••••••" && existingConfig?.thePosterDbEmail
-          ? existingConfig.thePosterDbEmail
-          : thePosterDbEmail,
-      thePosterDbPassword:
-        thePosterDbPassword === "••••••••" &&
-        existingConfig?.thePosterDbPassword
-          ? existingConfig.thePosterDbPassword
-          : thePosterDbPassword,
+      thePosterDbEmail: thePosterDbEmail !== null ? thePosterDbEmail : existingConfig?.thePosterDbEmail,
+      thePosterDbPassword: thePosterDbPassword !== null ? thePosterDbPassword : existingConfig?.thePosterDbPassword,
     };
 
     const config = await upsertConfiguration(configToSave);
@@ -95,13 +73,11 @@ export async function POST(request: Request) {
     return NextResponse.json({
       data: {
         id: config.id,
-        plexServerUrl: config.plexServerUrl,
-        plexToken: "••••••••",
-        tmdbApiKey: "••••••••",
-        fanartApiKey: config.fanartApiKey ? "••••••••" : null,
+        tmdbApiKey: config?.tmdbApiKey || null,
+        fanartApiKey: config?.fanartApiKey || null,
         removeOverlays: Boolean(config.removeOverlays),
-        thePosterDbEmail: config.thePosterDbEmail,
-        thePosterDbPassword: config.thePosterDbPassword ? "••••••••" : null,
+        thePosterDbEmail: config?.thePosterDbEmail || null,
+        thePosterDbPassword: config?.thePosterDbPassword || null,
       },
     });
   } catch (error) {

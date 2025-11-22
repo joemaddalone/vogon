@@ -1,12 +1,12 @@
-import { getConfiguration } from "./database";
+import { getConfiguration, getServers } from "./database";
 import { FanartClient } from "./fanart";
 import { TMDBWithFind } from "./tmdb";
 import { ThePosterDbClient } from "./theposterdb";
 
 export async function getClients() {
   const envConfig = {
-    plexServerUrl: process.env.PLEX_SERVER_URL,
-    plexToken: process.env.PLEX_TOKEN,
+    plexServerUrl: '' as string | null,
+    plexToken: '' as string | null,
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,
@@ -29,7 +29,11 @@ export async function getClients() {
   }
 
   const dbConfig = (await getConfiguration()) || {};
-
+  const dbServers = (await getServers()) || [];
+  if(dbServers.length > 0) {
+    envConfig.plexServerUrl = dbServers[0].url;
+    envConfig.plexToken = dbServers[0].token;
+  }
   const finalConfig = { ...dbConfig, ...envConfig };
 
   if(finalConfig.fanartApiKey) {

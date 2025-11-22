@@ -1,5 +1,6 @@
 export * from "./database";
 export * from "./configuration";
+export * from "./server";
 import { plexMovie } from "./plexmovie";
 import { plexEpisode } from "./plexepisode";
 import { plexShow } from "./plexshow";

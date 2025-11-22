@@ -79,11 +79,18 @@ model PlexSeason {
 
 model Configuration {
   id             Int     @id @default(autoincrement())
-  plexServerUrl  String?
-  plexToken      String?
   tmdbApiKey     String?
   fanartApiKey   String?
   removeOverlays Int     @default(0)
   thePosterDbEmail String?
   thePosterDbPassword String?
+}
+
+model Server {
+  id            Int      @id @default(autoincrement())
+  name          String
+  url           String
+  token         String
+  userid        String?
+  type          String
 }

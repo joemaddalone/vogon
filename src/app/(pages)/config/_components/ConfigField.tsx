@@ -36,7 +36,7 @@ export const ConfigField = ({
         placeholder={placeholder}
         required={required}
       />
-      <FieldDescription>{children}</FieldDescription>
+      <FieldDescription className="text-sm!">{children}</FieldDescription>
     </Field>
   );
 };
