@@ -1,16 +1,13 @@
 export * from "./database";
 export * from "./configuration";
 export * from "./server";
-import { plexMovie } from "./plexmovie";
-import { plexEpisode } from "./plexepisode";
-import { plexShow } from "./plexshow";
-import { plexSeason } from "./plexseason";
+import { media } from "./media";
 
 export const dataManager = {
 	plex: {
-		movie: plexMovie,
-		episode: plexEpisode,
-		show: plexShow,
-		season: plexSeason,
+		movie: media.movie,
+		episode: media.episode,
+		show: media.show,
+		season: media.season,
 	}
 }

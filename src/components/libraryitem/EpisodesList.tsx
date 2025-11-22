@@ -1,8 +1,8 @@
 "use client";
-import { PlexEpisode } from "@/lib/types";
+import { Media } from "@/lib/types";
 import ImageLoader from "../ImageLoader";
 
-export const EpisodesList = ({ episodes }: { episodes: PlexEpisode[] }) => {
+export const EpisodesList = ({ episodes }: { episodes: Media[] }) => {
   return (
     <div>
       <ul className="backdrop-list">

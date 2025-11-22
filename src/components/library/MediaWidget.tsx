@@ -1,5 +1,5 @@
 "use client";
-import { Selectable, PlexMovie } from "@/lib/types";
+import { Selectable, Media } from "@/lib/types";
 import ImageLoader from "@/components/ImageLoader";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export const MediaWidget = ({
   mode = "grid",
   itemType,
 }: {
-  movieData: Selectable<PlexMovie>;
+  movieData: Selectable<Media>;
   className?: string;
   mode?: "grid" | "rows";
   itemType: "movie" | "show";

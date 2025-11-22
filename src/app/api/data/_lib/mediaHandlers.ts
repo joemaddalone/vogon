@@ -2,17 +2,15 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
   Insertable,
-  PlexEpisode,
+  Media,
   PlexEpisodeResponse,
-  PlexMovie,
-  PlexSeason,
   PlexSeasonResponse,
-  PlexShow,
+  MediaTypeEnum,
 } from "@/lib/types";
 import { plex } from "@/lib/client/plex";
 import { dataManager as DM } from "@/lib/client/database";
 
-type MediaType = "movie" | "show" | "season";
+type MediaTypeString = "movie" | "show" | "season";
 
 type MediaConfig = {
   label: string;
@@ -22,11 +20,11 @@ type MediaConfig = {
   updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
   updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
   createMany: (
-    items: Array<Insertable<PlexMovie> | Insertable<PlexShow> | Insertable<PlexSeason>>
+    items: Array<Insertable<Media>>
   ) => Promise<void>;
 };
 
-const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
+const MEDIA_CONFIG: Record<MediaTypeString, MediaConfig> = {
   movie: {
     label: "movies",
     cachePath: "/movie",
@@ -34,7 +32,6 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     reset: DM.plex.movie.reset,
     updateThumb: DM.plex.movie.updateThumb,
     updateArt: DM.plex.movie.updateArt,
-    // @ts-expect-error - createManyPlexMovies expects an array of Insertable<PlexMovie>
     createMany: DM.plex.movie.createMany,
   },
   show: {
@@ -44,7 +41,6 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     reset: DM.plex.show.reset,
     updateThumb: DM.plex.show.updateThumb,
     updateArt: DM.plex.show.updateArt,
-    // @ts-expect-error - createManyPlexShows expects an array of Insertable<PlexShow>
     createMany: DM.plex.show.createMany,
   },
   season: {
@@ -54,12 +50,11 @@ const MEDIA_CONFIG: Record<MediaType, MediaConfig> = {
     reset: DM.plex.season.reset,
     updateThumb: DM.plex.season.updateThumb,
     updateArt: DM.plex.season.updateArt,
-    // @ts-expect-error - createManyPlexSeasons expects an array of Insertable<PlexSeason>
     createMany: DM.plex.season.createMany,
   },
 };
 
-export async function handleMediaList(mediaType: MediaType) {
+export async function handleMediaList(mediaType: MediaTypeString) {
   try {
     const config = MEDIA_CONFIG[mediaType];
     const items = await config.getAll();
@@ -75,7 +70,7 @@ export async function handleMediaList(mediaType: MediaType) {
   }
 }
 
-export async function handleMediaReset(mediaType: MediaType) {
+export async function handleMediaReset(mediaType: MediaTypeString) {
   try {
     const config = MEDIA_CONFIG[mediaType];
     await config.reset();
@@ -95,7 +90,7 @@ export async function handleMediaReset(mediaType: MediaType) {
 }
 
 export async function handleMediaUpdate(
-  mediaType: MediaType,
+  mediaType: MediaTypeString,
   request: Request
 ) {
   try {
@@ -135,7 +130,7 @@ export async function handleMediaUpdate(
 }
 
 export async function handleMediaImport(
-  mediaType: MediaType,
+  mediaType: MediaTypeString,
   request: Request
 ) {
   try {
@@ -152,7 +147,7 @@ export async function handleMediaImport(
     }
 
     const normalizedItems = items.map(
-      (item: Insertable<PlexMovie> | Insertable<PlexShow>) => ({
+      (item: Insertable<Media>) => ({
         ratingKey: String(item.ratingKey ?? ""),
         libraryKey: String(libraryKey),
         title: String(item.title ?? ""),
@@ -163,9 +158,8 @@ export async function handleMediaImport(
         duration: item.duration ?? null,
         rating: item.rating ?? null,
         contentRating: item.contentRating ?? null,
-        addedAt: Number(item.addedAt ?? 0),
-        updatedAt: Number(item.updatedAt ?? 0),
         guid: item.guid ?? null,
+        type: mediaType === "movie" ? MediaTypeEnum.MOVIE : mediaType === "show" ? MediaTypeEnum.SHOW : MediaTypeEnum.SEASON,
       })
     );
 
@@ -174,7 +168,7 @@ export async function handleMediaImport(
 
     if (mediaType === "show") {
       // purposely not awaiting this for now.
-      handleMediaImportSeasons(normalizedItems as Insertable<PlexShow>[]);
+      handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
     }
 
     return NextResponse.json({
@@ -190,9 +184,9 @@ export async function handleMediaImport(
   }
 }
 
-export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
-  const seasons: Insertable<PlexSeason>[] = [];
-  const episodes: Insertable<PlexEpisode>[] = [];
+export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
+  const seasons: Insertable<Media>[] = [];
+  const episodes: Insertable<Media>[] = [];
   // temp fix to dupes in database
   await DM.plex.season.reset();
   await DM.plex.episode.reset();
@@ -205,7 +199,7 @@ export async function handleMediaImportSeasons(items: Insertable<PlexShow>[]) {
         parentRatingKey: item.ratingKey,
         title: season.title,
         year: season.year,
-        type: season.type,
+        type: MediaTypeEnum.SEASON,
         parentKey: season.parentKey,
         parentTitle: season.parentTitle,
         summary: season.summary,

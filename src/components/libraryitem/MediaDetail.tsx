@@ -10,7 +10,7 @@ import {
   PlexSeasonMetadata,
   PlexSeasonResponse,
   PlexShowMetadata,
-  PlexEpisode,
+  Media,
   TMDBDetail,
 } from "@/lib/types";
 import Link from "next/link";
@@ -22,9 +22,9 @@ export const MediaDetail = ({
 }: {
   posterBuilder: Promise<{
     media:
-      | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
-      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
-      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[], episodes?: PlexEpisode[] })
+      | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
+      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
+      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
       | null;
     knownIds: Record<string, string | null>;
     tmdbMedia: TMDBDetail | null;

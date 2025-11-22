@@ -1,13 +1,11 @@
 import { MovieResultItem } from "@lorenzopant/tmdb";
 import {
   PlexLibraryResponse,
-  PlexMovie,
   PlexMovieMetadata,
   PlexShowMetadata,
   TMDBDetail,
   TMDBResult,
   ApiResponse,
-  PlexShow,
   FanartMovieResponse,
   FanartShowResponse,
   Configuration,
@@ -16,6 +14,7 @@ import {
   PlexSeasonMetadata,
   Insertable,
   Server,
+  Media,
 } from "./types";
 
 const host = "http://localhost:6001";
@@ -125,7 +124,7 @@ export const api = {
   data: {
     plex: {
       import: async (
-        items: PlexMovie[] | PlexShow[],
+        items: Media[],
         libraryKey: string,
         mediaType: "movie" | "show"
       ): Promise<ApiResponse<string>> => {
@@ -136,10 +135,10 @@ export const api = {
           })
         );
       },
-      movies: async (): Promise<ApiResponse<PlexMovie[]>> => {
+      movies: async (): Promise<ApiResponse<Media[]>> => {
         return await tryCatch(fetch(`${host}/api/data/movie`));
       },
-      shows: async (): Promise<ApiResponse<PlexShow[]>> => {
+      shows: async (): Promise<ApiResponse<Media[]>> => {
         return await tryCatch(fetch(`${host}/api/data/show`));
       },
       stats: async (): Promise<
@@ -188,7 +187,7 @@ export const api = {
     libraries: async (): Promise<ApiResponse<PlexLibraryResponse[]>> => {
       return await tryCatch(fetch(`${host}/api/plex/libraries`));
     },
-    library: async (libraryKey: string): Promise<ApiResponse<PlexMovie[]>> => {
+    library: async (libraryKey: string): Promise<ApiResponse<Media[]>> => {
       return await tryCatch(fetch(`${host}/api/plex/library/${libraryKey}`));
     },
     movieDetail: async (

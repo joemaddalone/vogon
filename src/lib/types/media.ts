@@ -4,3 +4,10 @@ export type FetchedMedia = {
   source?: string;
   season?: string;
 };
+
+export enum MediaTypeEnum {
+  MOVIE = 1,
+  SHOW = 2,
+  SEASON = 3,
+  EPISODE = 4,
+}
