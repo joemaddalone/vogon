@@ -41,19 +41,10 @@ model Configuration {
 }
 
 model Server {
-<<<<<<< HEAD
   id     Int     @id @default(autoincrement())
   name   String
   url    String
   token  String
   userid String?
   type   String
-=======
-  id            Int      @id @default(autoincrement())
-  name          String
-  url           String
-  token         String
-  userid        String?
-  type          String
->>>>>>> 0a9ea55 (initial work on multiple servers)
 }

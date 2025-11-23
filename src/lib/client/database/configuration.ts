@@ -3,9 +3,6 @@ import { Insertable, Selectable, Configuration } from "@/lib/types";
 
 export const getConfiguration = async (): Promise<Selectable<Configuration> | null> => {
   const config = await db.selectFrom("Configuration").selectAll().executeTakeFirst();
-  // const servers = await getServers();
-  // we're just using the first server for this refactor.
-  // the end result appears to be single server support for now.
   return config || null;
 };
 
