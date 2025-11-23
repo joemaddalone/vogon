@@ -43,18 +43,18 @@ model Configuration {
 }
 
 model Server {
-  id     Int     @id @default(autoincrement())
-  name   String
-  url    String
-  token  String
-  userid String?
-  type   String
+  id      Int       @id @default(autoincrement())
+  name    String
+  url     String
+  token   String
+  userid  String?
+  type    String
   media   Media[]
   session Session[]
 }
 
 model Session {
-  id              Int     @id @default(autoincrement())
-  serverId        Int
-  server          Server  @relation(fields: [serverId], references: [id])
+  id       Int    @id @default(autoincrement())
+  serverId Int
+  server   Server @relation(fields: [serverId], references: [id])
 }

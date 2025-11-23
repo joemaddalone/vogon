@@ -9,6 +9,7 @@ import {
 } from "@/lib/types";
 import { plex } from "@/lib/client/plex";
 import { dataManager as DM } from "@/lib/client/database";
+import { getSession } from "@/lib/client/database/session";
 
 type MediaTypeString = "movie" | "show" | "season";
 
@@ -23,6 +24,12 @@ type MediaConfig = {
     items: Array<Insertable<Media>>
   ) => Promise<void>;
 };
+
+const session = await getSession();
+if (!session) {
+  throw new Error("Session not found");
+}
+const serverId = session.serverId;
 
 const MEDIA_CONFIG: Record<MediaTypeString, MediaConfig> = {
   movie: {
@@ -160,6 +167,7 @@ export async function handleMediaImport(
         contentRating: item.contentRating ?? null,
         guid: item.guid ?? null,
         type: mediaType === "movie" ? MediaTypeEnum.MOVIE : mediaType === "show" ? MediaTypeEnum.SHOW : MediaTypeEnum.SEASON,
+        serverId,
       })
     );
 
@@ -208,6 +216,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
         artUrl: season.artUrl,
         parentThumb: season.parentThumb,
         parentTheme: season.parentTheme,
+        serverId,
       });
     });
   }
@@ -233,6 +242,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
           artUrl: episode.artUrl,
           duration: episode.duration,
           guid: episode.guid,
+          serverId,
         });
       });
     }

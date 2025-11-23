@@ -15,6 +15,7 @@ import {
   Insertable,
   Server,
   Media,
+  Session,
 } from "./types";
 
 const host = "http://localhost:6001";
@@ -49,6 +50,29 @@ export const api = {
           body: JSON.stringify(config),
         })
       );
+    },
+  },
+  session: {
+    get: async (): Promise<ApiResponse<Selectable<Session>>> => {
+      return await tryCatch(fetch(`${host}/api/data/session`));
+    },
+    create: async (session: Insertable<Session>): Promise<ApiResponse<Session>> => {
+      return await tryCatch(fetch(`${host}/api/data/session`, {
+        method: "POST",
+        body: JSON.stringify(session),
+      }));
+    },
+    update: async ({sessionId, serverId}: {sessionId: number, serverId: number}): Promise<ApiResponse<Session>> => {
+      return await tryCatch(fetch(`${host}/api/data/session`, {
+        method: "PUT",
+        body: JSON.stringify({ sessionId, serverId }),
+      }));
+    },
+    delete: async (id: number): Promise<ApiResponse<void>> => {
+      return await tryCatch(fetch(`${host}/api/data/session`, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }));
     },
   },
   server: {
