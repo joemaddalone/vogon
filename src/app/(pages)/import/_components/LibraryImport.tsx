@@ -6,16 +6,24 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Film, TvIcon } from "lucide-react";
+import { useServer } from "@/components/context/ServerContext";
 
 export const LibraryImport = ({ library, index }: { library: PlexLibrary, index: number }) => {
 	const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
+	const { selectedServerId } = useServer();
+
 	const importLibrary = async (libraryKey: string, libraryType: string) => {
+    if (!selectedServerId) {
+      setError("Please select a server first");
+      return;
+    }
+
     setImporting(libraryKey);
     setError(null);
 
-    const { data, error } = await api.plex.library(libraryKey);
+    const { data, error } = await api.plex.library(libraryKey, selectedServerId);
     if (error) {
       setError(error.message);
       setImporting(null);
@@ -26,7 +34,8 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
     const { error: importError } = await api.data.plex.import(
       data,
       libraryKey,
-      libraryType as "movie" | "show"
+      libraryType as "movie" | "show",
+      selectedServerId
     );
     setImporting(null);
     if (importError) {

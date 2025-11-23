@@ -2,8 +2,8 @@ import { db } from "./database";
 import { Insertable, Selectable, Media, MediaTypeEnum } from "@/lib/types";
 
 // Common operations for all media types
-export const list = async (type?: MediaTypeEnum): Promise<Selectable<Media>[]> => {
-  let query = db.selectFrom("Media");
+export const list = async (type: MediaTypeEnum, serverId: number): Promise<Selectable<Media>[]> => {
+  let query = db.selectFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -23,27 +23,31 @@ export const getById = async (
 };
 
 export const getByRatingKey = async (
-  ratingKey: string
+  ratingKey: string,
+  serverId: number
 ): Promise<Selectable<Media>> => {
   return await db
     .selectFrom("Media")
     .where("ratingKey", "=", ratingKey)
+		.where("serverId", "=", serverId)
     .selectAll()
     .executeTakeFirstOrThrow();
 };
 
 export const byParentRatingKey = async (
-  parentRatingKey: string
+  parentRatingKey: string,
+  serverId: number
 ): Promise<Selectable<Media>[]> => {
   return await db
     .selectFrom("Media")
     .where("parentRatingKey", "=", parentRatingKey)
+    .where("serverId", "=", serverId)
     .selectAll()
     .execute();
 };
 
-export const count = async (type?: MediaTypeEnum): Promise<number> => {
-  let query = db.selectFrom("Media");
+export const count = async (type: MediaTypeEnum, serverId: number): Promise<number> => {
+  let query = db.selectFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -56,8 +60,8 @@ export const count = async (type?: MediaTypeEnum): Promise<number> => {
   return Number(result.count);
 };
 
-export const reset = async (type?: MediaTypeEnum): Promise<void> => {
-  let query = db.deleteFrom("Media");
+export const reset = async (type: MediaTypeEnum, serverId: number): Promise<void> => {
+  let query = db.deleteFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -68,23 +72,27 @@ export const reset = async (type?: MediaTypeEnum): Promise<void> => {
 
 export const updateThumb = async (
   ratingKey: string,
-  thumbUrl: string
+  thumbUrl: string,
+  serverId: number
 ): Promise<void> => {
   await db
     .updateTable("Media")
     .set({ thumbUrl })
     .where("ratingKey", "=", ratingKey)
+    .where("serverId", "=", serverId)
     .execute();
 };
 
 export const updateArt = async (
   ratingKey: string,
-  artUrl: string
+  artUrl: string,
+  serverId: number
 ): Promise<void> => {
   await db
     .updateTable("Media")
     .set({ artUrl })
     .where("ratingKey", "=", ratingKey)
+    .where("serverId", "=", serverId)
     .execute();
 };
 
@@ -113,15 +121,17 @@ export const createMany = async (
 
 // Type-specific helper methods
 export const bySeason = async (
-  seasonRatingKey: string
+  seasonRatingKey: string,
+  serverId: number
 ): Promise<Selectable<Media>[]> => {
-  return byParentRatingKey(seasonRatingKey);
+  return byParentRatingKey(seasonRatingKey, serverId);
 };
 
 export const byShow = async (
-  showRatingKey: string
+  showRatingKey: string,
+  serverId: number
 ): Promise<Selectable<Media>[]> => {
-  return byParentRatingKey(showRatingKey);
+  return byParentRatingKey(showRatingKey, serverId);
 };
 
 // Export organized by media type for backward compatibility and clarity
@@ -144,10 +154,10 @@ export const media = {
 
   // Organized by type
   movie: {
-    list: () => list(MediaTypeEnum.MOVIE),
+    list: (serverId: number) => list(MediaTypeEnum.MOVIE, serverId),
     get: getById,
-    count: () => count(MediaTypeEnum.MOVIE),
-    reset: () => reset(MediaTypeEnum.MOVIE),
+    count: (serverId: number) => count(MediaTypeEnum.MOVIE, serverId),
+    reset: (serverId: number) => reset(MediaTypeEnum.MOVIE, serverId),
     updateThumb,
     updateArt,
     create,
@@ -155,10 +165,10 @@ export const media = {
   },
 
   show: {
-    list: () => list(MediaTypeEnum.SHOW),
+    list: (serverId: number) => list(MediaTypeEnum.SHOW, serverId),
     get: getById,
-    count: () => count(MediaTypeEnum.SHOW),
-    reset: () => reset(MediaTypeEnum.SHOW),
+    count: (serverId: number) => count(MediaTypeEnum.SHOW, serverId),
+    reset: (serverId: number) => reset(MediaTypeEnum.SHOW, serverId),
     updateThumb,
     updateArt,
     create,
@@ -166,10 +176,10 @@ export const media = {
   },
 
   season: {
-    list: () => list(MediaTypeEnum.SEASON),
+    list: (serverId: number) => list(MediaTypeEnum.SEASON, serverId),
     get: getByRatingKey,
     byShow,
-    reset: () => reset(MediaTypeEnum.SEASON),
+    reset: (serverId: number) => reset(MediaTypeEnum.SEASON, serverId),
     updateThumb,
     updateArt,
     create,
@@ -177,10 +187,10 @@ export const media = {
   },
 
   episode: {
-    list: () => list(MediaTypeEnum.EPISODE),
+    list: (serverId: number) => list(MediaTypeEnum.EPISODE, serverId),
     get: getByRatingKey,
     bySeason,
-    reset: () => reset(MediaTypeEnum.EPISODE),
+    reset: (serverId: number) => reset(MediaTypeEnum.EPISODE, serverId),
     create,
     createMany,
   },

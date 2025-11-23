@@ -11,7 +11,12 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const movie = await plex.getMovieDetails(id);
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const movie = await plex.getMovieDetails(id, serverId);
 
     return NextResponse.json({
       data: movie,

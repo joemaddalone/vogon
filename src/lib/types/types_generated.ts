@@ -33,6 +33,7 @@ export type Media = {
     title: string;
     type: Generated<number>;
     year: number | null;
+    serverId: Generated<number>;
 };
 export type Server = {
     id: Generated<number>;

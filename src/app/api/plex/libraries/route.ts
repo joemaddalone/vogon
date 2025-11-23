@@ -5,9 +5,14 @@ import { plex } from "@/lib/client/plex";
  * GET /api/plex/libraries
  * Retrieve all libraries from the Plex server
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const libraries = await plex.getLibraries();
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const libraries = await plex.getLibraries(serverId);
 
     // Filter to only show movie libraries
     const movieLibraries = libraries.filter(

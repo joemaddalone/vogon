@@ -11,15 +11,15 @@ import { getClients } from "./getClients";
 class PlexClient {
   constructor() {}
 
-  private async config() {
-    return await getClients();
+  private async config(serverId?: number) {
+    return await getClients(serverId);
   }
 
   /**
    * Make authenticated request to Plex API
    */
-  private async request<T>(endpoint: string): Promise<T> {
-    const config = await this.config();
+  private async request<T>(endpoint: string, serverId?: number): Promise<T> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}${endpoint}`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -49,9 +49,10 @@ class PlexClient {
   /**
    * Get all libraries from Plex server
    */
-  async getLibraries(): Promise<PlexLibraryResponse[]> {
+  async getLibraries(serverId?: number): Promise<PlexLibraryResponse[]> {
     const response = await this.request<PlexResponse<PlexLibraryResponse>>(
-      "/library/sections"
+      "/library/sections",
+      serverId
     );
     return response.MediaContainer.Directory || [];
   }
@@ -59,10 +60,11 @@ class PlexClient {
   /**
    * Get all items from a specific library
    */
-  async getLibraryItems(libraryKey: string): Promise<PlexMovieResponse[]> {
-    const config = await this.config();
+  async getLibraryItems(libraryKey: string, serverId?: number): Promise<PlexMovieResponse[]> {
+    const config = await this.config(serverId);
     const response = await this.request<PlexResponse<PlexMovieResponse>>(
-      `/library/sections/${libraryKey}/all`
+      `/library/sections/${libraryKey}/all`,
+      serverId
     );
     const items = response.MediaContainer.Metadata || [];
     // Add full URL to thumbnails
@@ -81,11 +83,13 @@ class PlexClient {
    * Get detailed metadata for a specific movie
    */
   async getMovieDetails(
-    ratingKey: string
+    ratingKey: string,
+    serverId?: number
   ): Promise<Partial<PlexMovieMetadata>> {
-    const config = await this.config();
+    const config = await this.config(serverId);
     const response = await this.request<PlexResponse<PlexMovieResponse>>(
-      `/library/metadata/${ratingKey}`
+      `/library/metadata/${ratingKey}`,
+      serverId
     );
     const movie = response.MediaContainer.Metadata?.[0];
 
@@ -104,10 +108,11 @@ class PlexClient {
     };
   }
 
-  async getShowSeasons(ratingKey: string): Promise<PlexSeasonResponse[]> {
-    const config = await this.config();
+  async getShowSeasons(ratingKey: string, serverId?: number): Promise<PlexSeasonResponse[]> {
+    const config = await this.config(serverId);
     const response = await this.request<PlexResponse<PlexSeasonResponse>>(
-      `/library/metadata/${ratingKey}/children`
+      `/library/metadata/${ratingKey}/children`,
+      serverId
     );
     const items = response?.MediaContainer?.Metadata || [];
 
@@ -122,10 +127,11 @@ class PlexClient {
     }));
   }
 
-  async getSeasonEpisodes(ratingKey: string): Promise<PlexEpisodeResponse[]> {
-    const config = await this.config();
+  async getSeasonEpisodes(ratingKey: string, serverId?: number): Promise<PlexEpisodeResponse[]> {
+    const config = await this.config(serverId);
     const response = await this.request<PlexResponse<PlexEpisodeResponse>>(
-      `/library/metadata/${ratingKey}/children`
+      `/library/metadata/${ratingKey}/children`,
+      serverId
     );
     const items = response?.MediaContainer?.Metadata || [];
     return items.map((episode) => ({
@@ -142,8 +148,8 @@ class PlexClient {
   /**
    * Update movie poster with a new image URL
    */
-  async updateMoviePoster(ratingKey: string, posterUrl: string): Promise<void> {
-    const config = await this.config();
+  async updateMoviePoster(ratingKey: string, posterUrl: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/posters`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -165,7 +171,7 @@ class PlexClient {
       }
 
       // Lock the poster field to prevent Plex from overwriting it
-      await this.lockPosterField(ratingKey);
+      await this.lockPosterField(ratingKey, serverId);
     } catch (error) {
       console.error("Failed to update movie poster:", error);
       throw error;
@@ -177,9 +183,10 @@ class PlexClient {
    */
   async updateMovieBackdrop(
     ratingKey: string,
-    backdropUrl: string
+    backdropUrl: string,
+    serverId?: number
   ): Promise<void> {
-    const config = await this.config();
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/arts`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -201,7 +208,7 @@ class PlexClient {
       }
 
       // Lock the poster field to prevent Plex from overwriting it
-      await this.lockBackdropField(ratingKey);
+      await this.lockBackdropField(ratingKey, serverId);
     } catch (error) {
       console.error("Failed to update movie backdrop:", error);
       throw error;
@@ -211,8 +218,8 @@ class PlexClient {
   /**
    * Lock the poster field to prevent Plex from changing it
    */
-  private async lockPosterField(ratingKey: string): Promise<void> {
-    const config = await this.config();
+  private async lockPosterField(ratingKey: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -235,8 +242,8 @@ class PlexClient {
   /**
    * Lock the poster field to prevent Plex from changing it
    */
-  private async lockBackdropField(ratingKey: string): Promise<void> {
-    const config = await this.config();
+  private async lockBackdropField(ratingKey: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -259,7 +266,7 @@ class PlexClient {
   /**
    * Get metadata including labels
    */
-  private async getMetadataWithLabels(ratingKey: string): Promise<{
+  private async getMetadataWithLabels(ratingKey: string, serverId?: number): Promise<{
     librarySectionID: string;
     type: string;
     title: string;
@@ -272,7 +279,7 @@ class PlexClient {
           Label?: Array<{ tag: string }>;
         }
       >
-    >(`/library/metadata/${ratingKey}`);
+    >(`/library/metadata/${ratingKey}`, serverId);
 
     const metadata = response.MediaContainer.Metadata?.[0];
     if (!metadata) {
@@ -306,8 +313,8 @@ class PlexClient {
   /**
    * Unlock the label field
    */
-  private async unlockLabelField(ratingKey: string): Promise<void> {
-    const config = await this.config();
+  private async unlockLabelField(ratingKey: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -337,9 +344,10 @@ class PlexClient {
     ratingKey: string,
     librarySectionID: string,
     typeId: string,
-    otherLabels: string[]
+    otherLabels: string[],
+    serverId?: number
   ): Promise<boolean> {
-    const config = await this.config();
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/sections/${librarySectionID}/all`;
 
     // Build the query parameters
@@ -380,8 +388,8 @@ class PlexClient {
   /**
    * Refresh metadata for a specific item
    */
-  private async refreshMetadata(ratingKey: string): Promise<void> {
-    const config = await this.config();
+  private async refreshMetadata(ratingKey: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/refresh`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -403,8 +411,8 @@ class PlexClient {
   /**
    * Refresh library section
    */
-  private async refreshLibrarySection(librarySectionID: string): Promise<void> {
-    const config = await this.config();
+  private async refreshLibrarySection(librarySectionID: string, serverId?: number): Promise<void> {
+    const config = await this.config(serverId);
     const url = `${config?.plexServerUrl}/library/sections/${librarySectionID}/refresh`;
     const params = new URLSearchParams({
       "X-Plex-Token": config?.plexToken || "",
@@ -426,8 +434,8 @@ class PlexClient {
   /**
    * Verify if Overlay label has been removed
    */
-  private async verifyOverlayRemoval(ratingKey: string): Promise<boolean> {
-    const metadata = await this.getMetadataWithLabels(ratingKey);
+  private async verifyOverlayRemoval(ratingKey: string, serverId?: number): Promise<boolean> {
+    const metadata = await this.getMetadataWithLabels(ratingKey, serverId);
     return !metadata.labels.includes("Overlay");
   }
 
@@ -437,13 +445,14 @@ class PlexClient {
   private async pollForOverlayRemoval(
     ratingKey: string,
     maxAttempts: number = 5,
-    initialDelay: number = 100
+    initialDelay: number = 100,
+    serverId?: number
   ): Promise<boolean> {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const delay = initialDelay * Math.pow(2, attempt); // Exponential backoff: 100, 200, 400, 800, 1600ms
       await this.wait(delay);
 
-      const verified = await this.verifyOverlayRemoval(ratingKey);
+      const verified = await this.verifyOverlayRemoval(ratingKey, serverId);
       if (verified) {
         return true;
       }
@@ -463,13 +472,13 @@ class PlexClient {
    * This logic is more or less translated from
    * https://github.com/jeremehancock/Posteria/blob/main/src/include/remove-overlay-label.sh
    */
-  async removeOverlay(ratingKey: string): Promise<{
+  async removeOverlay(ratingKey: string, serverId?: number): Promise<{
     success: boolean;
     message: string;
     title?: string;
   }> {
     try {
-      const metadata = await this.getMetadataWithLabels(ratingKey);
+      const metadata = await this.getMetadataWithLabels(ratingKey, serverId);
 
       if (!metadata.labels.includes("Overlay")) {
         return {
@@ -484,13 +493,14 @@ class PlexClient {
       );
       const typeId = this.getTypeId(metadata.type);
 
-      await this.unlockLabelField(ratingKey);
+      await this.unlockLabelField(ratingKey, serverId);
 
       const removed = await this.removeOverlayLabel(
         ratingKey,
         metadata.librarySectionID,
         typeId,
-        otherLabels
+        otherLabels,
+        serverId
       );
 
       if (!removed) {
@@ -501,10 +511,10 @@ class PlexClient {
         };
       }
 
-      await this.refreshMetadata(ratingKey);
-      this.refreshLibrarySection(metadata.librarySectionID); // Don't await
+      await this.refreshMetadata(ratingKey, serverId);
+      this.refreshLibrarySection(metadata.librarySectionID, serverId); // Don't await
 
-      const verified = await this.pollForOverlayRemoval(ratingKey, 5, 100);
+      const verified = await this.pollForOverlayRemoval(ratingKey, 5, 100, serverId);
 
       if (verified) {
         return {
@@ -534,11 +544,11 @@ class PlexClient {
   /**
    * Test connection to Plex server
    */
-  async testConnection(): Promise<boolean> {
+  async testConnection(serverId?: number): Promise<boolean> {
     try {
       const response = await this.request<{
         MediaContainer: { machineIdentifier: string };
-      }>("/");
+      }>("/", serverId);
       return !!response.MediaContainer.machineIdentifier;
     } catch {
       return false;

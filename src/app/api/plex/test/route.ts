@@ -5,9 +5,14 @@ import { plex } from "@/lib/client/plex";
  * GET /api/plex/test
  * Test connection to Plex server
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const isConnected = await plex.testConnection();
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const isConnected = await plex.testConnection(serverId);
 
     if (isConnected) {
       return NextResponse.json({

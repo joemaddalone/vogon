@@ -11,7 +11,12 @@ export async function GET(
 ) {
   try {
     const { libraryKey } = await params;
-    const movies = await plex.getLibraryItems(libraryKey);
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const movies = await plex.getLibraryItems(libraryKey, serverId);
 
     return NextResponse.json({
       success: true,

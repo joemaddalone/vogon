@@ -57,26 +57,6 @@ export default function ConfigForm({ config }: { config: Configuration }) {
     <div className="container max-w-2xl mx-auto px-4">
       <form action={formAction}>
         <FieldGroup className="p-4">
-          {/* <ConfigField
-            configData={configData as Configuration}
-            label="Plex Server URL"
-            hint="env. PLEX_SERVER_URL"
-            dataKey="plexServerUrl"
-            placeholder="http://192.168.1.2:32400"
-            required
-          >
-            Your Plex Media Server URL (usually local network IP with port 32400)
-          </ConfigField>
-          <ConfigField
-            configData={configData as Configuration}
-            label="Plex Token"
-            hint="env. PLEX_TOKEN"
-            dataKey="plexToken"
-            placeholder="Enter your Plex token"
-            required
-          >
-            Your Plex authentication token. <a href='https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>How to find your token</a>
-          </ConfigField> */}
         </FieldGroup>
         <FieldGroup className="p-4 mt-5 bg-muted">
           <FieldLegend>API Configuration</FieldLegend>

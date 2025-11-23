@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getClients } from "@/lib/client/getClients";
+import { getServers } from "@/lib/client/database/server";
 
 const protectedRoutes = ["/movie", "/show", "/import", "/"];
 // const publicRoutes = ["/", "/config"];
@@ -8,9 +8,15 @@ const protectedRoutes = ["/movie", "/show", "/import", "/"];
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
-  const config = await getClients();
-	if (isProtectedRoute && (!config?.plexToken || !config?.plexServerUrl || !config?.tmdbApiKey)) {
-    return NextResponse.redirect(new URL('/config', request.nextUrl), { status: 307 })
+
+  if (isProtectedRoute) {
+    // Check if servers are configured
+    const servers = await getServers();
+    if (servers.length === 0) {
+      return NextResponse.redirect(new URL('/config', request.nextUrl), { status: 307 });
+    }
+    // Note: Server selection is now handled client-side via ServerContext
+    // We just verify that at least one server exists
   }
 
   return NextResponse.next();

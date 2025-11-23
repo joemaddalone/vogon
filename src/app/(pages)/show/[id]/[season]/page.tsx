@@ -7,14 +7,24 @@ import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { dataManager as DM } from "@/lib/client/database";
+import { getServerId } from "@/lib/server/getServerId";
 
 export default async function SeasonPage(props: PageProps<"/show/[id]/[season]">) {
   const { id, season } = await props.params;
+  const serverId = await getServerId();
+
+  if (!serverId) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p>No server configured. Please add a server in the Config page.</p>
+      </div>
+    );
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id: seasonId, ...rest } = await DM.plex.season.get(season);
+  const { id: seasonId, ...rest } = await DM.plex.season.get(season, serverId);
   const seasonData = { ...rest } as unknown as Media;
-  const media = (await DM.plex.season.get(season));
+  const media = await DM.plex.season.get(season, serverId);
   const posterBuilder = buildPosters(id, "season", seasonData?.index || 0, season);
 
   return (
