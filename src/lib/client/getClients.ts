@@ -5,8 +5,8 @@ import { ThePosterDbClient } from "./theposterdb";
 
 export async function getClients() {
   const envConfig = {
-    plexServerUrl: '' as string | null,
-    plexToken: '' as string | null,
+    serverUrl: '' as string | null,
+    serverToken: '' as string | null,
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,
@@ -35,14 +35,14 @@ export async function getClients() {
     if(!dbServer) {
       return null;
     }
-    envConfig.plexServerUrl = dbServer.url;
-    envConfig.plexToken = dbServer.token;
+    envConfig.serverUrl = dbServer.url;
+    envConfig.serverToken = dbServer.token;
   }
   else {
     const dbServers = (await getServers()) || [];
     if(dbServers.length > 0) {
-      envConfig.plexServerUrl = dbServers[0].url;
-      envConfig.plexToken = dbServers[0].token;
+      envConfig.serverUrl = dbServers[0].url;
+      envConfig.serverToken = dbServers[0].token;
       createSession({ serverId: dbServers[0].id });
     }
 

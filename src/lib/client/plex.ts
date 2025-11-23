@@ -20,9 +20,9 @@ class PlexClient {
    */
   private async request<T>(endpoint: string): Promise<T> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}${endpoint}`;
+    const url = `${config?.serverUrl}${endpoint}`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
     });
 
     try {
@@ -69,10 +69,10 @@ class PlexClient {
     return items.map((movie) => ({
       ...movie,
       thumbUrl: movie.thumb
-        ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${movie.thumb}?X-Plex-Token=${config?.serverToken}`
         : undefined,
       artUrl: movie.art
-        ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${movie.art}?X-Plex-Token=${config?.serverToken}`
         : undefined,
     }));
   }
@@ -96,10 +96,10 @@ class PlexClient {
     return {
       ...movie,
       thumbUrl: movie.thumb
-        ? `${config?.plexServerUrl}${movie.thumb}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${movie.thumb}?X-Plex-Token=${config?.serverToken}`
         : "",
       artUrl: movie.art
-        ? `${config?.plexServerUrl}${movie.art}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${movie.art}?X-Plex-Token=${config?.serverToken}`
         : "",
     };
   }
@@ -114,10 +114,10 @@ class PlexClient {
     return items.map((season) => ({
       ...season,
       thumbUrl: season.thumb
-        ? `${config?.plexServerUrl}${season.thumb}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${season.thumb}?X-Plex-Token=${config?.serverToken}`
         : undefined,
       artUrl: season.art
-        ? `${config?.plexServerUrl}${season.art}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${season.art}?X-Plex-Token=${config?.serverToken}`
         : undefined,
     }));
   }
@@ -131,10 +131,10 @@ class PlexClient {
     return items.map((episode) => ({
       ...episode,
       thumbUrl: episode.thumb
-        ? `${config?.plexServerUrl}${episode.thumb}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${episode.thumb}?X-Plex-Token=${config?.serverToken}`
         : undefined,
       artUrl: episode.art
-        ? `${config?.plexServerUrl}${episode.art}?X-Plex-Token=${config?.plexToken}`
+        ? `${config?.serverUrl}${episode.art}?X-Plex-Token=${config?.serverToken}`
         : undefined,
     }));
   }
@@ -144,9 +144,9 @@ class PlexClient {
    */
   async updateMoviePoster(ratingKey: string, posterUrl: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/posters`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}/posters`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       url: posterUrl,
     });
 
@@ -180,9 +180,9 @@ class PlexClient {
     backdropUrl: string
   ): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/arts`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}/arts`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       url: backdropUrl,
     });
 
@@ -213,9 +213,9 @@ class PlexClient {
    */
   private async lockPosterField(ratingKey: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       "thumb.locked": "1",
     });
 
@@ -237,9 +237,9 @@ class PlexClient {
    */
   private async lockBackdropField(ratingKey: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       "art.locked": "1",
     });
 
@@ -308,9 +308,9 @@ class PlexClient {
    */
   private async unlockLabelField(ratingKey: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       "label.locked": "0",
     });
 
@@ -340,11 +340,11 @@ class PlexClient {
     otherLabels: string[]
   ): Promise<boolean> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/sections/${librarySectionID}/all`;
+    const url = `${config?.serverUrl}/library/sections/${librarySectionID}/all`;
 
     // Build the query parameters
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
       type: typeId,
       id: ratingKey,
       includeExternalMedia: "1",
@@ -382,9 +382,9 @@ class PlexClient {
    */
   private async refreshMetadata(ratingKey: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/metadata/${ratingKey}/refresh`;
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}/refresh`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
     });
 
     try {
@@ -405,9 +405,9 @@ class PlexClient {
    */
   private async refreshLibrarySection(librarySectionID: string): Promise<void> {
     const config = await this.config();
-    const url = `${config?.plexServerUrl}/library/sections/${librarySectionID}/refresh`;
+    const url = `${config?.serverUrl}/library/sections/${librarySectionID}/refresh`;
     const params = new URLSearchParams({
-      "X-Plex-Token": config?.plexToken || "",
+      "X-Plex-Token": config?.serverToken || "",
     });
 
     try {
