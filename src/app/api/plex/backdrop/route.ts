@@ -8,7 +8,7 @@ import { plex } from "@/lib/client/plex";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { ratingKey, backdropUrl } = body;
+    const { ratingKey, backdropUrl, serverId } = body;
 
     if (!ratingKey || !backdropUrl) {
       return NextResponse.json(
@@ -19,7 +19,8 @@ export async function POST(request: Request) {
       );
     }
 
-    await plex.updateMovieBackdrop(ratingKey, backdropUrl);
+    const parsedServerId = serverId ? parseInt(String(serverId), 10) : undefined;
+    await plex.updateMovieBackdrop(ratingKey, backdropUrl, parsedServerId);
 
     return NextResponse.json({
       data: "Backdrop updated successfully",

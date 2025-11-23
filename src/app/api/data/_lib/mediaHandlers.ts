@@ -15,10 +15,10 @@ type MediaTypeString = "movie" | "show" | "season";
 type MediaConfig = {
   label: string;
   cachePath: string;
-  getAll: () => Promise<unknown[]>;
-  reset: () => Promise<void>;
-  updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
-  updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
+  getAll: (serverId: number) => Promise<unknown[]>;
+  reset: (serverId: number) => Promise<void>;
+  updateThumb: (ratingKey: string, thumbUrl: string, serverId: number) => Promise<void>;
+  updateArt: (ratingKey: string, artUrl: string, serverId: number) => Promise<void>;
   createMany: (
     items: Array<Insertable<Media>>
   ) => Promise<void>;
@@ -54,10 +54,10 @@ const MEDIA_CONFIG: Record<MediaTypeString, MediaConfig> = {
   },
 };
 
-export async function handleMediaList(mediaType: MediaTypeString) {
+export async function handleMediaList(mediaType: MediaTypeString, serverId: number) {
   try {
     const config = MEDIA_CONFIG[mediaType];
-    const items = await config.getAll();
+    const items = await config.getAll(serverId);
     return NextResponse.json({ data: items });
   } catch (error) {
     console.error(`Error fetching imported ${mediaType}s:`, error);
@@ -70,12 +70,12 @@ export async function handleMediaList(mediaType: MediaTypeString) {
   }
 }
 
-export async function handleMediaReset(mediaType: MediaTypeString) {
+export async function handleMediaReset(mediaType: MediaTypeString, serverId: number) {
   try {
     const config = MEDIA_CONFIG[mediaType];
-    await config.reset();
+    await config.reset(serverId);
     if (mediaType === "show") {
-      await DM.plex.season.reset();
+      await DM.plex.season.reset(serverId);
     }
     return NextResponse.json({
       data: `${config.label} reset successfully`,
@@ -91,7 +91,8 @@ export async function handleMediaReset(mediaType: MediaTypeString) {
 
 export async function handleMediaUpdate(
   mediaType: MediaTypeString,
-  request: Request
+  request: Request,
+  serverId: number
 ) {
   try {
     const { ratingKey, thumbUrl, artUrl } = await request.json();
@@ -105,10 +106,10 @@ export async function handleMediaUpdate(
 
     const config = MEDIA_CONFIG[mediaType];
     if (thumbUrl) {
-      await config.updateThumb(ratingKey, thumbUrl);
+      await config.updateThumb(ratingKey, thumbUrl, serverId);
     }
     if (artUrl) {
-      await config.updateArt(ratingKey, artUrl);
+      await config.updateArt(ratingKey, artUrl, serverId);
     }
 
     revalidatePath(thumbUrl ?? artUrl ?? "");
@@ -131,10 +132,10 @@ export async function handleMediaUpdate(
 
 export async function handleMediaImport(
   mediaType: MediaTypeString,
-  request: Request
+  body: { items: Insertable<Media>[]; libraryKey: string },
+  serverId: number
 ) {
   try {
-    const body = await request.json();
     const { items, libraryKey } = body;
 
     if (!items || !Array.isArray(items) || !libraryKey) {
@@ -147,7 +148,7 @@ export async function handleMediaImport(
     }
 
     const normalizedItems = items.map(
-      (item: Insertable<Media>) => ({
+      (item) => ({
         ratingKey: String(item.ratingKey ?? ""),
         libraryKey: String(libraryKey),
         title: String(item.title ?? ""),
@@ -160,6 +161,7 @@ export async function handleMediaImport(
         contentRating: item.contentRating ?? null,
         guid: item.guid ?? null,
         type: mediaType === "movie" ? MediaTypeEnum.MOVIE : mediaType === "show" ? MediaTypeEnum.SHOW : MediaTypeEnum.SEASON,
+        serverId: serverId,
       })
     );
 
@@ -168,7 +170,7 @@ export async function handleMediaImport(
 
     if (mediaType === "show") {
       // purposely not awaiting this for now.
-      handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
+      handleMediaImportSeasons(normalizedItems as Insertable<Media>[], serverId);
     }
 
     return NextResponse.json({
@@ -184,15 +186,15 @@ export async function handleMediaImport(
   }
 }
 
-export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
+export async function handleMediaImportSeasons(items: Insertable<Media>[], serverId: number) {
   const seasons: Insertable<Media>[] = [];
   const episodes: Insertable<Media>[] = [];
   // temp fix to dupes in database
-  await DM.plex.season.reset();
-  await DM.plex.episode.reset();
+  await DM.plex.season.reset(serverId);
+  await DM.plex.episode.reset(serverId);
 
   for (const item of items) {
-    const showSeasons = await plex.getShowSeasons(item.ratingKey);
+    const showSeasons = await plex.getShowSeasons(item.ratingKey, serverId);
     showSeasons.forEach((season: PlexSeasonResponse) => {
       seasons.push({
         ratingKey: season.ratingKey,
@@ -208,6 +210,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
         artUrl: season.artUrl,
         parentThumb: season.parentThumb,
         parentTheme: season.parentTheme,
+        serverId: serverId,
       });
     });
   }
@@ -219,7 +222,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
   if (process.env.ENABLE_EPISODES === "true") {
     for (const season of seasons) {
       const seasonEpisodes: PlexEpisodeResponse[] =
-        await plex.getSeasonEpisodes(season.ratingKey);
+        await plex.getSeasonEpisodes(season.ratingKey, serverId);
       seasonEpisodes.forEach((episode) => {
         episodes.push({
           ratingKey: episode.ratingKey,
@@ -233,6 +236,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
           artUrl: episode.artUrl,
           duration: episode.duration,
           guid: episode.guid,
+          serverId: serverId,
         });
       });
     }

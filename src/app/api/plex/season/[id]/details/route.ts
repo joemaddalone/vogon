@@ -12,8 +12,19 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const show = await plex.getMovieDetails(id);
-    const episodes = await DM.plex.episode.bySeason(id);
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const show = await plex.getMovieDetails(id, serverId);
+    if (!serverId) {
+      return NextResponse.json(
+        { error: "serverId is required" },
+        { status: 400 }
+      );
+    }
+    const episodes = await DM.plex.episode.bySeason(id, serverId);
 
     const data = {...show, episodes: episodes };
 

@@ -7,10 +7,22 @@ import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { plex } from "@/lib/client/plex";
 import { PlexMovieMetadata } from "@/lib/types";
+import { getServerId } from "@/lib/server/getServerId";
+
 export default async function MoviePage(props: PageProps<"/movie/[id]">) {
   const { id } = await props.params;
+  const serverId = await getServerId();
+
+  if (!serverId) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p>No server configured. Please add a server in the Config page.</p>
+      </div>
+    );
+  }
+
   const posterBuilder = buildPosters(id, "movie");
-  const media = (await plex.getMovieDetails(id)) as PlexMovieMetadata;
+  const media = (await plex.getMovieDetails(id, serverId)) as PlexMovieMetadata;
 
   return (
     <Suspense

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { PosterOption } from "@/components/libraryitem/PosterOption";
+import { useServer } from "@/components/context/ServerContext";
 
 type PosterPickerProps = {
   posters: { file_path: string, previewUrl?: string, source?: string }[];
@@ -19,25 +20,31 @@ export const PosterPicker = ({
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [busyIndex, setBusyIndex] = useState(-1);
+  const { selectedServerId } = useServer();
 
   const updatePoster = async (posterUrl: string, index: number) => {
+    if (!selectedServerId) {
+      console.error("No server selected");
+      return;
+    }
+
     setBusyIndex(index);
 
-    await api.plex.poster(ratingKey, posterUrl);
+    await api.plex.poster(ratingKey, posterUrl, selectedServerId);
     if(mediaType === "movie") {
-      const movie = await api.plex.movieDetail(ratingKey);
+      const movie = await api.plex.movieDetail(ratingKey, selectedServerId);
       if(movie) {
-        await api.data.plex.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "", selectedServerId);
       }
     } else if(mediaType === "show") {
-      const show = await api.plex.showDetail(ratingKey);
+      const show = await api.plex.showDetail(ratingKey, selectedServerId);
       if(show) {
-        await api.data.plex.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "", selectedServerId);
       }
     } else if(mediaType === "season") {
-      const season = await api.plex.seasonDetail(ratingKey);
+      const season = await api.plex.seasonDetail(ratingKey, selectedServerId);
       if(season) {
-        await api.data.plex.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "", selectedServerId);
       }
     }
 

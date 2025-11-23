@@ -7,6 +7,7 @@ import { LibraryError } from "@/components/library/LibraryError";
 import { Selectable, Media, ApiResponse } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
+import { useServer } from "@/components/context/ServerContext";
 
 type MediaLibrarySectionProps = {
   libLoader: Promise<ApiResponse<Media[]>>;
@@ -20,16 +21,22 @@ export const MediaLibrarySection = ({
   type,
 }: MediaLibrarySectionProps) => {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
   const { data, error: libError } = use(libLoader);
-
-
+  const { selectedServerId } = useServer();
 
   const handleReset = async () => {
+    if (!selectedServerId) {
+      setError("Please select a server first");
+      return;
+    }
+
     setError(null);
 
     try {
-      await (type === "movie" ? api.data.plex.resetMovies() : api.data.plex.resetShows());
+      await (type === "movie"
+        ? api.data.plex.resetMovies(selectedServerId)
+        : api.data.plex.resetShows(selectedServerId));
       router.refresh();
     } catch (err) {
       const message =

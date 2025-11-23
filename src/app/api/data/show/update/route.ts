@@ -1,5 +1,16 @@
 import { handleMediaUpdate } from "@/app/api/data/_lib/mediaHandlers";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  return handleMediaUpdate("show", request);
+  const body = await request.json();
+  const { serverId } = body;
+
+  if (!serverId) {
+    return NextResponse.json(
+      { error: "serverId is required" },
+      { status: 400 }
+    );
+  }
+
+  return handleMediaUpdate("show", request, parseInt(String(serverId), 10));
 }

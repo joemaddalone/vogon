@@ -6,12 +6,17 @@ import { plex } from "@/lib/client/plex";
  * Get all imported movies from a specific library
  */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ libraryKey: string }> }
 ) {
   try {
     const { libraryKey } = await params;
-    const movies = await plex.getLibraryItems(libraryKey);
+    const { searchParams } = new URL(request.url);
+    const serverId = searchParams.get("serverId")
+      ? parseInt(searchParams.get("serverId")!, 10)
+      : undefined;
+
+    const movies = await plex.getLibraryItems(libraryKey, serverId);
 
     return NextResponse.json({ data: movies });
   } catch (error) {

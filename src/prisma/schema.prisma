@@ -29,6 +29,8 @@ model Media {
   title           String
   type            Int     @default(0)
   year            Int?
+  serverId        Int     @default(1)
+  server          Server  @relation(fields: [serverId], references: [id])
 }
 
 model Configuration {
@@ -47,4 +49,5 @@ model Server {
   token  String
   userid String?
   type   String
+  media Media[]
 }

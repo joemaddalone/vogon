@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { api } from "@/lib/api";
 import { BackdropOption } from "@/components/libraryitem/BackdropOption";
+import { useServer } from "@/components/context/ServerContext";
 
 type BackdropPickerProps = {
   backdrops: { file_path: string, previewUrl?: string, source?: string }[];
@@ -20,20 +21,26 @@ export const BackdropPicker = ({
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [busyIndex, setBusyIndex] = useState(-1);
+  const { selectedServerId } = useServer();
 
   const updateBackdrop = async (backdropUrl: string, index: number) => {
+    if (!selectedServerId) {
+      console.error("No server selected");
+      return;
+    }
+
     setBusyIndex(index);
 
-    await api.plex.backdrop(ratingKey, backdropUrl);
+    await api.plex.backdrop(ratingKey, backdropUrl, selectedServerId);
     if(mediaType === "movie") {
-      const movie = await api.plex.movieDetail(ratingKey);
+      const movie = await api.plex.movieDetail(ratingKey, selectedServerId);
       if(movie) {
-        await api.data.plex.updateBackdrop(mediaType, ratingKey, movie.data?.artUrl || "");
+        await api.data.plex.updateBackdrop(mediaType, ratingKey, movie.data?.artUrl || "", selectedServerId);
       }
     } else {
-      const show = await api.plex.showDetail(ratingKey);
+      const show = await api.plex.showDetail(ratingKey, selectedServerId);
       if(show) {
-        await api.data.plex.updateBackdrop(mediaType, ratingKey, show.data?.artUrl || "");
+        await api.data.plex.updateBackdrop(mediaType, ratingKey, show.data?.artUrl || "", selectedServerId);
       }
     }
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Library, Film, TvIcon, Settings } from "lucide-react";
 import { TooltipElement } from "@/components/TooltipElement";
+import { ServerSelector } from "@/components/ServerSelector";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ export function Navigation() {
             vogon
           </Link>
           <div className="flex flex-wrap gap-2">
+            <ServerSelector />
             <TooltipElement content="Movies">
                 <Link
                   href="/movie"

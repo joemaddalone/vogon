@@ -9,7 +9,7 @@ import { getClients } from "@/lib/client/getClients";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { ratingKey, posterUrl } = body;
+    const { ratingKey, posterUrl, serverId } = body;
 
     if (!ratingKey || !posterUrl) {
       return NextResponse.json(
@@ -20,11 +20,12 @@ export async function POST(request: Request) {
       );
     }
 
-    await plex.updateMoviePoster(ratingKey, posterUrl);
-    const config = await getClients();
+    const parsedServerId = serverId ? parseInt(String(serverId), 10) : undefined;
+    await plex.updateMoviePoster(ratingKey, posterUrl, parsedServerId);
+    const config = await getClients(parsedServerId);
     if (Boolean(config?.removeOverlays) === true) {
       try {
-        await plex.removeOverlay(ratingKey);
+        await plex.removeOverlay(ratingKey, parsedServerId);
       } catch (error) {
         console.error("Error removing overlay:", error);
       }

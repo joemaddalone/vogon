@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { plex } from "@/lib/client/plex";
 
 export async function POST(request: Request) {
-  const { ratingKey } = await request.json();
+  const { ratingKey, serverId } = await request.json();
 
   if (!ratingKey) {
     return NextResponse.json(
@@ -13,7 +13,8 @@ export async function POST(request: Request) {
     );
   }
   try {
-    await plex.removeOverlay(ratingKey);
+    const parsedServerId = serverId ? parseInt(String(serverId), 10) : undefined;
+    await plex.removeOverlay(ratingKey, parsedServerId);
     return NextResponse.json({
       data: "Overlay removed successfully",
     });

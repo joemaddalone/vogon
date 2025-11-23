@@ -33,6 +33,7 @@ export type Media = {
     title: string;
     type: Generated<number>;
     year: number | null;
+    serverId: Generated<number>;
 };
 export type Server = {
     id: Generated<number>;
@@ -42,8 +43,6 @@ export type Server = {
     userid: string | null;
     type: string;
 };
-
-
 export type DB = {
     Configuration: Configuration;
     Media: Media;
