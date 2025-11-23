@@ -1,4 +1,4 @@
-import { getConfiguration, getServers } from "./database";
+import { getSession, createSession, getConfiguration, getServers, getServer } from "./database";
 import { FanartClient } from "./fanart";
 import { TMDBWithFind } from "./tmdb";
 import { ThePosterDbClient } from "./theposterdb";
@@ -29,10 +29,23 @@ export async function getClients() {
   }
 
   const dbConfig = (await getConfiguration()) || {};
-  const dbServers = (await getServers()) || [];
-  if(dbServers.length > 0) {
-    envConfig.plexServerUrl = dbServers[0].url;
-    envConfig.plexToken = dbServers[0].token;
+  const dbSession = await getSession();
+  if(dbSession?.serverId) {
+    const dbServer = await getServer(dbSession.serverId);
+    if(!dbServer) {
+      return null;
+    }
+    envConfig.plexServerUrl = dbServer.url;
+    envConfig.plexToken = dbServer.token;
+  }
+  else {
+    const dbServers = (await getServers()) || [];
+    if(dbServers.length > 0) {
+      envConfig.plexServerUrl = dbServers[0].url;
+      envConfig.plexToken = dbServers[0].token;
+      createSession({ serverId: dbServers[0].id });
+    }
+
   }
   const finalConfig = { ...dbConfig, ...envConfig };
 
