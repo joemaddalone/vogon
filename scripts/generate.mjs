@@ -68,9 +68,19 @@ await db.schema.createTable('Configuration').ifNotExists()
 	.addColumn('tmdbApiKey', 'text')
 	.addColumn('fanartApiKey', 'text')
 	.addColumn('removeOverlays', 'integer', (col) => col.notNull().defaultTo(0))
+	.addColumn('enableEpisodes', 'integer', (col) => col.notNull().defaultTo(0))
 	.addColumn('thePosterDbEmail', 'text')
 	.addColumn('thePosterDbPassword', 'text')
 	.execute();
+
+// If Configuration does not have column: enableEpisodes, add it
+try {
+	await db.schema.alterTable('Configuration')
+		.addColumn('enableEpisodes', 'integer', (col) => col.notNull().defaultTo(0))
+		.execute();
+} catch (e) {
+	// nothing
+}
 
 await db.schema.createTable('Server').ifNotExists()
 	.addColumn('id', 'integer', (col) => col.primaryKey().autoIncrement())

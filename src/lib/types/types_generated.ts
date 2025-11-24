@@ -1,7 +1,7 @@
 import type { ColumnType } from "kysely";
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S, I | undefined, U>
-  : ColumnType<T, T | undefined, T>;
+    ? ColumnType<S, I | undefined, U>
+    : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type Configuration = {
@@ -9,6 +9,7 @@ export type Configuration = {
     tmdbApiKey: string | null;
     fanartApiKey: string | null;
     removeOverlays: Generated<number>;
+    enableEpisodes: Generated<number>;
     thePosterDbEmail: string | null;
     thePosterDbPassword: string | null;
 };

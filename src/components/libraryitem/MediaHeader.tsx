@@ -52,7 +52,7 @@ export const MediaHeader = ({
               {/* Glow effect behind poster */}
               <div className="absolute inset-0 bg-primary/20 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-              <div className="relative w-full lg:w-[380px] aspect-2/3 rounded-3xl overflow-hidden shadow-2xl bg-muted group-hover:shadow-3xl">
+              <div className="relative w-full lg:w-[380px] sm:w-[280px] aspect-2/3 rounded-3xl overflow-hidden shadow-2xl bg-muted group-hover:shadow-3xl">
                 {media?.thumbUrl && (
                   <Image
                     src={media.thumbUrl}

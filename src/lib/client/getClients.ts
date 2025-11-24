@@ -13,6 +13,7 @@ export async function getClients() {
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,
+    enableEpisodes: process.env.ENABLE_EPISODES as string | number | undefined,
     thePosterDbEmail: process.env.THEPOSTERDB_EMAIL,
     thePosterDbPassword: process.env.THEPOSTERDB_PASSWORD,
     fanart: undefined as FanartClient | undefined,
@@ -29,6 +30,10 @@ export async function getClients() {
 
   if (envConfig.removeOverlays) {
     envConfig.removeOverlays = envConfig.removeOverlays === "true" ? 1 : 0;
+  }
+
+  if (envConfig.enableEpisodes) {
+    envConfig.enableEpisodes = envConfig.enableEpisodes === "true" ? 1 : 0;
   }
 
   const dbConfig = (await getConfiguration()) || {};
