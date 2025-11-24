@@ -57,6 +57,12 @@ export const api = {
         })
       );
     },
+    revalidate: async (path: string): Promise<ApiResponse<void>> => {
+      return await tryCatch(fetch(`${host}/api/revalidate`, {
+        method: "POST",
+        body: JSON.stringify({ path }),
+      }));
+    },
   },
   session: {
     get: async (): Promise<ApiResponse<Selectable<Session>>> => {
@@ -68,7 +74,7 @@ export const api = {
         body: JSON.stringify(session),
       }));
     },
-    update: async ({sessionId, serverId}: {sessionId: number, serverId: number}): Promise<ApiResponse<Session>> => {
+    update: async ({ sessionId, serverId }: { sessionId: number, serverId: number; }): Promise<ApiResponse<Session>> => {
       return await tryCatch(fetch(`${host}/api/data/session`, {
         method: "PUT",
         body: JSON.stringify({ sessionId, serverId }),
@@ -120,8 +126,7 @@ export const api = {
     ): Promise<ApiResponse<TMDBDetail>> => {
       return await tryCatch(
         fetch(
-          `${host}/api/tmdb/season/detail?id=${id}${
-            seasonNumber ? `&season_number=${seasonNumber}` : ""
+          `${host}/api/tmdb/season/detail?id=${id}${seasonNumber ? `&season_number=${seasonNumber}` : ""
           }`
         )
       );
@@ -132,8 +137,7 @@ export const api = {
     ): Promise<ApiResponse<MovieResultItem[]>> => {
       return await tryCatch(
         fetch(
-          `${host}/api/tmdb/find?external_id=${external_id}${
-            external_source ? `&external_source=${external_source}` : ""
+          `${host}/api/tmdb/find?external_id=${external_id}${external_source ? `&external_source=${external_source}` : ""
           }`
         )
       );
@@ -172,7 +176,7 @@ export const api = {
         return await tryCatch(fetch(`${host}/api/data/show`));
       },
       stats: async (): Promise<
-        ApiResponse<{ movies: number; shows: number }>
+        ApiResponse<{ movies: number; shows: number; }>
       > => {
         return await tryCatch(fetch(`${host}/api/data/stats`));
       },
@@ -241,6 +245,17 @@ export const api = {
         fetch(`${host}/api/mediaserver/poster`, {
           method: "POST",
           body: JSON.stringify({ ratingKey, posterUrl }),
+        })
+      );
+    },
+    posterEpisode: async (
+      ratingKey: string,
+      base64: string
+    ): Promise<ApiResponse<void>> => {
+      return await tryCatch(
+        fetch(`${host}/api/mediaserver/poster/episode`, {
+          method: "POST",
+          body: JSON.stringify({ ratingKey, base64 }),
         })
       );
     },

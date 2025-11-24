@@ -12,22 +12,25 @@ import {
   NormalizedEpisode,
 } from "@/lib/types";
 import Link from "next/link";
-import { EpisodesList } from "./EpisodesList";
+import { EpisodesList } from "./episode/EpisodesList";
 import { useTranslations } from "next-intl";
+import type { Configuration } from "@/lib/types";
 export const MediaDetail = ({
   posterBuilder,
   id,
+  config
 }: {
   posterBuilder: Promise<{
-    media:(NormalizedMovieDetails & { seasons?: NormalizedSeason[], episodes?: NormalizedEpisode[] });
+    media: (NormalizedMovieDetails & { seasons?: NormalizedSeason[], episodes?: NormalizedEpisode[]; });
     knownIds: Record<string, string | null>;
     tmdbMedia: TMDBDetail | null;
-    posters: { file_path: string; previewUrl?: string; source?: string }[];
-    backdrops?: { file_path: string; previewUrl?: string; source?: string }[];
-    logos: { file_path: string; source?: string }[];
+    posters: { file_path: string; previewUrl?: string; source?: string; }[];
+    backdrops?: { file_path: string; previewUrl?: string; source?: string; }[];
+    logos: { file_path: string; source?: string; }[];
     mediaType?: "movie" | "show" | "season";
   }>;
   id: string;
+  config: Configuration;
 }) => {
   const { media, knownIds, tmdbMedia, posters, backdrops = [], mediaType } = use(posterBuilder);
   const t = useTranslations();
@@ -42,6 +45,7 @@ export const MediaDetail = ({
 
   const hasEpisodes =
     mediaType === "season" &&
+    config?.enableEpisodes &&
     media?.episodes?.length !== undefined &&
     media?.episodes?.length > 0;
 

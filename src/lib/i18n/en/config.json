@@ -42,5 +42,9 @@
 		"label": "Remove Overlays",
 		"description": "Remove Plex overlay labels when updating posters",
 		"description2": "useful for Kometa/PMM users"
+	},
+	"episodes": {
+		"label": "Enable Episodes (experimental)",
+		"description": "Enable episode title card support"
 	}
 }

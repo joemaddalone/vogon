@@ -1,0 +1,1 @@
+export const pint = (value: number): number => parseInt(value.toFixed(0));

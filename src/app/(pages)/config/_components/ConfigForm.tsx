@@ -16,7 +16,7 @@ import { Configuration } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { ConfigField } from "./ConfigField";
 import { useTranslations } from "next-intl";
-export default function ConfigForm({ config }: { config: Configuration }) {
+export default function ConfigForm({ config }: { config: Configuration; }) {
   const t = useTranslations();
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -30,6 +30,9 @@ export default function ConfigForm({ config }: { config: Configuration }) {
         tmdbApiKey: data.get("tmdbApiKey") as string | undefined,
         fanartApiKey: data.get("fanartApiKey") as string | undefined,
         removeOverlays: data.get("removeOverlays") as unknown as
+          | number
+          | undefined,
+        enableEpisodes: data.get("enableEpisodes") as unknown as
           | number
           | undefined,
         thePosterDbEmail: data.get("thePosterDbEmail") as string | undefined,
@@ -146,13 +149,32 @@ export default function ConfigForm({ config }: { config: Configuration }) {
               <span className="font-bold pl-2">({t("config.overlays.description2")})</span>
             </FieldDescription>
           </Field>
+          <Field>
+            <div className="flex items-center gap-2">
+              <input
+                id="enableEpisodes"
+                name="enableEpisodes"
+                type="checkbox"
+                defaultChecked={configData?.enableEpisodes ? true : false}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <FieldLabel htmlFor="enableEpisodes" className="mb-0!">
+                {t("config.episodes.label")}
+                <span className="text-xs text-muted-foreground">
+                  env: ENABLE_EPISODES
+                </span>
+              </FieldLabel>
+            </div>
+            <FieldDescription className="text-sm!">
+              {t("config.episodes.description")}
+            </FieldDescription>
+          </Field>
           {message && (
             <div
-              className={`p-4 rounded-md ${
-                message.type === "success"
-                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                  : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-              }`}
+              className={`p-4 rounded-md ${message.type === "success"
+                ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                }`}
             >
               {message.text}
             </div>

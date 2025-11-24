@@ -10,7 +10,7 @@ export const MediaBackdrop = ({
   media: NormalizedMovieDetails | NormalizedMediaItem;
 }) => {
   return (
-    <div className="fixed inset-0 pointer-events-none top-0 left-0 w-full h-full object-cover ">
+    <div className="fixed inset-0 pointer-events-none top-0 left-0 w-full h-full object-cover z-[-1]">
       <div className="absolute top-0 left-0 w-full h-full z-[-1] object-cover">
         <Image
           src={media.artUrl || ""}

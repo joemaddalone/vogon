@@ -20,6 +20,7 @@ export async function GET() {
         tmdbApiKey: config.tmdbApiKey || null,
         fanartApiKey: config.fanartApiKey || null,
         removeOverlays: config.removeOverlays ?? 0,
+        enableEpisodes: config.enableEpisodes ?? 0,
         thePosterDbEmail: config.thePosterDbEmail || null,
         thePosterDbPassword: config.thePosterDbPassword || null,
       },
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
       tmdbApiKey,
       fanartApiKey,
       removeOverlays,
+      enableEpisodes,
       thePosterDbEmail,
       thePosterDbPassword,
     } = body;
@@ -64,10 +66,12 @@ export async function POST(request: Request) {
       tmdbApiKey: tmdbApiKey !== null ? tmdbApiKey : existingConfig?.tmdbApiKey,
       fanartApiKey: fanartApiKey !== null ? fanartApiKey : existingConfig?.fanartApiKey,
       removeOverlays: removeOverlays ? 1 : 0,
+      enableEpisodes: enableEpisodes ? 1 : 0,
       thePosterDbEmail: thePosterDbEmail !== null ? thePosterDbEmail : existingConfig?.thePosterDbEmail,
       thePosterDbPassword: thePosterDbPassword !== null ? thePosterDbPassword : existingConfig?.thePosterDbPassword,
     };
 
+    console.log(configToSave);
     const config = await upsertConfiguration(configToSave);
 
     return NextResponse.json({
@@ -76,6 +80,7 @@ export async function POST(request: Request) {
         tmdbApiKey: config?.tmdbApiKey || null,
         fanartApiKey: config?.fanartApiKey || null,
         removeOverlays: Boolean(config.removeOverlays),
+        enableEpisodes: Boolean(config.enableEpisodes),
         thePosterDbEmail: config?.thePosterDbEmail || null,
         thePosterDbPassword: config?.thePosterDbPassword || null,
       },

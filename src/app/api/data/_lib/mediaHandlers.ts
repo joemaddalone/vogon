@@ -241,7 +241,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
     DM.plex.season.createMany(seasons);
   }
 
-  if (process.env.ENABLE_EPISODES === "true") {
+  if (config.enableEpisodes) {
     for (const season of seasons) {
       const seasonEpisodes: NormalizedEpisode[] =
         await mediaServer.getSeasonEpisodes(season.ratingKey);
