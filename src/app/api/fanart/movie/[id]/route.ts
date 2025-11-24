@@ -3,6 +3,11 @@ import { getClients } from "@/lib/client/getClients";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	const config = await getClients();
+  if (!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
 	const { id } = await params;
 	if (!id) {
 		return NextResponse.json({

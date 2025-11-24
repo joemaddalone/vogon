@@ -2,18 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Library, Film, TvIcon, Settings, Home } from "lucide-react";
+import { Library, Film, TvIcon, Settings } from "lucide-react";
 import { TooltipElement } from "@/components/TooltipElement";
 import { ServerSelector } from "@/components/ServerSelect";
-import { Session } from "@/lib/types";
+import { Session, Selectable } from "@/lib/types";
 import { Server } from "@/lib/types";
 
 export function Navigation({
   session,
   servers,
 }: {
-  session?: Session;
-  servers?: Server[];
+  session?: Selectable<Session>;
+  servers?: Selectable<Server>[];
 }) {
   const pathname = usePathname();
 

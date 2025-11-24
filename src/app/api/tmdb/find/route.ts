@@ -4,6 +4,11 @@ import type { FindParams } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
     const config = await getClients();
+    if (!config) {
+      return NextResponse.json({
+        error: "No config found",
+      }, { status: 500 });
+    }
     const external_id = request.nextUrl.searchParams.get("external_id") as string
     const external_source = request.nextUrl.searchParams.get("external_source") as FindParams['external_source']
 

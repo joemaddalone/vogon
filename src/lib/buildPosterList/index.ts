@@ -66,6 +66,9 @@ export const buildPosters = async (
   seasonId?: string
 ) => {
   const config = await getClients();
+  if (!config) {
+    return { ...errorResponse, error: "No config found" };
+  }
 
   const methods = mediaMethods[type as keyof typeof mediaMethods];
   let { data: media } = await methods.plex(id as string);

@@ -1,9 +1,20 @@
 import { db } from "./database";
 import { Insertable, Selectable, Media, MediaTypeEnum } from "@/lib/types";
+import { getSession } from "./session";
+
+const getServerId = async () => {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Session not found");
+  }
+  return session.serverId;
+
+}
 
 // Common operations for all media types
 export const list = async (type?: MediaTypeEnum): Promise<Selectable<Media>[]> => {
-  let query = db.selectFrom("Media");
+  const serverId = await getServerId();
+  let query = db.selectFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -25,9 +36,11 @@ export const getById = async (
 export const getByRatingKey = async (
   ratingKey: string
 ): Promise<Selectable<Media>> => {
+  const serverId = await getServerId();
   return await db
     .selectFrom("Media")
     .where("ratingKey", "=", ratingKey)
+    .where("serverId", "=", serverId)
     .selectAll()
     .executeTakeFirstOrThrow();
 };
@@ -35,15 +48,18 @@ export const getByRatingKey = async (
 export const byParentRatingKey = async (
   parentRatingKey: string
 ): Promise<Selectable<Media>[]> => {
+  const serverId = await getServerId();
   return await db
     .selectFrom("Media")
     .where("parentRatingKey", "=", parentRatingKey)
+    .where("serverId", "=", serverId)
     .selectAll()
     .execute();
 };
 
 export const count = async (type?: MediaTypeEnum): Promise<number> => {
-  let query = db.selectFrom("Media");
+  const serverId = await getServerId();
+  let query = db.selectFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -57,7 +73,8 @@ export const count = async (type?: MediaTypeEnum): Promise<number> => {
 };
 
 export const reset = async (type?: MediaTypeEnum): Promise<void> => {
-  let query = db.deleteFrom("Media");
+  const serverId = await getServerId();
+  let query = db.deleteFrom("Media").where("serverId", "=", serverId);
 
   if (type) {
     query = query.where("type", "=", type);
@@ -70,10 +87,12 @@ export const updateThumb = async (
   ratingKey: string,
   thumbUrl: string
 ): Promise<void> => {
+  const serverId = await getServerId();
   await db
     .updateTable("Media")
     .set({ thumbUrl })
     .where("ratingKey", "=", ratingKey)
+    .where("serverId", "=", serverId)
     .execute();
 };
 
@@ -81,19 +100,22 @@ export const updateArt = async (
   ratingKey: string,
   artUrl: string
 ): Promise<void> => {
+  const serverId = await getServerId();
   await db
     .updateTable("Media")
     .set({ artUrl })
     .where("ratingKey", "=", ratingKey)
+    .where("serverId", "=", serverId)
     .execute();
 };
 
 export const create = async (
   media: Insertable<Media>
 ): Promise<Selectable<Media>> => {
+  const serverId = await getServerId();
   return await db
     .insertInto("Media")
-    .values(media)
+    .values({ ...media, serverId })
     .returningAll()
     .executeTakeFirstOrThrow();
 };
@@ -101,11 +123,12 @@ export const create = async (
 export const createMany = async (
   mediaItems: Insertable<Media>[]
 ): Promise<void> => {
+  const serverId = await getServerId();
   await db.transaction().execute(async (tx) => {
     for (const media of mediaItems) {
       await tx
         .replaceInto("Media")
-        .values(media)
+        .values({ ...media, serverId })
         .executeTakeFirstOrThrow();
     }
   });

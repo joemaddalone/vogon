@@ -3,6 +3,11 @@ import { getClients } from '@/lib/client/getClients'
 
 export async function GET(request: NextRequest) {
 	const config = await getClients();
+	if (!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
 	const id = request.nextUrl.searchParams.get("id");
 	const data = await config.tmdb?.shows.details(id as string);
 	if (!data) {

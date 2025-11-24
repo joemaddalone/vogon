@@ -26,10 +26,8 @@ type MediaConfig = {
 };
 
 const session = await getSession();
-if (!session) {
-  throw new Error("Session not found");
-}
-const serverId = session.serverId;
+
+const serverId = session?.serverId;
 
 const MEDIA_CONFIG: Record<MediaTypeString, MediaConfig> = {
   movie: {

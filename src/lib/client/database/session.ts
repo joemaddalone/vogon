@@ -1,5 +1,5 @@
 import { db } from "./database";
-import { Insertable, Updateable, Session, Selectable } from "@/lib/types";
+import { Insertable, Session, Selectable } from "@/lib/types";
 
 export const getSessions = async () => {
   return await db.selectFrom("Session").selectAll().execute();

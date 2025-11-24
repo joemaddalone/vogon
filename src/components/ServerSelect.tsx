@@ -10,14 +10,14 @@ import {
 import { Server as ServerIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { Session, Server } from "@/lib/types";
+import { Session, Server, Selectable } from "@/lib/types";
 
 export function ServerSelector({
   session,
   servers,
 }: {
-  session: Session;
-  servers: Server[];
+  session: Selectable<Session>;
+  servers: Selectable<Server>[];
 }) {
   const router = useRouter();
 
@@ -25,15 +25,19 @@ export function ServerSelector({
     const sessionId = session?.id?.toString() || "";
     const serverId = parseInt(value, 10);
     if (!isNaN(serverId)) {
-      const result = await api.session.update({ sessionId: parseInt(sessionId, 10), serverId });
+      const result = await api.session.update({
+        sessionId: parseInt(sessionId, 10),
+        serverId,
+      });
       if (result.error) {
         console.error(result.error);
       }
-			router.refresh();
+      router.refresh();
     }
   };
 
-	const selectedServerId = session?.serverId?.toString();
+
+  const selectedServerId = session?.serverId?.toString();
 
   return (
     <Select
