@@ -1,6 +1,6 @@
 ## vogon
 
-This application connects to a Plex Media Server, imports movie and TV show libraries, and lets you replace poster artwork with alternatives from TMDB, Fanart.tv, and other sources.
+This application connects to one or more Plex Media Servers, imports movie and TV show libraries, and lets you replace movie, show, and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
 
 
 ## Requirements
@@ -14,6 +14,8 @@ This application connects to a Plex Media Server, imports movie and TV show libr
    - **Fanart.tv API Key** [Get an API key](https://fanart.tv/get-an-api-key/)
    - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
 
+
+[Support Open Source](https://buymeacoffee.com/joemaddalone)
 
 
 https://github.com/user-attachments/assets/d9803c83-92da-44b0-9332-5e4aaa1683fe
