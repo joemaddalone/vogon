@@ -7,6 +7,8 @@ export async function getClients() {
   const envConfig = {
     serverUrl: '' as string | null,
     serverToken: '' as string | null,
+    userid: '' as string | null,
+    type: '' as string | null,
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,
@@ -37,12 +39,16 @@ export async function getClients() {
     }
     envConfig.serverUrl = dbServer.url;
     envConfig.serverToken = dbServer.token;
+    envConfig.userid = dbServer.userid;
+    envConfig.type = dbServer.type;
   }
   else {
     const dbServers = (await getServers()) || [];
     if(dbServers.length > 0) {
       envConfig.serverUrl = dbServers[0].url;
       envConfig.serverToken = dbServers[0].token;
+      envConfig.userid = dbServers[0].userid;
+      envConfig.type = dbServers[0].type;
       createSession({ serverId: dbServers[0].id });
     }
 
