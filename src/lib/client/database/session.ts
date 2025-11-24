@@ -15,7 +15,6 @@ export const createSession = async (session: Insertable<Session>) => {
 };
 
 export const updateSession = async (sessionId: number, serverId: number) => {
-	console.log('updateSession', sessionId, serverId);
 	return await db.updateTable("Session").set('serverId', serverId).where("id", "=", sessionId).returningAll().executeTakeFirst();
 };
 

@@ -209,7 +209,6 @@ export const api = {
   },
   plex: {
     libraries: async (): Promise<ApiResponse<PlexLibraryResponse[]>> => {
-      console.log("calling libraries");
       return await tryCatch(fetch(`${host}/api/plex/libraries`));
     },
     library: async (libraryKey: string): Promise<ApiResponse<Media[]>> => {
