@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { api } from "@/lib/api";
 import { Suspense } from "react";
 import ConfigForm from "./_components/ConfigForm";
-import { ServerForm } from "./_components/ServerForm";
+import { Servers } from "./_components/Servers";
 import { Configuration } from "@/lib/types";
 
 export default async function ConfigPage() {
@@ -24,7 +24,10 @@ export default async function ConfigPage() {
           </i>
         </p>
       </div>
-      <ServerForm data={server} />
+      <div className="container max-w-2xl mx-auto">
+        <Servers servers={servers?.data} />
+      </div>
+
       <ConfigForm config={config} />
     </Suspense>
   )

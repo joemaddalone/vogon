@@ -9,8 +9,13 @@ import { plex } from "@/lib/client/plex";
 import { PlexMovieMetadata } from "@/lib/types";
 export default async function MoviePage(props: PageProps<"/movie/[id]">) {
   const { id } = await props.params;
-  const posterBuilder = buildPosters(id, "movie");
   const media = (await plex.getMovieDetails(id)) as PlexMovieMetadata;
+  if(!media) {
+    return <div className="flex items-center justify-center min-h-[30vh]">
+      Dang we could not find that one, perhaps it&apos;s in another server?
+    </div>
+  }
+  const posterBuilder = buildPosters(id, "movie");
 
   return (
     <Suspense

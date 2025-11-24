@@ -10,6 +10,7 @@ import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 
 export default async function ShowPage(props: PageProps<"/show/[id]">) {
   const { id } = await props.params;
+
   const posterBuilder = buildPosters(id, "show");
   const media = (await plex.getMovieDetails(id)) as PlexShowMetadata;
 
