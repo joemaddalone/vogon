@@ -217,15 +217,15 @@ export const api = {
     movieDetail: async (
       id: string
     ): Promise<ApiResponse<PlexMovieMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/movie/${id}/details`));
+      return await tryCatch(fetch(`${host}/api/plex/movie/${id}`));
     },
     showDetail: async (id: string): Promise<ApiResponse<PlexShowMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/show/${id}/details`));
+      return await tryCatch(fetch(`${host}/api/plex/show/${id}`));
     },
     seasonDetail: async (
       id: string
     ): Promise<ApiResponse<PlexSeasonMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/season/${id}/details`));
+      return await tryCatch(fetch(`${host}/api/plex/season/${id}`));
     },
     poster: async (
       ratingKey: string,
