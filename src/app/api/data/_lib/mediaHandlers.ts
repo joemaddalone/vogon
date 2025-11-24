@@ -11,6 +11,9 @@ import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
 import { dataManager as DM } from "@/lib/client/database";
 import { getSession } from "@/lib/client/database/session";
+import { existsSync } from "fs";
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 type MediaTypeString = "movie" | "show" | "season";
 
@@ -262,6 +265,22 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
 
     if (episodes.length > 0) {
       DM.plex.episode.createMany(episodes);
+    }
+
+    // save a local image (ratingKey.png) if not already saved in @/cache/episodes.
+    for (const episode of episodes) {
+      if(!episode.thumbUrl) {
+        continue;
+      }
+      const image = await fetch(episode.thumbUrl);
+      const imageBlob = await image.blob();
+      const imageBuffer = await imageBlob.arrayBuffer();
+      const imageBase64 = Buffer.from(imageBuffer).toString("base64");
+      // const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
+      const imagePath = join(process.cwd(), "cache", "episodes", `${episode.ratingKey}.png`);
+      if(!existsSync(imagePath)) {
+        await writeFile(imagePath, imageBase64);
+      }
     }
   }
 }

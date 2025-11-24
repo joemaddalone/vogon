@@ -59,6 +59,15 @@ memory-bank
 
 # local sqlite backups
 src/db/dev.db
+<<<<<<< HEAD
 data
+<<<<<<< HEAD
 
 public/cache
+=======
+=======
+
+# cache
+cache
+>>>>>>> 0f68195 (iffy prototype to create title cards)
+>>>>>>> 81af86c (iffy prototype to create title cards)
