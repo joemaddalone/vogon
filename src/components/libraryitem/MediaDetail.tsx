@@ -6,12 +6,10 @@ import { TMDBError } from "@/components/libraryitem/TMDBError";
 import ImageLoader from "@/components/ImageLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  PlexMovieMetadata,
-  PlexSeasonMetadata,
-  PlexSeasonResponse,
-  PlexShowMetadata,
-  Media,
   TMDBDetail,
+  NormalizedMovieDetails,
+  NormalizedSeason,
+  NormalizedEpisode,
 } from "@/lib/types";
 import Link from "next/link";
 import { EpisodesList } from "./EpisodesList";
@@ -21,11 +19,7 @@ export const MediaDetail = ({
   id,
 }: {
   posterBuilder: Promise<{
-    media:
-      | (PlexMovieMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
-      | (PlexShowMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
-      | (PlexSeasonMetadata & { seasons?: PlexSeasonResponse[], episodes?: Media[] })
-      | null;
+    media:(NormalizedMovieDetails & { seasons?: NormalizedSeason[], episodes?: NormalizedEpisode[] });
     knownIds: Record<string, string | null>;
     tmdbMedia: TMDBDetail | null;
     posters: { file_path: string; previewUrl?: string; source?: string }[];
@@ -35,8 +29,7 @@ export const MediaDetail = ({
   }>;
   id: string;
 }) => {
-  const { media, knownIds, tmdbMedia, posters, backdrops = [], mediaType } =
-    use(posterBuilder);
+  const { media, knownIds, tmdbMedia, posters, backdrops = [], mediaType } = use(posterBuilder);
 
   if (!tmdbMedia || !media || !mediaType) {
     return <TMDBError knownIds={knownIds} />;

@@ -1,14 +1,13 @@
 import {
-  PlexMovieMetadata,
-  PlexSeasonMetadata,
-  PlexShowMetadata,
+  NormalizedMovieDetails,
+  NormalizedMediaItem,
 } from "@/lib/types";
 import Image from "next/image";
 
 export const MediaBackdrop = ({
   media,
 }: {
-  media: PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata;
+  media: NormalizedMovieDetails | NormalizedMediaItem;
 }) => {
   return (
     <div className="fixed inset-0 pointer-events-none top-0 left-0 w-full h-full object-cover ">

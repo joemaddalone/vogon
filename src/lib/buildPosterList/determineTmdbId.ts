@@ -1,16 +1,19 @@
 import { api } from "@/lib/api";
 
 export const determineTmdbId = async (knownIds: {
-  tmdbId: string;
-  imdbId: string;
-  tvdbId: string;
-}) => {
-  if (knownIds.tmdbId) {
-    return knownIds.tmdbId;
+  tmdb?: string;
+  imdb?: string;
+  tvdb?: string;
+} | undefined) => {
+  if (!knownIds) {
+    return null;
   }
-  if (knownIds.tvdbId) {
+  if (knownIds.tmdb) {
+    return knownIds.tmdb;
+  }
+  if (knownIds.tvdb) {
     const { data: tmdbMovieData, error: tmdbMovieError } = await api.tmdb.find(
-      knownIds.tvdbId as string,
+        knownIds.tvdb as string,
       "tvdb_id"
     );
     if (!tmdbMovieError && tmdbMovieData && tmdbMovieData.length > 0) {
@@ -18,9 +21,9 @@ export const determineTmdbId = async (knownIds: {
     }
   }
 
-  if (knownIds.imdbId) {
+  if (knownIds.imdb) {
     const { data: tmdbMovieData, error: tmdbMovieError } = await api.tmdb.find(
-      knownIds.imdbId as string,
+      knownIds.imdb as string,
       "imdb_id"
     );
     if (!tmdbMovieError && tmdbMovieData && tmdbMovieData.length > 0) {

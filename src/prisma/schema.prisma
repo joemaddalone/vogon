@@ -23,7 +23,7 @@ model Media {
   parentThumb     String?
   parentTitle     String?
   rating          Float?
-  ratingKey       String  @unique
+  ratingKey       String
   summary         String?
   thumbUrl        String?
   title           String

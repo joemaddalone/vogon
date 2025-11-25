@@ -25,7 +25,7 @@ import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 
-const JELLYFIN_ENABLED = false;
+const JELLYFIN_ENABLED = true;
 
 export const ServerForm = ({
   data,

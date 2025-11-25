@@ -9,7 +9,7 @@ import {
 } from "@/lib/types/jellyfin";
 import { getClients } from "./getClients";
 
-class JellyfinClient {
+export class JellyfinClient {
   constructor() {}
 
   private async config() {
@@ -134,7 +134,9 @@ class JellyfinClient {
         : undefined,
       artUrl: season.BackdropImageTags?.[0]
         ? `${config?.serverUrl}/Items/${season.Id}/Images/Backdrop/0?api_key=${config?.serverToken}`
-        : undefined,
+        : season.ParentBackdropImageTags?.[0]
+          ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Backdrop/0?api_key=${config?.serverToken}`
+          : undefined,
       parentThumb: season.SeriesPrimaryImageTag
         ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Primary?api_key=${config?.serverToken}`
         : undefined,
@@ -175,6 +177,8 @@ class JellyfinClient {
       throw new Error("Failed to download poster image");
     }
     const imageBlob = await imageResponse.blob();
+    // convert to base64
+    const base64 = Buffer.from(await imageBlob.arrayBuffer()).toString("base64");
 
     // Upload to Jellyfin
     const url = `${config?.serverUrl}/Items/${itemId}/Images/Primary`;
@@ -186,7 +190,7 @@ class JellyfinClient {
           "Content-Type": imageResponse.headers.get("content-type") || "image/jpeg",
           "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
         },
-        body: imageBlob,
+        body: base64,
       });
 
       if (!response.ok) {
@@ -196,7 +200,7 @@ class JellyfinClient {
       }
 
       // Lock the poster field to prevent Jellyfin from overwriting it
-      await this.lockPosterField(itemId);
+      // await this.lockPosterField(itemId);
     } catch (error) {
       console.error("Failed to update movie poster:", error);
       throw error;

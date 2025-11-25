@@ -1,12 +1,12 @@
 "use client";
-import { PlexLibraryResponse, ApiResponse } from "@/lib/types";
+import { NormalizedLibrary, ApiResponse } from "@/lib/types";
 import { LibrariesHeader } from "./LibrariesHeader";
 import { LibraryImport } from "./LibraryImport";
 import { PlexConnectionError } from "./PlexConnectionError";
 import { Empty } from "./Empty";
 import { use } from 'react';
 
-export const Libraries = ({libs}: { libs: Promise<ApiResponse<PlexLibraryResponse[]>>}) => {
+export const Libraries = ({libs}: { libs: Promise<ApiResponse<NormalizedLibrary[]>>}) => {
 
   const { data, error } = use(libs)
 
@@ -22,7 +22,7 @@ export const Libraries = ({libs}: { libs: Promise<ApiResponse<PlexLibraryRespons
       ) : (
         <div className="grid gap-6">
           {data?.map((library, index) => (
-            <LibraryImport key={library.key} library={library} index={index} />
+            <LibraryImport key={library.id} library={library} index={index} />
           ))}
         </div>
       )}

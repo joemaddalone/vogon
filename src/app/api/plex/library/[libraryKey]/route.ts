@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { plex } from "@/lib/client/plex";
+import { MediaServerClient } from "@/lib/client/mediaserver";
+import { getClients } from "@/lib/client/getClients";
 
 /**
  * GET /api/plex/library/[libraryKey]
@@ -9,9 +11,16 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ libraryKey: string }> }
 ) {
+  const config = await getClients();
+  if(!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
+  const mediaServer = new MediaServerClient(config.type!);
   try {
     const { libraryKey } = await params;
-    const movies = await plex.getLibraryItems(libraryKey);
+    const movies = await mediaServer.getLibraryItems(libraryKey);
 
     return NextResponse.json({
       success: true,

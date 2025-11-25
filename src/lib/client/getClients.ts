@@ -2,13 +2,14 @@ import { getSession, createSession, getConfiguration, getServers, getServer } fr
 import { FanartClient } from "./fanart";
 import { TMDBWithFind } from "./tmdb";
 import { ThePosterDbClient } from "./theposterdb";
+import type { MediaServerType } from "./mediaserver";
 
 export async function getClients() {
   const envConfig = {
     serverUrl: '' as string | null,
     serverToken: '' as string | null,
     userid: '' as string | null,
-    type: '' as string | null,
+    type: '' as MediaServerType | null,
     tmdbApiKey: process.env.TMDB_API_KEY,
     fanartApiKey: process.env.FANART_API_KEY,
     removeOverlays: process.env.REMOVE_OVERLAYS as string | number | undefined,
@@ -40,7 +41,7 @@ export async function getClients() {
     envConfig.serverUrl = dbServer.url;
     envConfig.serverToken = dbServer.token;
     envConfig.userid = dbServer.userid;
-    envConfig.type = dbServer.type;
+    envConfig.type = dbServer.type as MediaServerType;
   }
   else {
     const dbServers = (await getServers()) || [];
@@ -48,7 +49,7 @@ export async function getClients() {
       envConfig.serverUrl = dbServers[0].url;
       envConfig.serverToken = dbServers[0].token;
       envConfig.userid = dbServers[0].userid;
-      envConfig.type = dbServers[0].type;
+      envConfig.type = dbServers[0].type as MediaServerType;
       createSession({ serverId: dbServers[0].id });
     }
 

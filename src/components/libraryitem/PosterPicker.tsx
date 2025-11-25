@@ -20,6 +20,7 @@ export const PosterPicker = ({
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [busyIndex, setBusyIndex] = useState(-1);
 
+
   const updatePoster = async (posterUrl: string, index: number) => {
     setBusyIndex(index);
 
@@ -27,7 +28,7 @@ export const PosterPicker = ({
     if(mediaType === "movie") {
       const movie = await api.plex.movieDetail(ratingKey);
       if(movie) {
-        await api.data.plex.updatePoster(mediaType, ratingKey, movie.data?.thumbUrl || "");
+        await api.data.plex.updatePoster(mediaType, ratingKey, posterUrl || "");
       }
     } else if(mediaType === "show") {
       const show = await api.plex.showDetail(ratingKey);

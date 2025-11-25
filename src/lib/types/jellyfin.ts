@@ -77,6 +77,7 @@ export type JellyfinSeasonResponse = {
     Backdrop?: string;
   };
   BackdropImageTags?: string[];
+  ParentBackdropImageTags?: string[];
   ProviderIds?: {
     Tmdb?: string;
     Imdb?: string;

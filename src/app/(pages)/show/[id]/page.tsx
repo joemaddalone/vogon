@@ -3,16 +3,30 @@ import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
 import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { Spinner } from "@/components/ui/spinner";
-import { plex } from "@/lib/client/plex";
-import { PlexShowMetadata } from "@/lib/types";
+import { NormalizedMovieDetails } from "@/lib/types";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
+import { getClients } from "@/lib/client/getClients";
+import { NextResponse } from "next/server";
+import { MediaServerClient } from "@/lib/client/mediaserver";
 
 export default async function ShowPage(props: PageProps<"/show/[id]">) {
   const { id } = await props.params;
+  const config = await getClients();
+  if(!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
+  const mediaServer = new MediaServerClient(config.type!);
+  const media = (await mediaServer.getMovieDetails(id)) as NormalizedMovieDetails;
+  if(!media) {
+    return <div className="flex items-center justify-center min-h-[30vh]">
+      Dang we could not find that one, perhaps it&apos;s in another server?
+    </div>
+  }
 
   const posterBuilder = buildPosters(id, "show");
-  const media = (await plex.getMovieDetails(id)) as PlexShowMetadata;
 
   return (
     <Suspense
