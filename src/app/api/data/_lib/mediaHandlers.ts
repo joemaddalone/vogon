@@ -186,7 +186,7 @@ export async function handleMediaImport(
 
     if (mediaType === "show") {
       // purposely not awaiting this for now.
-      handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
+      await handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
     }
 
     return NextResponse.json({

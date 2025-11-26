@@ -18,5 +18,8 @@ export const updateServer = async (id: number, server: Updateable<Server>) => {
 };
 
 export const deleteServer = async (id: number) => {
+  await db.deleteFrom("Media").where("serverId", "=", id).execute();
+  await db.deleteFrom("Session").where("serverId", "=", id).execute();
   return await db.deleteFrom("Server").where("id", "=", id).execute();
+
 };
