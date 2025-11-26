@@ -164,3 +164,14 @@ export type JellyfinShowMetadata = JellyfinShowResponse & {
 export type JellyfinSeasonMetadata = JellyfinSeasonResponse & {
   SeriesStudio?: string;
 };
+
+export type JellyfinImage = {
+  ImageType: string;
+  ImageIndex: number;
+  ImageTag: string;
+  Path: string;
+  BlurHash: string;
+  Height: number;
+  Width: number;
+  Size: number;
+};

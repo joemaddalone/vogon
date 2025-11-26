@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
-import { plex } from "@/lib/client/plex";
+import { getClients } from "@/lib/client/getClients";
+import { MediaServerClient } from "@/lib/client/mediaserver";
 
 /**
  * POST /api/plex/backdrop
  * Update a movie's backdrop in Plex
  */
 export async function POST(request: Request) {
+  const config = await getClients();
+  if(!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
+  const mediaServer = new MediaServerClient(config.type!);
   try {
     const body = await request.json();
     const { ratingKey, backdropUrl } = body;
@@ -19,7 +27,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await plex.updateMovieBackdrop(ratingKey, backdropUrl);
+    await mediaServer.updateMovieBackdrop(ratingKey, backdropUrl);
 
     return NextResponse.json({
       data: "Backdrop updated successfully",

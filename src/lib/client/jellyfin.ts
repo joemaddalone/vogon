@@ -6,6 +6,7 @@ import {
   JellyfinResponse,
   JellyfinSystemInfo,
   JellyfinMovieMetadata,
+  JellyfinImage,
 } from "@/lib/types/jellyfin";
 import { getClients } from "./getClients";
 
@@ -19,13 +20,18 @@ export class JellyfinClient {
   /**
    * Make authenticated request to Jellyfin API
    */
-  private async request<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
+  private async request<T>(
+    endpoint: string,
+    params?: Record<string, string>
+  ): Promise<T> {
     const config = await this.config();
     const url = `${config?.serverUrl}${endpoint}`;
 
     // Build query params (don't add api_key to query string)
     const queryParams = new URLSearchParams(params || {});
-    const fullUrl = queryParams.toString() ? `${url}?${queryParams.toString()}` : url;
+    const fullUrl = queryParams.toString()
+      ? `${url}?${queryParams.toString()}`
+      : url;
     try {
       const response = await fetch(fullUrl, {
         headers: {
@@ -52,9 +58,9 @@ export class JellyfinClient {
    */
   async getLibraries(): Promise<JellyfinLibraryResponse[]> {
     const config = await this.config();
-    const response = await this.request<JellyfinResponse<JellyfinLibraryResponse>>(
-      `/Users/${config?.userid}/Views`
-    );
+    const response = await this.request<
+      JellyfinResponse<JellyfinLibraryResponse>
+    >(`/Users/${config?.userid}/Views`);
     return response.Items || [];
   }
 
@@ -63,15 +69,14 @@ export class JellyfinClient {
    */
   async getLibraryItems(libraryId: string): Promise<JellyfinMovieResponse[]> {
     const config = await this.config();
-    const response = await this.request<JellyfinResponse<JellyfinMovieResponse>>(
-      `/Users/${config?.userid}/Items`,
-      {
-        IncludeItemTypes: "Series,Movie",
-        ParentId: libraryId,
-        Recursive: "true",
-        // Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
-      }
-    );
+    const response = await this.request<
+      JellyfinResponse<JellyfinMovieResponse>
+    >(`/Users/${config?.userid}/Items`, {
+      IncludeItemTypes: "Series,Movie",
+      ParentId: libraryId,
+      Recursive: "true",
+      // Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
+    });
     const items = response.Items || [];
 
     // Add full URL to thumbnails
@@ -89,12 +94,15 @@ export class JellyfinClient {
   /**
    * Get detailed metadata for a specific movie
    */
-  async getMovieDetails(itemId: string): Promise<Partial<JellyfinMovieMetadata>> {
+  async getMovieDetails(
+    itemId: string
+  ): Promise<Partial<JellyfinMovieMetadata>> {
     const config = await this.config();
     const response = await this.request<JellyfinMovieMetadata>(
       `/Users/${config?.userid}/Items/${itemId}`,
       {
-        Fields: "ProviderIds,Overview,Studios,Genres,MediaSources,ImageTags,BackdropImageTags",
+        Fields:
+          "ProviderIds,Overview,Studios,Genres,MediaSources,ImageTags,BackdropImageTags",
       }
     );
 
@@ -118,13 +126,12 @@ export class JellyfinClient {
    */
   async getShowSeasons(seriesId: string): Promise<JellyfinSeasonResponse[]> {
     const config = await this.config();
-    const response = await this.request<JellyfinResponse<JellyfinSeasonResponse>>(
-      `/Shows/${seriesId}/Seasons`,
-      {
-        UserId: config?.userid || "",
-        Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
-      }
-    );
+    const response = await this.request<
+      JellyfinResponse<JellyfinSeasonResponse>
+    >(`/Shows/${seriesId}/Seasons`, {
+      UserId: config?.userid || "",
+      Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
+    });
     const items = response.Items || [];
 
     return items.map((season) => ({
@@ -135,8 +142,8 @@ export class JellyfinClient {
       artUrl: season.BackdropImageTags?.[0]
         ? `${config?.serverUrl}/Items/${season.Id}/Images/Backdrop/0?api_key=${config?.serverToken}`
         : season.ParentBackdropImageTags?.[0]
-          ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Backdrop/0?api_key=${config?.serverToken}`
-          : undefined,
+        ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Backdrop/0?api_key=${config?.serverToken}`
+        : undefined,
       parentThumb: season.SeriesPrimaryImageTag
         ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Primary?api_key=${config?.serverToken}`
         : undefined,
@@ -146,15 +153,16 @@ export class JellyfinClient {
   /**
    * Get episodes for a season
    */
-  async getSeasonEpisodes(seasonId: string): Promise<JellyfinEpisodeResponse[]> {
+  async getSeasonEpisodes(
+    seasonId: string
+  ): Promise<JellyfinEpisodeResponse[]> {
     const config = await this.config();
-    const response = await this.request<JellyfinResponse<JellyfinEpisodeResponse>>(
-      `/Users/${config?.userid}/Items`,
-      {
-        ParentId: seasonId,
-        Fields: "ProviderIds,Overview,ImageTags",
-      }
-    );
+    const response = await this.request<
+      JellyfinResponse<JellyfinEpisodeResponse>
+    >(`/Users/${config?.userid}/Items`, {
+      ParentId: seasonId,
+      Fields: "ProviderIds,Overview,ImageTags",
+    });
     const items = response.Items || [];
 
     return items.map((episode) => ({
@@ -178,7 +186,9 @@ export class JellyfinClient {
     }
     const imageBlob = await imageResponse.blob();
     // convert to base64
-    const base64 = Buffer.from(await imageBlob.arrayBuffer()).toString("base64");
+    const base64 = Buffer.from(await imageBlob.arrayBuffer()).toString(
+      "base64"
+    );
 
     // Upload to Jellyfin
     const url = `${config?.serverUrl}/Items/${itemId}/Images/Primary`;
@@ -187,7 +197,8 @@ export class JellyfinClient {
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": imageResponse.headers.get("content-type") || "image/jpeg",
+          "Content-Type":
+            imageResponse.headers.get("content-type") || "image/jpeg",
           "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
         },
         body: base64,
@@ -210,27 +221,35 @@ export class JellyfinClient {
   /**
    * Update movie backdrop with a new image URL
    */
-  async updateMovieBackdrop(itemId: string, backdropUrl: string): Promise<void> {
+  async updateMovieBackdrop(
+    itemId: string,
+    backdropUrl: string
+  ): Promise<void> {
     const config = await this.config();
 
     // Download the image
     const imageResponse = await fetch(backdropUrl);
+
     if (!imageResponse.ok) {
       throw new Error("Failed to download backdrop image");
     }
     const imageBlob = await imageResponse.blob();
+    const base64 = Buffer.from(await imageBlob.arrayBuffer()).toString(
+      "base64"
+    );
 
     // Upload to Jellyfin
-    const url = `${config?.serverUrl}/Items/${itemId}/Images/Backdrop/0`;
+    const url = `${config?.serverUrl}/Items/${itemId}/Images/Backdrop`;
 
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": imageResponse.headers.get("content-type") || "image/jpeg",
+          "Content-Type":
+            imageResponse.headers.get("content-type") || "image/jpeg",
           "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
         },
-        body: imageBlob,
+        body: base64,
       });
 
       if (!response.ok) {
@@ -239,8 +258,46 @@ export class JellyfinClient {
         );
       }
 
+      // we now need to update the index of the new backdrop
+      const indexResponse = await fetch(
+        `${config?.serverUrl}/Items/${itemId}/Images`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
+          },
+        }
+      );
+
+      const images: JellyfinImage[] = await indexResponse.json();
+      if (images.length > 0) {
+        const backdrop = images.filter(
+          (image) => image.ImageType === "Backdrop"
+        )?.sort(
+          (a: JellyfinImage, b: JellyfinImage) => a.ImageIndex - b.ImageIndex
+        );
+
+        const lastBackdrop = backdrop?.[backdrop.length - 1];
+        const updateResponse = await fetch(
+          `${config?.serverUrl}/Items/${itemId}/Images/Backdrop/${lastBackdrop.ImageIndex}/Index?newIndex=0`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
+            }
+          }
+        );
+
+        if (!updateResponse.ok) {
+          throw new Error(
+            `Failed to update backdrop index: ${updateResponse.status} ${updateResponse.statusText}`
+          );
+        }
+      }
+
       // Lock the backdrop field to prevent Jellyfin from overwriting it
-      await this.lockBackdropField(itemId);
+      // await this.lockBackdropField(itemId);
     } catch (error) {
       console.error("Failed to update movie backdrop:", error);
       throw error;
