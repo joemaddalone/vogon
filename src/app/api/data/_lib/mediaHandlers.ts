@@ -3,8 +3,6 @@ import { revalidatePath } from "next/cache";
 import {
   Insertable,
   Media,
-  PlexEpisodeResponse,
-  PlexSeasonResponse,
   MediaTypeEnum,
   NormalizedSeason,
   NormalizedEpisode,

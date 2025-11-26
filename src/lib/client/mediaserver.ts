@@ -40,7 +40,9 @@ export class MediaServerClient {
   /**
    * Transform Plex library to normalized format
    */
-  private normalizePlexLibrary(lib: PlexLibraryResponse): NormalizedLibrary | null {
+  private normalizePlexLibrary(
+    lib: PlexLibraryResponse
+  ): NormalizedLibrary | null {
     // Only include movie and show libraries
     if (lib.type !== "movie" && lib.type !== "show") {
       return null;
@@ -112,7 +114,6 @@ export class MediaServerClient {
         ? Math.floor(item.RunTimeTicks / 10_000_000)
         : undefined, // Convert ticks (100ns) to seconds
       originallyAvailableAt: item.PremiereDate,
-
     };
   }
 
@@ -135,7 +136,9 @@ export class MediaServerClient {
   /**
    * Transform Jellyfin season to normalized format
    */
-  private normalizeJellyfinSeason(season: JellyfinSeasonResponse): NormalizedSeason {
+  private normalizeJellyfinSeason(
+    season: JellyfinSeasonResponse
+  ): NormalizedSeason {
     return {
       ratingKey: season.Id,
       title: season.Name,
@@ -151,7 +154,9 @@ export class MediaServerClient {
   /**
    * Transform Plex episode to normalized format
    */
-  private normalizePlexEpisode(episode: PlexEpisodeResponse): NormalizedEpisode {
+  private normalizePlexEpisode(
+    episode: PlexEpisodeResponse
+  ): NormalizedEpisode {
     return {
       ratingKey: episode.ratingKey,
       title: episode.title,
@@ -162,7 +167,9 @@ export class MediaServerClient {
       summary: episode.summary,
       rating: episode.audienceRating,
       originallyAvailableAt: episode.originallyAvailableAt,
-      duration: episode.duration ? Math.floor(episode.duration / 1000) : undefined,
+      duration: episode.duration
+        ? Math.floor(episode.duration / 1000)
+        : undefined,
     };
   }
 
@@ -196,20 +203,17 @@ export class MediaServerClient {
   ): NormalizedMovieDetails {
     const base = this.normalizePlexMediaItem(details as PlexMovieResponse);
     const guid = Array.isArray(details.Guid)
-      ? details.Guid.reduce(
-          (acc, g) => {
-            const id = g.id;
-            if (id?.startsWith("tmdb://")) {
-              acc.tmdb = id.replace("tmdb://", "");
-            } else if (id?.startsWith("imdb://")) {
-              acc.imdb = id.replace("imdb://", "");
-            } else if (id?.startsWith("tvdb://")) {
-              acc.tvdb = id.replace("tvdb://", "");
-            }
-            return acc;
-          },
-          {} as { tmdb?: string; imdb?: string; tvdb?: string }
-        )
+      ? details.Guid.reduce((acc, g) => {
+          const id = g.id;
+          if (id?.startsWith("tmdb://")) {
+            acc.tmdb = id.replace("tmdb://", "");
+          } else if (id?.startsWith("imdb://")) {
+            acc.imdb = id.replace("imdb://", "");
+          } else if (id?.startsWith("tvdb://")) {
+            acc.tvdb = id.replace("tvdb://", "");
+          }
+          return acc;
+        }, {} as { tmdb?: string; imdb?: string; tvdb?: string })
       : undefined;
 
     return {
@@ -225,10 +229,13 @@ export class MediaServerClient {
   private normalizeJellyfinMovieDetails(
     details: Partial<JellyfinMovieMetadata>
   ): NormalizedMovieDetails {
-    const base = this.normalizeJellyfinMediaItem(details as JellyfinMovieResponse);
+    const base = this.normalizeJellyfinMediaItem(
+      details as JellyfinMovieResponse
+    );
     return {
       ...base,
       thumbUrl: details.thumbUrl + `?bust=${Date.now()}`,
+      artUrl: details.artUrl + `?bust=${Date.now()}`,
       studio: details.Studios?.[0]?.Name,
       genres: details.Genres?.map((g) => g.Name),
       providerIds: details.ProviderIds
@@ -279,7 +286,9 @@ export class MediaServerClient {
   async getMovieDetails(itemId: string): Promise<NormalizedMovieDetails> {
     const details = await this.client.getMovieDetails(itemId);
     if (this.type === "plex") {
-      return this.normalizePlexMovieDetails(details as Partial<PlexMovieMetadata>);
+      return this.normalizePlexMovieDetails(
+        details as Partial<PlexMovieMetadata>
+      );
     } else {
       return this.normalizeJellyfinMovieDetails(
         details as Partial<JellyfinMovieMetadata>
@@ -329,10 +338,7 @@ export class MediaServerClient {
   /**
    * Update movie backdrop with a new image URL
    */
-  async updateMovieBackdrop(
-    itemId: string,
-    backdropUrl: string
-  ): Promise<void> {
+  async updateMovieBackdrop( itemId: string, backdropUrl: string ): Promise<void> {
     return this.client.updateMovieBackdrop(itemId, backdropUrl);
   }
 
@@ -359,4 +365,3 @@ export function createMediaServerClient(
 ): MediaServerClient {
   return new MediaServerClient(type);
 }
-
