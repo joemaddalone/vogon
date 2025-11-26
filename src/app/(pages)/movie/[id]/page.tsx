@@ -8,14 +8,11 @@ import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { NormalizedMovieDetails } from "@/lib/types";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
-import { NextResponse } from "next/server";
 export default async function MoviePage(props: PageProps<"/movie/[id]">) {
   const { id } = await props.params;
   const config = await getClients();
   if(!config) {
-    return NextResponse.json({
-      error: "No config found",
-    }, { status: 500 });
+    return <div className="flex items-center justify-center min-h-[30vh]">No config found</div>
   }
   const mediaServer = new MediaServerClient(config.type!);
   const media = (await mediaServer.getMovieDetails(id)) as NormalizedMovieDetails;
