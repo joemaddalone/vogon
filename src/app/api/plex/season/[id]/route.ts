@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { plex } from "@/lib/client/plex";
 import { dataManager as DM } from "@/lib/client/database";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
