@@ -5,11 +5,17 @@ import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { Spinner } from "@/components/ui/spinner";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
-import { plex } from "@/lib/client/plex";
-import { PlexMovieMetadata } from "@/lib/types";
+import { NormalizedMovieDetails } from "@/lib/types";
+import { MediaServerClient } from "@/lib/client/mediaserver";
+import { getClients } from "@/lib/client/getClients";
 export default async function MoviePage(props: PageProps<"/movie/[id]">) {
   const { id } = await props.params;
-  const media = (await plex.getMovieDetails(id)) as PlexMovieMetadata;
+  const config = await getClients();
+  if(!config) {
+    return <div className="flex items-center justify-center min-h-[30vh]">No config found</div>
+  }
+  const mediaServer = new MediaServerClient(config.type!);
+  const media = (await mediaServer.getMovieDetails(id)) as NormalizedMovieDetails;
   if(!media) {
     return <div className="flex items-center justify-center min-h-[30vh]">
       Dang we could not find that one, perhaps it&apos;s in another server?

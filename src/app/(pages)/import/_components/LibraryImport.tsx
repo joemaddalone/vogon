@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
-import { PlexLibrary } from "@/lib/types";
+import { NormalizedLibrary } from "@/lib/types";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Film, TvIcon } from "lucide-react";
 
-export const LibraryImport = ({ library, index }: { library: PlexLibrary, index: number }) => {
+export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, index: number }) => {
 	const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
@@ -38,7 +38,7 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
   };
   return (
     <motion.div
-      key={library.key}
+      key={library.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -60,7 +60,7 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
           )}
           <div>
             <h3>
-              {library.title}
+              {library.name}
             </h3>
             <p>
               {library.type === "movie" ? "Movie" : "TV Show"} Library
@@ -68,12 +68,12 @@ export const LibraryImport = ({ library, index }: { library: PlexLibrary, index:
           </div>
         </div>
         <Button
-          onClick={() => importLibrary(library.key, library.type)}
+          onClick={() => importLibrary(library.id, library.type)}
           disabled={importing !== null}
           size="lg"
           className="rounded-xl font-medium transition-all duration-300 hover:scale-105 whitespace-nowrap"
         >
-          {importing === library.key ? (
+          {importing === library.id ? (
             <>
               <Spinner className="size-4" />
               Importing...

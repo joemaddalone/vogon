@@ -1,13 +1,22 @@
 import { NextResponse } from "next/server";
-import { plex } from "@/lib/client/plex";
+import { getClients } from "@/lib/client/getClients";
+import { MediaServerClient } from "@/lib/client/mediaserver";
+
 
 /**
  * GET /api/plex/test
  * Test connection to Plex server
  */
 export async function GET() {
+  const config = await getClients();
+  if(!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
+  const mediaServer = new MediaServerClient(config.type!);
   try {
-    const isConnected = await plex.testConnection();
+    const isConnected = await mediaServer.testConnection();
 
     if (isConnected) {
       return NextResponse.json({

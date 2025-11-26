@@ -5,5 +5,7 @@ export * from './fanart';
 export * from './theposterdb';
 export * from './errors';
 export * from './plex';
+export * from './jellyfin';
 export * from './api';
 export * from './media';
+export * from './mediaserver';

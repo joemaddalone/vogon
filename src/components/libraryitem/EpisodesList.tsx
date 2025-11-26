@@ -1,8 +1,8 @@
 "use client";
-import { Media } from "@/lib/types";
+import { NormalizedEpisode } from "@/lib/types";
 import ImageLoader from "../ImageLoader";
 
-export const EpisodesList = ({ episodes }: { episodes: Media[] }) => {
+export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) => {
   return (
     <div>
       <ul className="backdrop-list">

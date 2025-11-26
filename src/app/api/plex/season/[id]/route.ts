@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { plex } from "@/lib/client/plex";
 import { dataManager as DM } from "@/lib/client/database";
+import { MediaServerClient } from "@/lib/client/mediaserver";
+import { getClients } from "@/lib/client/getClients";
 
 /**
  * GET /api/plex/season/[id]/details
@@ -10,9 +11,16 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const config = await getClients();
+  if(!config) {
+    return NextResponse.json({
+      error: "No config found",
+    }, { status: 500 });
+  }
+  const mediaServer = new MediaServerClient(config.type!);
   try {
     const { id } = await params;
-    const show = await plex.getMovieDetails(id);
+    const show = await mediaServer.getMovieDetails(id);
     const episodes = await DM.plex.episode.bySeason(id);
 
     const data = {...show, episodes: episodes };

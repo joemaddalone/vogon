@@ -8,7 +8,7 @@ import {
 } from "@/lib/types";
 import { getClients } from "./getClients";
 
-class PlexClient {
+export class PlexClient {
   constructor() {}
 
   private async config() {

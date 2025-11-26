@@ -3,11 +3,12 @@ import { revalidatePath } from "next/cache";
 import {
   Insertable,
   Media,
-  PlexEpisodeResponse,
-  PlexSeasonResponse,
   MediaTypeEnum,
+  NormalizedSeason,
+  NormalizedEpisode,
 } from "@/lib/types";
-import { plex } from "@/lib/client/plex";
+import { MediaServerClient } from "@/lib/client/mediaserver";
+import { getClients } from "@/lib/client/getClients";
 import { dataManager as DM } from "@/lib/client/database";
 import { getSession } from "@/lib/client/database/session";
 
@@ -20,9 +21,7 @@ type MediaConfig = {
   reset: () => Promise<void>;
   updateThumb: (ratingKey: string, thumbUrl: string) => Promise<void>;
   updateArt: (ratingKey: string, artUrl: string) => Promise<void>;
-  createMany: (
-    items: Array<Insertable<Media>>
-  ) => Promise<void>;
+  createMany: (items: Array<Insertable<Media>>) => Promise<void>;
 };
 
 const session = await getSession();
@@ -41,8 +40,8 @@ const MEDIA_CONFIG: Record<MediaTypeString, MediaConfig> = {
   },
   show: {
     label: "shows",
-      cachePath: "/show",
-      getAll: DM.plex.show.list,
+    cachePath: "/show",
+    getAll: DM.plex.show.list,
     reset: DM.plex.show.reset,
     updateThumb: DM.plex.show.updateThumb,
     updateArt: DM.plex.show.updateArt,
@@ -116,9 +115,10 @@ export async function handleMediaUpdate(
       await config.updateArt(ratingKey, artUrl);
     }
 
+    revalidatePath(`/${mediaType}/${ratingKey}`, "page");
     revalidatePath(thumbUrl ?? artUrl ?? "");
-    revalidatePath(config.cachePath, "page");
     revalidatePath(`/api/data/${mediaType}`);
+    revalidatePath(config.cachePath, "page");
 
     return NextResponse.json({
       data: `${mediaType} ${
@@ -151,30 +151,42 @@ export async function handleMediaImport(
       );
     }
 
-    const normalizedItems = items.map(
-      (item: Insertable<Media>) => ({
-        ratingKey: String(item.ratingKey ?? ""),
-        libraryKey: String(libraryKey),
-        title: String(item.title ?? ""),
-        year: item.year as number | null,
-        summary: item.summary ?? null,
-        thumbUrl: item.thumbUrl ?? null,
-        artUrl: item.artUrl ?? null,
-        duration: item.duration ?? null,
-        rating: item.rating ?? null,
-        contentRating: item.contentRating ?? null,
-        guid: item.guid ?? null,
-        type: mediaType === "movie" ? MediaTypeEnum.MOVIE : mediaType === "show" ? MediaTypeEnum.SHOW : MediaTypeEnum.SEASON,
-        serverId,
-      })
-    );
+    const normalizedItems = items.map((item: Insertable<Media>) => ({
+      ratingKey: String(item.ratingKey ?? ""),
+      libraryKey: String(libraryKey),
+      title: String(item.title ?? ""),
+      year: item.year as number | null,
+      summary: item.summary ?? null,
+      thumbUrl: item.thumbUrl ?? null,
+      artUrl: item.artUrl ?? null,
+      duration: item.duration ?? null,
+      rating: item.rating ?? null,
+      contentRating: item.contentRating ?? null,
+      guid: item.guid ?? null,
+      type:
+        mediaType === "movie"
+          ? MediaTypeEnum.MOVIE
+          : mediaType === "show"
+          ? MediaTypeEnum.SHOW
+          : MediaTypeEnum.SEASON,
+      serverId,
+    }));
 
     const config = MEDIA_CONFIG[mediaType];
-    await config.createMany(normalizedItems);
+    await config.reset();
+    try {
+      await config.createMany(normalizedItems);
+    } catch (error) {
+      console.error(`Error creating many ${mediaType}s:`, error);
+      return NextResponse.json(
+        { error: `Failed to create many ${mediaType}s into database` },
+        { status: 500 }
+      );
+    }
 
     if (mediaType === "show") {
       // purposely not awaiting this for now.
-      handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
+      await handleMediaImportSeasons(normalizedItems as Insertable<Media>[]);
     }
 
     return NextResponse.json({
@@ -197,23 +209,28 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
   await DM.plex.season.reset();
   await DM.plex.episode.reset();
 
+  const config = await getClients();
+  if (!config) {
+    return;
+  }
+  const mediaServer = new MediaServerClient(config.type!);
+
   for (const item of items) {
-    const showSeasons = await plex.getShowSeasons(item.ratingKey);
-    showSeasons.forEach((season: PlexSeasonResponse) => {
+    const showSeasons = await mediaServer.getShowSeasons(item.ratingKey);
+    showSeasons.forEach((season: NormalizedSeason) => {
       seasons.push({
         ratingKey: season.ratingKey,
         parentRatingKey: item.ratingKey,
         title: season.title,
         year: season.year,
         type: MediaTypeEnum.SEASON,
-        parentKey: season.parentKey,
-        parentTitle: season.parentTitle,
+        parentKey: season.seriesId,
+        parentTitle: item.title,
         summary: season.summary,
         index: season.index,
         thumbUrl: season.thumbUrl,
         artUrl: season.artUrl,
         parentThumb: season.parentThumb,
-        parentTheme: season.parentTheme,
         serverId,
       });
     });
@@ -225,21 +242,19 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
 
   if (process.env.ENABLE_EPISODES === "true") {
     for (const season of seasons) {
-      const seasonEpisodes: PlexEpisodeResponse[] =
-        await plex.getSeasonEpisodes(season.ratingKey);
+      const seasonEpisodes: NormalizedEpisode[] =
+        await mediaServer.getSeasonEpisodes(season.ratingKey);
       seasonEpisodes.forEach((episode) => {
         episodes.push({
           ratingKey: episode.ratingKey,
-          parentRatingKey: episode.parentRatingKey,
+          parentRatingKey: episode.seasonId,
           title: episode.title,
+          type: MediaTypeEnum.EPISODE,
           index: episode.index,
           parentIndex: episode.parentIndex,
-          year: episode.year,
           summary: episode.summary,
           thumbUrl: episode.thumbUrl,
-          artUrl: episode.artUrl,
           duration: episode.duration,
-          guid: episode.guid,
           serverId,
         });
       });

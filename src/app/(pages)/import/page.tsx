@@ -15,6 +15,7 @@ export default async function ImportLibraryPage() {
         </div>
       }
     >
+      {/* @ts-expect-error - libs is a promise of ApiResponse<NormalizedLibrary[]> */}
        <Libraries libs={libs}  />
     </Suspense>
   );

@@ -32,8 +32,8 @@ export const PlexConnectionError = ({ error }: { error: string }) => {
         <div className="text-base text-red-600 dark:text-red-400 bg-red-100/50 dark:bg-red-950/30 rounded-xl p-6">
           <p className="font-semibold mb-3">Make sure you have set:</p>
           <ul className="list-disc list-inside space-y-2 ml-2">
-            <li className="font-medium">PLEX_SERVER_URL in your environment variables</li>
-            <li className="font-medium">PLEX_TOKEN in your environment variables</li>
+            <li className="font-medium">A server url</li>
+            <li className="font-medium">A server token</li>
           </ul>
         </div>
 

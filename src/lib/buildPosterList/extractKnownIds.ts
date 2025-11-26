@@ -4,8 +4,8 @@ export const extractKnownIds = (guid: Record<string, string>[]) => {
   const imdbId = ids.find((str: string) => str.startsWith("imdb")) || "";
   const tvdbId = ids.find((str: string) => str.startsWith("tvdb")) || "";
   return {
-    tmdbId: tmdbId?.split("://")[1],
-    imdbId: imdbId?.split("://")[1],
-    tvdbId: tvdbId?.split("://")[1],
+    tmdb: tmdbId?.split("://")[1],
+    imdb: imdbId?.split("://")[1],
+    tvdb: tvdbId?.split("://")[1],
   };
 };

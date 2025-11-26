@@ -1,5 +1,5 @@
 "use client";
-import { Media, PlexMovieMetadata, PlexShowMetadata } from "@/lib/types";
+import { NormalizedMediaItem, Media } from "@/lib/types";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import { useHistory } from "@/app/hooks/useHistory";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,7 @@ export const MediaHeader = ({
   mediaType,
 }: {
   media:
-    | PlexMovieMetadata
-    | PlexShowMetadata
+    | NormalizedMediaItem
     | Media;
   logos: { file_path: string }[];
   mediaType: "movie" | "show" | "season";

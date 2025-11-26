@@ -32,10 +32,16 @@ export function ServerSelector({
       if (result.error) {
         console.error(result.error);
       }
+
+      if (window.location.pathname.includes("/show/")) {
+        return router.push("/show");
+      }
+      if (window.location.pathname.includes("/movie/")) {
+        return router.push("/movie");
+      }
       router.refresh();
     }
   };
-
 
   const selectedServerId = session?.serverId?.toString();
 

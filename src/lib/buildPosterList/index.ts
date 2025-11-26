@@ -3,19 +3,17 @@ import { getClients } from "@/lib/client/getClients";
 import {
   FanartMovieResponse,
   FanartShowResponse,
-  PlexMovieMetadata,
-  PlexShowMetadata,
   ApiResponse,
   FetchedMedia,
-  PlexSeasonMetadata,
+  NormalizedMovieDetails,
 } from "@/lib/types";
 import { ThePosterDbClient } from "@/lib/client/theposterdb";
-import { extractKnownIds } from "./extractKnownIds";
 import { determineTmdbId } from "./determineTmdbId";
 import { fetchTmdbDetails } from "./fetchTmdbDetails";
 import * as fanart from "./fanart";
 import * as tmdb from "./tmdb";
 import * as posterdb from "./posterdb";
+import { extractKnownIds } from "./extractKnownIds";
 
 const errorResponse = {
   error: "Unknown error",
@@ -23,9 +21,9 @@ const errorResponse = {
   logos: [],
   media: null,
   knownIds: {
-    tmdbId: null,
-    imdbId: null,
-    tvdbId: null,
+    tmdb: null,
+    imdb: null,
+    tvdb: null,
   },
   tmdbId: null,
   tmdbMedia: null,
@@ -37,7 +35,7 @@ type MediaConfig = {
   plex: (
     id: string
   ) => Promise<
-    ApiResponse<PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata>
+    ApiResponse<NormalizedMovieDetails>
   >;
   fanart: (
     id: string
@@ -75,8 +73,17 @@ export const buildPosters = async (
   if (!media) {
     return { ...errorResponse, error: "Plex movie not found" };
   }
-  const knownIds = extractKnownIds(media?.Guid || []);
-  const tmdbId = await determineTmdbId(knownIds);
+
+  let knownIds;
+  // @ts-expect-error - media.guid is not defined in the type
+  if(media.Guid) {
+    // @ts-expect-error - media.guid is not defined in the type
+    knownIds = extractKnownIds(media.Guid);
+  } else {
+    knownIds = media.providerIds;
+  }
+
+  const tmdbId = await determineTmdbId(knownIds as { tmdb?: string; imdb?: string; tvdb?: string });
   const tmdbMedia = await fetchTmdbDetails(
     tmdbId as string,
     type,
@@ -90,8 +97,8 @@ export const buildPosters = async (
   const backdrops: FetchedMedia[] = [];
   const logos: FetchedMedia[] = [];
 
-  if (config.fanartApiKey) {
-    const idForFanart = type === "movie" ? tmdbId : knownIds.tvdbId;
+  if (config.fanartApiKey && (knownIds?.tvdb || tmdbId)) {
+    const idForFanart = type === "movie" ? tmdbId : knownIds?.tvdb;
     if (type === "movie") {
       const { fanart_posters, fanart_backdrops, fanart_logos } =
         await fanart.movie(idForFanart as string);
