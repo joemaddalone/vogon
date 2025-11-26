@@ -17,75 +17,99 @@ import { useRouter } from "next/navigation";
 import { ConfigField } from "./ConfigField";
 
 export default function ConfigForm({ config }: { config: Configuration }) {
-
-	const [message, setMessage] = useState<{
+  const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
 
-	const router = useRouter();
-	const [configData, formAction, pending] = useActionState(async (prev: Configuration | null, data: FormData) => {
-		const updateable: Updateable<Configuration> = {
-			tmdbApiKey: data.get("tmdbApiKey") as string | undefined,
-			fanartApiKey: data.get("fanartApiKey") as string | undefined,
-			removeOverlays: data.get("removeOverlays") as unknown as number | undefined,
-			thePosterDbEmail: data.get("thePosterDbEmail") as string | undefined,
-			thePosterDbPassword: data.get("thePosterDbPassword") as string | undefined,
-		};
-		const result = await api.config.save(updateable);
-		if(result.error) {
+  const router = useRouter();
+  const [configData, formAction, pending] = useActionState(
+    async (prev: Configuration | null, data: FormData) => {
+      const updateable: Updateable<Configuration> = {
+        tmdbApiKey: data.get("tmdbApiKey") as string | undefined,
+        fanartApiKey: data.get("fanartApiKey") as string | undefined,
+        removeOverlays: data.get("removeOverlays") as unknown as
+          | number
+          | undefined,
+        thePosterDbEmail: data.get("thePosterDbEmail") as string | undefined,
+        thePosterDbPassword: data.get("thePosterDbPassword") as
+          | string
+          | undefined,
+      };
+      const result = await api.config.save(updateable);
+      if (result.error) {
+        setMessage({
+          type: "error",
+          text: result.error.message,
+        });
+        return prev;
+      }
       setMessage({
-        type: "error",
-        text: result.error.message,
+        type: "success",
+        text: "Configuration saved successfully",
       });
-			return prev;
-		}
-		setMessage({
-			type: "success",
-			text: "Configuration saved successfully",
-		});
-		router.prefetch("/");
-		router.prefetch("/movie");
-		router.prefetch("/show");
-		router.prefetch("/import");
-		router.refresh();
-		return result.data;
-	}, config);
-
+      router.prefetch("/");
+      router.prefetch("/movie");
+      router.prefetch("/show");
+      router.prefetch("/import");
+      router.refresh();
+      return result.data;
+    },
+    config
+  );
 
   return (
     <div className="container max-w-2xl mx-auto px-4">
       <form action={formAction}>
-        <FieldGroup className="p-4">
-        </FieldGroup>
+        <FieldGroup className="p-4"></FieldGroup>
         <FieldGroup className="p-4 mt-5 bg-muted">
-          <FieldLegend>API Configuration</FieldLegend>
+          <FieldLegend>
+            API Configuration{" "}
+            <i className="text-sm text-orange-200">
+              (Environment variables will take precedence here.)
+            </i>
+          </FieldLegend>
 
           <ConfigField
             configData={configData as Configuration}
-            label="TMDB API Key"
+            label="TMDB API Key (required)"
             hint="env. TMDB_API_KEY"
             dataKey="tmdbApiKey"
             placeholder="Enter your TMDB API key"
             required
           >
-            The Movie Database (TMDB) API key for poster lookups. <a href='https://www.themoviedb.org/settings/api' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>Get your API key</a>
+            The Movie Database (TMDB) API key for poster lookups.{" "}
+            <a
+              href="https://www.themoviedb.org/settings/api"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Get your API key
+            </a>
           </ConfigField>
-
 
           <ConfigField
             configData={configData as Configuration}
-            label="Fanart.tv API Key"
+            label="Fanart.tv API Key (optional)"
             hint="env. FANART_API_KEY"
             dataKey="fanartApiKey"
             placeholder="Enter your Fanart.tv API key (optional)"
             required={false}
           >
-            Optional: Fanart.tv API key for additional poster sources. <a href='https://fanart.tv/get-an-api-key/' target='_blank' rel='noopener noreferrer' className='text-primary hover:underline'>Get your API key</a>
+            Optional: Fanart.tv API key for additional poster sources.{" "}
+            <a
+              href="https://fanart.tv/get-an-api-key/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Get your API key
+            </a>
           </ConfigField>
           <ConfigField
             configData={configData as Configuration}
-            label="ThePosterDB Email"
+            label="ThePosterDB Email (optional)"
             hint="env. THEPOSTERDB_EMAIL"
             dataKey="thePosterDbEmail"
             placeholder="Enter your ThePosterDB email"
@@ -95,7 +119,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           </ConfigField>
           <ConfigField
             configData={configData as Configuration}
-            label="ThePosterDB Password"
+            label="ThePosterDB Password (optional)"
             hint="env. THEPOSTERDB_PASSWORD"
             dataKey="thePosterDbPassword"
             placeholder="Enter your ThePosterDB password"

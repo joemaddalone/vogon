@@ -18,9 +18,6 @@ export default async function ConfigPage() {
         <p>
           Configure your media server and API credentials. All values are stored
           securely in the local database.{" "}
-          <i className="text-sm text-orange-200">
-            Environment variables will take precedence here.
-          </i>
         </p>
       </div>
       <div className="container max-w-2xl mx-auto">

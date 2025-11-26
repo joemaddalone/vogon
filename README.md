@@ -1,13 +1,17 @@
 ## vogon
 
-This application connects to one or more Plex Media Servers, imports movie and TV show libraries, and lets you replace movie, show, and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
+This application connects to one or more Plex or Jellyfin Media Servers, imports movie and TV show libraries, and lets you replace movie, show, and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
 
 
 ## Requirements
 
 - **Node v20+**
-- **Plex Server**
-- **Plex token**: [How to find your token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/)
+- **Plex or Jellyfin Server**
+  - Plex
+    - **Plex token**: [How to find your token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/)
+  - Jellyfin
+    - **Jellyfin API key**: Dashboard > Api Keys
+    - **Jellyfin user Id**: this is user id NOT username
 - **TMDB API key**: [Get an API key](https://www.themoviedb.org/settings/api)
 - **Local network access** to Plex
 - OPTIONAL
