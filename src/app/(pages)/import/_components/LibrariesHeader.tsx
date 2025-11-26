@@ -8,7 +8,7 @@ export const LibrariesHeader = () => {
       transition={{ duration: 0.5 }}
     >
       <h1>
-        Select Plex Library
+        Select a Library
       </h1>
       <p>
         Choose a library to import and manage poster artwork. Be sure the

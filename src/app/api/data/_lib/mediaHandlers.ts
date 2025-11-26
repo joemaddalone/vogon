@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { revalidatePath} from "next/cache";
+import { revalidatePath } from "next/cache";
 import {
   Insertable,
   Media,
@@ -212,7 +212,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
   await DM.plex.episode.reset();
 
   const config = await getClients();
-  if(!config) {
+  if (!config) {
     return;
   }
   const mediaServer = new MediaServerClient(config.type!);
@@ -251,6 +251,7 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
           ratingKey: episode.ratingKey,
           parentRatingKey: episode.seasonId,
           title: episode.title,
+          type: MediaTypeEnum.EPISODE,
           index: episode.index,
           parentIndex: episode.parentIndex,
           summary: episode.summary,

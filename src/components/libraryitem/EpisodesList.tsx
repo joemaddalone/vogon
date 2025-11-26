@@ -1,5 +1,5 @@
 "use client";
-import { Media, NormalizedEpisode } from "@/lib/types";
+import { NormalizedEpisode } from "@/lib/types";
 import ImageLoader from "../ImageLoader";
 
 export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) => {

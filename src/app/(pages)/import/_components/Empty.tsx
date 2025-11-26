@@ -9,7 +9,7 @@ export const Empty = () => {
 		className="text-center py-20"
 	>
 		<p className="text-xl text-muted-foreground font-light">
-			No libraries found in your Plex server.
+			No libraries found in your server.
 		</p>
 	</motion.div>
   );
