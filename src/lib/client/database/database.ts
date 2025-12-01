@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const dbPath = path.join(__dirname, '../../../prisma/dev.db')
+const dbPath = path.join(__dirname, '../../../db/dev.db')
 
 const dialect = new SqliteDialect({
   database: new SQLite(dbPath),

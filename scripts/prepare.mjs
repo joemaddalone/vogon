@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const dbPath = join(__dirname, '../src/prisma/dev.db');
+const dbPath = join(__dirname, '../src/db/dev.db');
 
 if (!existsSync(dbPath)) {
     await writeFile(dbPath, '');
