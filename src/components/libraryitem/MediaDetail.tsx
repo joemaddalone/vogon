@@ -53,7 +53,7 @@ export const MediaDetail = ({
             className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
             value="posters"
           >
-            {mediaType === "season" ? "Seaosn Posters" : "Posters"}
+            {mediaType === "season" ? "Season Posters" : "Posters"}
           </TabsTrigger>
           {mediaType !== "season" && (
             <TabsTrigger
