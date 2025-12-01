@@ -244,6 +244,17 @@ export const api = {
         })
       );
     },
+    posterEpisode: async (
+      ratingKey: string,
+      base64: string
+    ): Promise<ApiResponse<void>> => {
+      return await tryCatch(
+        fetch(`${host}/api/mediaserver/poster/episode`, {
+          method: "POST",
+          body: JSON.stringify({ ratingKey, base64 }),
+        })
+      );
+    },
     backdrop: async (
       ratingKey: string,
       backdropUrl: string

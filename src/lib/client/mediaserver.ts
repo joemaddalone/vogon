@@ -336,6 +336,13 @@ export class MediaServerClient {
   }
 
   /**
+   * Update episode poster with a new image URL
+   */
+  async updateEpisodePoster(itemId: string, base64: string): Promise<void> {
+    return this.client.updateEpisodePoster(itemId, base64);
+  }
+
+  /**
    * Update movie backdrop with a new image URL
    */
   async updateMovieBackdrop( itemId: string, backdropUrl: string ): Promise<void> {

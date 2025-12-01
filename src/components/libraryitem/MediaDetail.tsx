@@ -12,7 +12,7 @@ import {
   NormalizedEpisode,
 } from "@/lib/types";
 import Link from "next/link";
-import { EpisodesList } from "./EpisodesList";
+import { EpisodesList } from "./episode/EpisodesList";
 import { useTranslations } from "next-intl";
 export const MediaDetail = ({
   posterBuilder,

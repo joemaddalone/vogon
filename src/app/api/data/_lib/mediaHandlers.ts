@@ -12,8 +12,8 @@ import { getClients } from "@/lib/client/getClients";
 import { dataManager as DM } from "@/lib/client/database";
 import { getSession } from "@/lib/client/database/session";
 import { existsSync } from "fs";
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { join, dirname } from 'path';
 
 type MediaTypeString = "movie" | "show" | "season";
 
@@ -268,19 +268,20 @@ export async function handleMediaImportSeasons(items: Insertable<Media>[]) {
     }
 
     // save a local image (ratingKey.png) if not already saved in @/cache/episodes.
-    for (const episode of episodes) {
-      if(!episode.thumbUrl) {
-        continue;
-      }
-      const image = await fetch(episode.thumbUrl);
-      const imageBlob = await image.blob();
-      const imageBuffer = await imageBlob.arrayBuffer();
-      const imageBase64 = Buffer.from(imageBuffer).toString("base64");
-      // const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
-      const imagePath = join(process.cwd(), "cache", "episodes", `${episode.ratingKey}.png`);
-      if(!existsSync(imagePath)) {
-        await writeFile(imagePath, imageBase64);
-      }
-    }
+    // for (const episode of episodes) {
+    //   if(!episode.thumbUrl) {
+    //     continue;
+    //   }
+    //   const image = await fetch(episode.thumbUrl);
+    //   const imageBlob = await image.blob();
+    //   const imageBuffer = await imageBlob.arrayBuffer();
+    //   const imageData = Buffer.from(imageBuffer);
+    //   const imagePath = join(process.cwd(), "src", "cache", "episodes", `${episode.ratingKey}.jpg`);
+    //   if(!existsSync(imagePath)) {
+    //     const imageDir = dirname(imagePath);
+    //     await mkdir(imageDir, { recursive: true });
+    //     await writeFile(imagePath, imageData);
+    //   }
+    // }
   }
 }

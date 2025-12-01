@@ -1,0 +1,56 @@
+"use client";
+import { NormalizedEpisode } from "@/lib/types";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import ImageLoader from "@/components/ImageLoader";
+import { EpisodeModal } from "./EpisodeModal";
+
+export const EpisodesList = ({
+  episodes,
+}: {
+  episodes: NormalizedEpisode[];
+}) => {
+  const t = useTranslations();
+  const [modalEpisode, setModalEpisode] = useState<NormalizedEpisode | null>(null);
+
+  return (
+    <div>
+      <ul className="backdrop-list">
+        <EpisodeModal
+          episode={modalEpisode}
+          close={() => setModalEpisode(null)}
+        />
+        {episodes.map((episode) => (
+          <li key={episode.ratingKey}>
+            <figure
+              key={episode.ratingKey}
+              className="relative"
+              onClick={() => setModalEpisode(episode)}
+            >
+              <div className="relative overflow-hidden transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
+                <div className="relative overflow-hidden transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
+                  <ImageLoader
+                    src={episode.thumbUrl || ""}
+                    alt={episode.title || ""}
+                    width={500}
+                    height={500}
+                    unoptimized
+                    className="transition-transform duration-700 group-hover:scale-105 rounded-none!"
+                  />
+                </div>
+              </div>
+              <figcaption className="mt-5 text-center">
+                {episode.title}
+                <br />
+                <span className="capitalize">
+                  {t("common.season", { count: 1 })}:{episode.parentIndex}{" "}
+                  {t("common.episode", { count: 1 })}:{episode.index}
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};

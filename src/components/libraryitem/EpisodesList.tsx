@@ -1,8 +1,8 @@
 "use client";
 import { NormalizedEpisode } from "@/lib/types";
-import { Button } from "../ui/button";
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import ImageLoader from "../ImageLoader";
 
 const CanvasImage = ({ episode }: { episode: NormalizedEpisode }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,23 +54,19 @@ export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) =>
   const t = useTranslations();
   return (
     <div>
-      <Button variant="default" className="z-10">
-        do title
-      </Button>
       <ul className="backdrop-list">
         {episodes.map((episode) => (
           <li key={episode.ratingKey}>
             <figure key={episode.ratingKey} className="relative">
               <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
-                <CanvasImage episode={episode} />
-                {/* <ImageLoader
+                <ImageLoader
                   src={episode.thumbUrl || ""}
                   alt={episode.title || ""}
                   width={500}
                   height={500}
                   unoptimized
                   className="transition-transform duration-700 group-hover:scale-105"
-                /> */}
+                />
               </div>
               <figcaption className="mt-5 text-center">
                 {episode.title}<br />
