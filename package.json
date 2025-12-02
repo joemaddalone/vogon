@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:prepare": "node scripts/prepare.mjs",
     "db:delete": "node scripts/delete.mjs",
-    "db:generate": "npm run db:delete && npm run db:prepare && node scripts/generate.mjs"
+    "db:generate": "npm run db:prepare && node scripts/generate.mjs"
   },
   "dependencies": {
     "@lorenzopant/tmdb": "^1.0.0",

@@ -1,11 +1,25 @@
-## vogon
+<h1 align="center" id="title">vogon</h1>
+<div align="center">
 
-This application connects to one or more Plex or Jellyfin Media Servers, imports movie and TV show libraries, and lets you replace movie, show, and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
+![VOGON](https://img.shields.io/badge/VOGON-Art%20Management-blue?style=for-the-badge)
+[![Buy Me A Coffee](https://img.shields.io/badge/Support-Buy%20Me%20A%20Coffee-orange?style=for-the-badge)](https://buymeacoffee.com/joemaddalone)
 
 
-## Requirements
+</div>
 
-- **Node v20+**
+> **Note**
+> This application connects to one or more Plex or Jellyfin Media Servers, imports movie and TV show libraries, and lets you replace movie, show and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
+
+
+## Key Features
+
+- **Handles Multiple Servers**: Add as many Plex and Jellyfin servers as you like
+- **Fast Import**: Vogon does not store image files so reset your libraries as often as you like
+- **Sourcing**: Vogon currently supports TMDB, Fanart.tv, and ThePosterDB.  Plenty of options to choose from.
+- **Update Everything**: Update Movie posters and backdrops, TV Show posters and backdrops, and Season posters.
+
+## Usage
+
 - **Plex or Jellyfin Server**
   - Plex
     - **Plex token**: [How to find your token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/)
@@ -19,26 +33,92 @@ This application connects to one or more Plex or Jellyfin Media Servers, imports
    - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
 
 
-[Support Open Source](https://buymeacoffee.com/joemaddalone)
+## 🛠️ Deployment Guide
 
+### Docker Deployment
+
+Deploy using Docker for easy containerized hosting:
+
+```bash
+# Clone the repository
+git clone https://github.com/joemaddalone/vogon.git && cd vogon
+
+# Build and start the container
+docker-compose up -d --build
+
+# Access the application at http://localhost:3000 (or your configured port)
+```
+
+### Production Build
+
+```bash
+# Clone the repository
+git clone https://github.com/joemaddalone/vogon.git && cd vogon
+
+# Install dependencies
+npm install
+
+# Set up the database
+npm run db:generate
+
+# Build the application
+npm run build
+
+# Start production server
+npm start
+
+# Open your browser at http://localhost:3000
+```
 
 https://github.com/user-attachments/assets/d9803c83-92da-44b0-9332-5e4aaa1683fe
 
+---
+
+## Development Guide
+
+### Local Development Requirements
+
+- **Node v20+**
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/joemaddalone/vogon.git && cd vogon
+
+# Install dependencies
+npm install
+
+# Set up the database
+npm run db:generate
+
+# Start the development server
+npm run dev
+
+# Open your browser at http://localhost:3000
+```
 
 
-## Getting Started
-1. Clone this repo: `git clone https://github.com/joemaddalone/vogon.git`
-2. `cd vogon`
-3. Install dependencies: `npm install`
-4. Prepare the database `npm run db:generate`
-5. Build the production optimized app: `npm run build`
-6. Start the server: `npm run start`
+[Support Open Source](https://buymeacoffee.com/joemaddalone)
 
 
-## Useful Scripts
 
-- `npm run dev` – Next.js development server
-- `npm run build` – production build
-- `npm run start` – run the production build
-- `npm run lint` – lint the codebase
-- `npm run db:generate` – run initial sqlite database setup
+---
+
+## Support the Project
+
+Your support helps maintain and improve this project! Please consider:
+
+- [Buy me a coffee](https://www.buymeacoffee.com/joemaddalone)
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
