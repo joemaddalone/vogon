@@ -3,11 +3,19 @@ import SQLite from 'better-sqlite3';
 import { Kysely, SqliteDialect } from 'kysely';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const dbPath = join(__dirname, '../src/db/dev.db');
+const dbDir = dirname(dbPath);
+
+// Ensure directory exists
+if (!existsSync(dbDir)) {
+    await mkdir(dbDir, { recursive: true });
+}
 
 const dialect = new SqliteDialect({
 	database: new SQLite(dbPath),

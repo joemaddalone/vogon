@@ -18,7 +18,7 @@ import {
   Session,
 } from "./types";
 
-const host = "http://localhost:6001";
+const host = "http://localhost:3000";
 
 const tryCatch = async function <T>(
   promise: Promise<Response>

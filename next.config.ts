@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   reactStrictMode: true,
   serverExternalPackages: ["better-sqlite3"],
-  devIndicators: {},
+  output: "standalone",
   images: {
     remotePatterns: [
       {
