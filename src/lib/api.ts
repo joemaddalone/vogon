@@ -18,7 +18,9 @@ import {
   Session,
 } from "./types";
 
-const host = "http://localhost:3000";
+const h = process.env.HOST || "localhost";
+const p = process.env.PORT || 3000;
+const host = `http://${h}:${p}`;
 
 const tryCatch = async function <T>(
   promise: Promise<Response>
