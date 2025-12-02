@@ -1,12 +1,14 @@
 services:
   vogon:
-    image: ghcr.io/joemaddalone/vogon:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: vogon
     restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
-      - ./vogon/data:/app/src/db
+      - ./data:/app/src/db
     # environment:
     #   - TMDB_API_KEY=
     #   - FANART_API_KEY=

@@ -33,21 +33,48 @@
    - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
 
 
-## 🛠️ Deployment Guide
+## Deployment Guide
 
 ### Docker Deployment
 
-Deploy using Docker for easy containerized hosting:
+docker-compose.yml example (aka just adding the thing to your home lab / media server)
+
+```yaml
+services:
+  vogon:
+    image: ghcr.io/joemaddalone/vogon:latest
+    container_name: vogon
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./vogon/data:/app/src/db
+    # environment:
+    #   - TMDB_API_KEY=
+    #   - FANART_API_KEY=
+    #   - THEPOSTERDB_EMAIL=
+    #   - THEPOSTERDB_PASSWORD=
+    #   - REMOVE_OVERLAYS=true
+```
+
+## Local Guide
+
+Build using Docker for local containerized hosting:
 
 ```bash
 # Clone the repository
 git clone https://github.com/joemaddalone/vogon.git && cd vogon
 
 # Build and start the container
-docker-compose up -d --build
+docker compose -f docker-compose-dev.yml up -d --build
 
 # Access the application at http://localhost:3000 (or your configured port)
 ```
+
+### Local Development Requirements
+
+- **Node v20+**
+
 
 ### Production Build
 
@@ -74,13 +101,7 @@ https://github.com/user-attachments/assets/d9803c83-92da-44b0-9332-5e4aaa1683fe
 
 ---
 
-## Development Guide
-
-### Local Development Requirements
-
-- **Node v20+**
-
-### Local Development
+### Dev Build
 
 ```bash
 # Clone the repository
