@@ -18,9 +18,13 @@ import {
   Session,
 } from "./types";
 
-const h = process.env.HOST || "localhost";
-const p = process.env.PORT || 3000;
-const host = `http://${h}:${p}`;
+// Detect host and port for API calls
+// Client-side (browser): Use relative URLs so browser uses whatever port it's accessing (5150 in Docker)
+// Server-side: Use localhost with PORT env var (3000 in Docker, internal container port)
+const isClient = typeof window !== "undefined";
+const host = isClient
+  ? "" // Relative URL - browser will use current host/port
+  : `http://${process.env.HOST || "localhost"}:${process.env.PORT || 3000}`;
 
 const tryCatch = async function <T>(
   promise: Promise<Response>
