@@ -28,9 +28,9 @@ export const MediaHeader = ({
     mediaType === "season"
       ? `/show/${(media as unknown as Media)?.parentRatingKey}`
       : "";
-  // Format duration from milliseconds to hours and minutes
-  const formatDuration = (ms: number) => {
-    const minutes = Math.floor(ms / 60000);
+  // Format duration from seconds to hours and minutes
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return hours > 0 ? `${hours}h ${remainingMinutes}m` : `${minutes}m`;
