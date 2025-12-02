@@ -1,0 +1,29 @@
+services:
+  vogon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vogon
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/src/db
+    # environment:
+    #   - TMDB_API_KEY=
+    #   - FANART_API_KEY=
+    #   - THEPOSTERDB_EMAIL=
+    #   - THEPOSTERDB_PASSWORD=
+    #   - REMOVE_OVERLAYS=true
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
