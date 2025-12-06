@@ -80,7 +80,7 @@ export class PlexClient {
   /**
    * Get detailed metadata for a specific movie
    */
-  async getMovieDetails(
+  async getLibraryItemDetails(
     ratingKey: string
   ): Promise<Partial<PlexMovieMetadata>> {
     const config = await this.config();

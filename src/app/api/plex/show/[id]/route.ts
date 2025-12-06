@@ -20,7 +20,7 @@ export async function GET(
   const mediaServer = new MediaServerClient(config.type!);
   try {
     const { id } = await params;
-    const show = await mediaServer.getMovieDetails(id);
+    const show = await mediaServer.getLibraryItemDetails(id);
     const seasons = await DM.plex.season.byShow(id);
 
     const data = {

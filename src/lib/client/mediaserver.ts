@@ -283,8 +283,8 @@ export class MediaServerClient {
   /**
    * Get detailed metadata for a specific movie (normalized)
    */
-  async getMovieDetails(itemId: string): Promise<NormalizedMovieDetails> {
-    const details = await this.client.getMovieDetails(itemId);
+  async getLibraryItemDetails(itemId: string): Promise<NormalizedMovieDetails> {
+    const details = await this.client.getLibraryItemDetails(itemId);
     if (this.type === "plex") {
       return this.normalizePlexMovieDetails(
         details as Partial<PlexMovieMetadata>

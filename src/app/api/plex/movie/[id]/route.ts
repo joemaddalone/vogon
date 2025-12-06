@@ -19,7 +19,7 @@ export async function GET(
   const mediaServer = new MediaServerClient(config.type!);
   try {
     const { id } = await params;
-    const movie = await mediaServer.getMovieDetails(id);
+    const movie = await mediaServer.getLibraryItemDetails(id);
 
     return NextResponse.json({
       data: movie,

@@ -94,7 +94,7 @@ export class JellyfinClient {
   /**
    * Get detailed metadata for a specific movie
    */
-  async getMovieDetails(
+  async getLibraryItemDetails(
     itemId: string
   ): Promise<Partial<JellyfinMovieMetadata>> {
     const config = await this.config();
@@ -313,7 +313,7 @@ export class JellyfinClient {
 
     try {
       // Get current item metadata
-      const item = await this.getMovieDetails(itemId);
+      const item = await this.getLibraryItemDetails(itemId);
 
       // Update with locked image field
       const response = await fetch(url, {
@@ -345,7 +345,7 @@ export class JellyfinClient {
 
     try {
       // Get current item metadata
-      const item = await this.getMovieDetails(itemId);
+      const item = await this.getLibraryItemDetails(itemId);
 
       // Update with locked image field
       const response = await fetch(url, {

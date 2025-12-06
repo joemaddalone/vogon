@@ -15,7 +15,7 @@ export default async function MoviePage(props: PageProps<"/movie/[id]">) {
     return <div className="flex items-center justify-center min-h-[30vh]">No config found</div>
   }
   const mediaServer = new MediaServerClient(config.type!);
-  const media = (await mediaServer.getMovieDetails(id)) as NormalizedMovieDetails;
+  const media = (await mediaServer.getLibraryItemDetails(id)) as NormalizedMovieDetails;
   if(!media) {
     return <div className="flex items-center justify-center min-h-[30vh]">
       Dang we could not find that one, perhaps it&apos;s in another server?
