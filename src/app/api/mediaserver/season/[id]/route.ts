@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
+import { dataManager as DM } from "@/lib/client/database";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
 
 /**
- * GET /api/plex/library/[libraryKey]
- * Retrieve all movies from a specific Plex library
+ * GET /api/mediaserver/season/[id]/details
+ * Get movie details from the media server
  */
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ libraryKey: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const config = await getClients();
   if(!config) {
@@ -18,19 +19,20 @@ export async function GET(
   }
   const mediaServer = new MediaServerClient(config.type!);
   try {
-    const { libraryKey } = await params;
-    const movies = await mediaServer.getLibraryItems(libraryKey);
+    const { id } = await params;
+    const show = await mediaServer.getLibraryItemDetails(id);
+    const episodes = await DM.plex.episode.bySeason(id);
+
+    const data = {...show, episodes: episodes };
 
     return NextResponse.json({
-      success: true,
-      data: movies,
+      data: data,
     });
   } catch (error) {
-    console.error("Error fetching Plex library movies:", error);
+    console.error("Error fetching movie details:", error);
     return NextResponse.json(
       {
-        success: false,
-        error: "Failed to fetch movies from Plex library.",
+        error: "Failed to fetch movie details",
       },
       { status: 500 }
     );

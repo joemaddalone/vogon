@@ -24,19 +24,19 @@ export const PosterPicker = ({
   const updatePoster = async (posterUrl: string, index: number) => {
     setBusyIndex(index);
 
-    await api.plex.poster(ratingKey, posterUrl);
+    await api.mediaserver.poster(ratingKey, posterUrl);
     if(mediaType === "movie") {
-      const movie = await api.plex.movieDetail(ratingKey);
+      const movie = await api.mediaserver.movieDetail(ratingKey);
       if(movie) {
         await api.data.plex.updatePoster(mediaType, ratingKey, posterUrl || "");
       }
     } else if(mediaType === "show") {
-      const show = await api.plex.showDetail(ratingKey);
+      const show = await api.mediaserver.showDetail(ratingKey);
       if(show) {
         await api.data.plex.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
       }
     } else if(mediaType === "season") {
-      const season = await api.plex.seasonDetail(ratingKey);
+      const season = await api.mediaserver.seasonDetail(ratingKey);
       if(season) {
         await api.data.plex.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
       }

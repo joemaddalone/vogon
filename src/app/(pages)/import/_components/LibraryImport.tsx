@@ -15,7 +15,7 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
     setImporting(libraryKey);
     setError(null);
 
-    const { data, error } = await api.plex.library(libraryKey);
+    const { data, error } = await api.mediaserver.library(libraryKey);
     if (error) {
       setError(error.message);
       setImporting(null);

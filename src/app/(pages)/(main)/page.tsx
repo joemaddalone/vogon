@@ -6,7 +6,7 @@ import Home from "./_components/Home";
 
 export default async function HomePage() {
   const stats = await api.data.plex.stats();
-  const plexConnection = api.plex.test();
+  const plexConnection = api.mediaserver.test();
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center">loading..</div>}>

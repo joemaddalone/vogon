@@ -24,14 +24,14 @@ export const BackdropPicker = ({
   const updateBackdrop = async (backdropUrl: string, index: number) => {
     setBusyIndex(index);
 
-    await api.plex.backdrop(ratingKey, backdropUrl);
+    await api.mediaserver.backdrop(ratingKey, backdropUrl);
     if(mediaType === "movie") {
-      const movie = await api.plex.movieDetail(ratingKey);
+      const movie = await api.mediaserver.movieDetail(ratingKey);
       if(movie) {
         await api.data.plex.updateBackdrop(mediaType, ratingKey, movie.data?.artUrl || "");
       }
     } else {
-      const show = await api.plex.showDetail(ratingKey);
+      const show = await api.mediaserver.showDetail(ratingKey);
       if(show) {
         await api.data.plex.updateBackdrop(mediaType, ratingKey, show.data?.artUrl || "");
       }

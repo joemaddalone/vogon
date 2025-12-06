@@ -3,8 +3,8 @@ import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
 
 /**
- * GET /api/plex/movie/[id]/details
- * Get movie details from local database
+ * GET /api/mediaserver/movie/[id]/details
+ * Get movie details from the media server
  */
 export async function GET(
   request: Request,

@@ -44,15 +44,15 @@ type MediaConfig = {
 
 const mediaMethods: Record<MediaType, MediaConfig> = {
   movie: {
-    plex: api.plex.movieDetail,
+    plex: api.mediaserver.movieDetail,
     fanart: api.fanart.moviePosters,
   },
   show: {
-    plex: api.plex.showDetail,
+    plex: api.mediaserver.showDetail,
     fanart: api.fanart.showPosters,
   },
   season: {
-    plex: api.plex.seasonDetail,
+    plex: api.mediaserver.seasonDetail,
     fanart: api.fanart.showPosters,
   },
 };

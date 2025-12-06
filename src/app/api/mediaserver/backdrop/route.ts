@@ -3,8 +3,8 @@ import { getClients } from "@/lib/client/getClients";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 
 /**
- * POST /api/plex/backdrop
- * Update a movie's backdrop in Plex
+ * POST /api/mediaserver/backdrop
+ * Update a movie's backdrop in the media server
  */
 export async function POST(request: Request) {
   const config = await getClients();
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       data: "Backdrop updated successfully",
     });
   } catch (error) {
-    console.error("Error updating Plex movie backdrop:", error);
+    console.error("Error updating media server movie backdrop:", error);
     return NextResponse.json(
       {
         error: "Failed to update movie backdrop.",

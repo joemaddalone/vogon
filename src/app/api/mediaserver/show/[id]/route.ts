@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { dataManager as DM } from "@/lib/client/database";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 import { getClients } from "@/lib/client/getClients";
+import  { dataManager as DM } from "@/lib/client/database";
 
 /**
- * GET /api/plex/season/[id]/details
- * Get movie details from local database
+ * GET /api/mediaserver/show/[id]/details
+ * Get movie details from the media server
  */
 export async function GET(
   request: Request,
@@ -21,9 +21,12 @@ export async function GET(
   try {
     const { id } = await params;
     const show = await mediaServer.getLibraryItemDetails(id);
-    const episodes = await DM.plex.episode.bySeason(id);
+    const seasons = await DM.plex.season.byShow(id);
 
-    const data = {...show, episodes: episodes };
+    const data = {
+      ...show,
+      seasons: seasons,
+    };
 
     return NextResponse.json({
       data: data,

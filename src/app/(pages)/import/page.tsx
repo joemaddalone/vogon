@@ -5,7 +5,7 @@ import { Libraries } from "./_components/Libraries";
 import { api } from "@/lib/api";
 
 export default async function ImportLibraryPage() {
-  const libs = api.plex.libraries();
+  const libs = api.mediaserver.libraries();
 
   return (
     <Suspense

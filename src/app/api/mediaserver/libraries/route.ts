@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { getClients } from "@/lib/client/getClients";
 import { MediaServerClient } from "@/lib/client/mediaserver";
 /**
- * GET /api/plex/libraries
- * Retrieve all libraries from the Plex server
+ * GET /api/mediaserver/libraries
+ * Retrieve all libraries from the media server
  */
 export async function GET() {
   const config = await getClients();
@@ -25,10 +25,10 @@ export async function GET() {
       data: mediaLibraries,
     });
   } catch (error) {
-    console.error("Error fetching Plex libraries:", error);
+    console.error("Error fetching media server libraries:", error);
     return NextResponse.json(
       {
-        error: "Failed to fetch Plex libraries. Check your Plex server configuration.",
+        error: "Failed to fetch media server libraries. Check your media server configuration.",
       },
       { status: 500 }
     );

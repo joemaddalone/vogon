@@ -213,32 +213,32 @@ export const api = {
       },
     },
   },
-  plex: {
+  mediaserver: {
     libraries: async (): Promise<ApiResponse<PlexLibraryResponse[]>> => {
-      return await tryCatch(fetch(`${host}/api/plex/libraries`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/libraries`));
     },
     library: async (libraryKey: string): Promise<ApiResponse<Media[]>> => {
-      return await tryCatch(fetch(`${host}/api/plex/library/${libraryKey}`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/library/${libraryKey}`));
     },
     movieDetail: async (
       id: string
     ): Promise<ApiResponse<PlexMovieMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/movie/${id}`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/movie/${id}`));
     },
     showDetail: async (id: string): Promise<ApiResponse<PlexShowMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/show/${id}`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/show/${id}`));
     },
     seasonDetail: async (
       id: string
     ): Promise<ApiResponse<PlexSeasonMetadata>> => {
-      return await tryCatch(fetch(`${host}/api/plex/season/${id}`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/season/${id}`));
     },
     poster: async (
       ratingKey: string,
       posterUrl: string
     ): Promise<ApiResponse<void>> => {
       return await tryCatch(
-        fetch(`${host}/api/plex/poster`, {
+        fetch(`${host}/api/mediaserver/poster`, {
           method: "POST",
           body: JSON.stringify({ ratingKey, posterUrl }),
         })
@@ -249,7 +249,7 @@ export const api = {
       backdropUrl: string
     ): Promise<ApiResponse<void>> => {
       return await tryCatch(
-        fetch(`${host}/api/plex/backdrop`, {
+        fetch(`${host}/api/mediaserver/backdrop`, {
           method: "POST",
           body: JSON.stringify({ ratingKey, backdropUrl }),
         })
@@ -257,14 +257,14 @@ export const api = {
     },
     removeOverlay: async (ratingKey: string): Promise<ApiResponse<void>> => {
       return await tryCatch(
-        fetch(`${host}/api/plex/overlay`, {
+        fetch(`${host}/api/mediaserver/overlay`, {
           method: "POST",
           body: JSON.stringify({ ratingKey }),
         })
       );
     },
     test: async (): Promise<ApiResponse<boolean>> => {
-      return await tryCatch(fetch(`${host}/api/plex/test`));
+      return await tryCatch(fetch(`${host}/api/mediaserver/test`));
     },
   },
 };
