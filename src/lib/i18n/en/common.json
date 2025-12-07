@@ -1,0 +1,11 @@
+{
+	"movie": "{count, plural, =0 {movies} =1 {movie} other {movies}}",
+	"show": "{count, plural, =0 {shows} =1 {show} other {shows}}",
+	"noMovies": "No movies found",
+	"noShows": "No shows found",
+	"noItemsFound": "No items found matching your search",
+	"noItemsInLibrary": "No items in library",
+	"importLibraries": "Import Libraries",
+	"importMovies": "Import Movies",
+	"importShows": "Import Shows"
+}

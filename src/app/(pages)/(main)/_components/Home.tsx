@@ -7,7 +7,7 @@ import { LibraryCard } from "./LibraryCard";
 import { FadeIn } from "@/components/FadeIn";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
+import { useTranslations } from "next-intl";
 export default function Home({
   stats,
   plexConnection,
@@ -15,6 +15,7 @@ export default function Home({
   stats: ApiResponse<{ movies: number; shows: number }>;
   plexConnection: Promise<ApiResponse<boolean>>;
 }) {
+  const t = useTranslations();
   const statsData = stats.data || { movies: 0, shows: 0 };
   const { data: successfulConnection } = use(plexConnection);
   const router = useRouter();
@@ -27,10 +28,7 @@ export default function Home({
       {/* Hero Section */}
       <FadeIn className="text-center mb-20 mt-16">
         <h1 className="title">vogon</h1>
-        <p className="description">
-          Discover and update your media collection with beautiful, high-quality
-          poster artwork
-        </p>
+        <p className="description">{t("home.description")}</p>
       </FadeIn>
 
       {/* Library Cards */}
@@ -40,8 +38,14 @@ export default function Home({
           {statsData?.movies === 0 ? (
             <div className="empty-card">
               <Film className="library-icon" />
-              <p>No movie libraries found</p>
-              <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
+              <p>{t("common.noMovies")}</p>
+              <Button
+                className="mt-4"
+                size="sm"
+                onClick={() => router.push("/import")}
+              >
+                {t("common.importLibraries")}
+              </Button>
             </div>
           ) : (
             <LibraryCard
@@ -57,8 +61,14 @@ export default function Home({
           {statsData?.shows === 0 ? (
             <div className="empty-card">
               <TvIcon className="library-icon" />
-              <p>No show libraries found</p>
-              <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
+              <p>{t("common.noShows")}</p>
+              <Button
+                className="mt-4"
+                size="sm"
+                onClick={() => router.push("/import")}
+              >
+                {t("common.importLibraries")}
+              </Button>
             </div>
           ) : (
             <LibraryCard
