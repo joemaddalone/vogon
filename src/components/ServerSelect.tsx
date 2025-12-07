@@ -59,7 +59,7 @@ export function ServerSelector({
       <SelectContent>
         {servers.map((server) => (
           <SelectItem key={server.id.toString()} value={server.id.toString()}>
-            <div className="flex items-center gap-2">
+            <div data-testid={`server-select-item-${server.id}`}  className="flex items-center gap-2">
               <span>{server.name}</span>
               <span className="text-xs text-muted-foreground">
                 ({server.type})
