@@ -15,8 +15,9 @@ import { Updateable } from "kysely";
 import { Configuration } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { ConfigField } from "./ConfigField";
-
+import { useTranslations } from "next-intl";
 export default function ConfigForm({ config }: { config: Configuration }) {
+  const t = useTranslations();
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -46,7 +47,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
       }
       setMessage({
         type: "success",
-        text: "Configuration saved successfully",
+        text: t("config.savedSuccessfully"),
       });
       router.prefetch("/");
       router.prefetch("/movie");
@@ -64,69 +65,65 @@ export default function ConfigForm({ config }: { config: Configuration }) {
         <FieldGroup className="p-4"></FieldGroup>
         <FieldGroup className="p-4 mt-5 bg-muted">
           <FieldLegend>
-            API Configuration{" "}
-            <i className="text-sm text-orange-200">
-              (Environment variables will take precedence here.)
+            {t("config.apiConfiguration")}
+            <i className="text-sm text-orange-200 pl-3">
+              {t("config.envPrecedence")}
             </i>
           </FieldLegend>
 
           <ConfigField
             configData={configData as Configuration}
-            label="TMDB API Key (required)"
-            hint="env. TMDB_API_KEY"
+            label={t("config.tmdb.label")}
+            hint={t("config.tmdb.hint")}
             dataKey="tmdbApiKey"
-            placeholder="Enter your TMDB API key"
+            placeholder={t("config.tmdb.placeholder")}
             required
           >
-            The Movie Database (TMDB) API key for poster lookups.{" "}
             <a
               href="https://www.themoviedb.org/settings/api"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              Get your API key
+              {t("config.getApiKey")}
             </a>
           </ConfigField>
 
           <ConfigField
             configData={configData as Configuration}
-            label="Fanart.tv API Key (optional)"
-            hint="env. FANART_API_KEY"
+            label={t("config.fanart.label")}
+            hint={t("config.fanart.hint")}
             dataKey="fanartApiKey"
-            placeholder="Enter your Fanart.tv API key (optional)"
+            placeholder={t("config.fanart.placeholder")}
             required={false}
           >
-            Optional: Fanart.tv API key for additional poster sources.{" "}
             <a
               href="https://fanart.tv/get-an-api-key/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              Get your API key
+              {t("config.getApiKey")}
             </a>
           </ConfigField>
           <ConfigField
             configData={configData as Configuration}
-            label="ThePosterDB Email (optional)"
-            hint="env. THEPOSTERDB_EMAIL"
+            label={t("config.posterDb.label")}
+            hint={t("config.posterDb.hint")}
             dataKey="thePosterDbEmail"
-            placeholder="Enter your ThePosterDB email"
+            placeholder={t("config.posterDb.placeholder")}
             required={false}
           >
-            Your ThePosterDB email for poster lookups.
           </ConfigField>
           <ConfigField
             configData={configData as Configuration}
-            label="ThePosterDB Password (optional)"
-            hint="env. THEPOSTERDB_PASSWORD"
+            label={t("config.posterDbPassword.label")}
+            hint={t("config.posterDbPassword.hint")}
             dataKey="thePosterDbPassword"
-            placeholder="Enter your ThePosterDB password"
+            placeholder={t("config.posterDbPassword.placeholder")}
             type="password"
             required={false}
           >
-            Your ThePosterDB password for poster lookups.
           </ConfigField>
           <Field>
             <div className="flex items-center gap-2">
@@ -138,15 +135,15 @@ export default function ConfigForm({ config }: { config: Configuration }) {
                 className="h-4 w-4 rounded border-gray-300"
               />
               <FieldLabel htmlFor="removeOverlays" className="mb-0!">
-                Remove Overlays{" "}
+                {t("config.overlays.label")}
                 <span className="text-xs text-muted-foreground">
-                  env. REMOVE_OVERLAYS
+                  {t("config.overlays.hint")}
                 </span>
               </FieldLabel>
             </div>
             <FieldDescription className="text-sm!">
-              Remove Plex overlay labels when updating posters{" "}
-              <span className="font-bold">(useful for Kometa/PMM users)</span>
+              {t("config.overlays.description")}
+              <span className="font-bold pl-2">({t("config.overlays.description2")})</span>
             </FieldDescription>
           </Field>
           {message && (
@@ -165,10 +162,10 @@ export default function ConfigForm({ config }: { config: Configuration }) {
               {pending ? (
                 <>
                   <Spinner className="mr-2" />
-                  Saving...
+                  {t("common.saving")}
                 </>
               ) : (
-                "Save API Configuration"
+                t("config.saveApi")
               )}
             </Button>
           </div>

@@ -24,6 +24,7 @@ import { Insertable, Selectable, Server } from "@/lib/types";
 import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import { useTranslations } from "next-intl";
 
 const JELLYFIN_ENABLED = true;
 
@@ -32,6 +33,7 @@ export const ServerForm = ({
 }: {
   data: Selectable<Server> | undefined;
 }) => {
+  const t = useTranslations();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [serverType, setServerType] = useState(data?.type || "");
@@ -64,7 +66,7 @@ export const ServerForm = ({
 
   const handleDelete = () => {
     if (data?.id) {
-      if (window.confirm("Are you sure you want to delete this server?")) {
+      if (window.confirm(t("config.deleteServerConfirm"))) {
         api.server.delete(data.id);
         router.refresh();
       }
@@ -77,77 +79,77 @@ export const ServerForm = ({
         <form action={formAction}>
           <DialogHeader>
             <DialogTitle className="text-2xl! pb-0! mb-0! font-bold">
-              {data?.name ? "Edit" : "Add"} Server
+              {data?.name ? t("config.editServer") : t("config.addServer")}
             </DialogTitle>
             <DialogDescription className="text-sm! mb-4!">
-              {data?.name ? "Edit" : "Add"} the server configuration.
+              {data?.name ? t("config.editServerDescription") : t("config.addServerDescription")}
             </DialogDescription>
           </DialogHeader>
 
           {JELLYFIN_ENABLED ? (
             <Field className="mb-4">
-              <FieldLabel htmlFor="type">Server Type</FieldLabel>
+              <FieldLabel htmlFor="type">{t("config.serverType")}</FieldLabel>
               <Select
                 name="type"
                 defaultValue={serverType}
                 onValueChange={setServerType}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Server Type" />
+                  <SelectValue placeholder={t("config.selectServerType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="plex">Plex</SelectItem>
-                  <SelectItem value="jellyfin">Jellyfin</SelectItem>
+                  <SelectItem value="plex">{t("config.plex")}</SelectItem>
+                  <SelectItem value="jellyfin">{t("config.jellyfin")}</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
           ) : null}
           <Field className="mb-4">
-            <FieldLabel htmlFor="name">Server Name</FieldLabel>
+            <FieldLabel htmlFor="name">{t("config.serverName")}</FieldLabel>
             <Input
               className=""
               id="name"
               type="text"
               name="name"
               defaultValue={data?.name || ""}
-              placeholder="Name your server"
+              placeholder={t("config.serverNamePlaceholder")}
               required
             />
           </Field>
           <Field className="mb-4">
-            <FieldLabel htmlFor="name">Server URL</FieldLabel>
+            <FieldLabel htmlFor="name">{t("config.serverUrl")}</FieldLabel>
             <Input
               className=""
               id="name"
               type="text"
               name="url"
               defaultValue={data?.url || ""}
-              placeholder="http://192.168.1.2:32400"
+              placeholder={t("config.serverUrlPlaceholder")}
               required
             />
           </Field>
           <Field className="mb-4">
-            <FieldLabel htmlFor="name">Token</FieldLabel>
+            <FieldLabel htmlFor="name">{t("config.token")}</FieldLabel>
             <Input
               className=""
               id="name"
               type="text"
               name="token"
               defaultValue={data?.token || ""}
-              placeholder="Enter your server token"
+              placeholder={t("config.tokenPlaceholder")}
               required
             />
           </Field>
           {serverType === "jellyfin" ? (
             <Field className="mb-4">
-              <FieldLabel htmlFor="name">User ID</FieldLabel>
+              <FieldLabel htmlFor="name">{t("config.userId")}</FieldLabel>
               <Input
                 className=""
                 id="name"
                 type="text"
                 name="userid"
                 defaultValue={data?.userid || ""}
-                placeholder="Enter your server user id"
+                placeholder={t("config.userIdPlaceholder")}
                 required={serverType === "jellyfin"}
               />
             </Field>
@@ -161,7 +163,7 @@ export const ServerForm = ({
                     variant="destructive"
                     onClick={handleDelete}
                   >
-                    Delete
+                    {t("common.delete")}
                   </Button>
                 ) : null}
               </div>
@@ -170,7 +172,7 @@ export const ServerForm = ({
                   <Button variant="outline">Test Connection</Button>
                 </DialogClose> */}
                 <Button type="submit" disabled={pending}>
-                  {pending ? <Spinner /> : "Save"}
+                  {pending ? <Spinner /> : t("common.save")}
                 </Button>
               </div>
             </div>
@@ -179,7 +181,7 @@ export const ServerForm = ({
       </DialogContent>
       <DialogTrigger asChild>
         <div className="border border-gray-500 rounded-md p-4 shadow-md cursor-pointer text-sm hover:bg-gray-500">
-          <span className="font-bold">{data?.name || "Add Server"}</span>
+          <span className="font-bold">{data?.name || t("config.addServer")}</span>
         </div>
       </DialogTrigger>
     </Dialog>

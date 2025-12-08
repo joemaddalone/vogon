@@ -6,11 +6,14 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Film, TvIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, index: number }) => {
 	const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
+	const t = useTranslations();
+
 	const importLibrary = async (libraryKey: string, libraryType: string) => {
     setImporting(libraryKey);
     setError(null);
@@ -36,6 +39,9 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
     }
     router.push(`/${libraryType === "movie" ? "movie" : "show"}`);
   };
+
+  const isMovie = library.type === "movie";
+
   return (
     <motion.div
       key={library.id}
@@ -47,13 +53,13 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
       <div className="absolute inset-0" />
 			{error && (
         <div className="text-red-500">
-          well shit that didnt work..
+          {t("import.importError")}
         </div>
       )}
 
       <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          {library.type === "movie" ? (
+          {isMovie ? (
             <Film className="w-8 h-8 mt-1 text-foreground/80 shrink-0" />
           ) : (
             <TvIcon className="w-8 h-8 mt-1 text-foreground/80 shrink-0" />
@@ -63,7 +69,7 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
               {library.name}
             </h3>
             <p>
-              {library.type === "movie" ? "Movie" : "TV Show"} Library
+              {t(isMovie ? "import.movieLibrary" : "import.tvShowLibrary")}
             </p>
           </div>
         </div>
@@ -76,10 +82,10 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
           {importing === library.id ? (
             <>
               <Spinner className="size-4" />
-              Importing...
+              {t("import.importing")}
             </>
           ) : (
-            `Import ${library.type === "movie" ? "Movie" : "TV Show"} Library`
+            t(isMovie ? "import.importMovieLibrary" : "import.importTvShowLibrary")
           )}
         </Button>
       </div>

@@ -18,7 +18,7 @@ export const ConfigField = ({
   dataKey: keyof Configuration;
   placeholder: string;
   required: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   type?: "text" | "password" | "email";
 }) => {
   return (
