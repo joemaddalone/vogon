@@ -13,7 +13,7 @@ import {
 } from "@/lib/types";
 import Link from "next/link";
 import { EpisodesList } from "./EpisodesList";
-
+import { useTranslations } from "next-intl";
 export const MediaDetail = ({
   posterBuilder,
   id,
@@ -30,7 +30,7 @@ export const MediaDetail = ({
   id: string;
 }) => {
   const { media, knownIds, tmdbMedia, posters, backdrops = [], mediaType } = use(posterBuilder);
-
+  const t = useTranslations();
   if (!tmdbMedia || !media || !mediaType) {
     return <TMDBError knownIds={knownIds} />;
   }
@@ -53,14 +53,14 @@ export const MediaDetail = ({
             className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
             value="posters"
           >
-            {mediaType === "season" ? "Season Posters" : "Posters"}
+            {mediaType === "season" ? t("library.seasonPosters") : t("library.posters")}
           </TabsTrigger>
           {mediaType !== "season" && (
             <TabsTrigger
               className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="backdrops"
             >
-              Backdrops
+              {t("library.backdrops")}
             </TabsTrigger>
           )}
           {hasSeasons && (
@@ -68,7 +68,7 @@ export const MediaDetail = ({
               className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="seasons"
             >
-              Seasons
+              {t("library.seasons")}
             </TabsTrigger>
           )}
           {hasEpisodes && (
@@ -76,7 +76,7 @@ export const MediaDetail = ({
               className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="episodes"
             >
-              Episodes
+              {t("library.episodes")}
             </TabsTrigger>
           )}
         </TabsList>

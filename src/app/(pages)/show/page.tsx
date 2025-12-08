@@ -17,7 +17,6 @@ export default async function ShowsPage() {
   >
     <MediaLibrarySection
       libLoader={libLoader}
-      totalLabel="shows"
       type="show"
     />
     </Suspense>

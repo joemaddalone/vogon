@@ -1,8 +1,9 @@
 "use client";
 import { NormalizedEpisode } from "@/lib/types";
 import ImageLoader from "../ImageLoader";
-
+import { useTranslations } from "next-intl";
 export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) => {
+  const t = useTranslations();
   return (
     <div>
       <ul className="backdrop-list">
@@ -21,7 +22,7 @@ export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) =>
               </div>
               <figcaption className="mt-5 text-center">
                 {episode.title}<br />
-								Season:{episode.parentIndex} Episode:{episode.index}
+								{t("library.season")}:{episode.parentIndex} {t("library.episode")}:{episode.index}
               </figcaption>
             </figure>
           </li>

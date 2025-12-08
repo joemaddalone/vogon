@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import { SearchIcon, XIcon } from "lucide-react";
-
+import { useTranslations } from "next-intl";
 export const SearchField = ({
   size = "default",
   searchQuery,
@@ -17,7 +17,7 @@ export const SearchField = ({
 }) => {
   const [localQuery, setLocalQuery] = useState(searchQuery);
   const isInternalChangeRef = useRef(false);
-
+  const t = useTranslations();
   // Debounce the search query
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -55,7 +55,7 @@ export const SearchField = ({
             className={size === "xl" ? "h-12 text-lg w-full rounded-xl rounded-r-none" : "w-full h-[42px] rounded-xl px-4 rounded-r-none"}
             type="text"
             name="query"
-            placeholder="Search by title..."
+            placeholder={t("library.searchByTitle")}
             value={localQuery}
             onChange={(e) => setLocalQuery(e.target.value)}
           />
@@ -64,7 +64,7 @@ export const SearchField = ({
               type="button"
               onClick={handleClear}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-110"
-              aria-label="Clear search"
+              aria-label={t("library.clearSearch")}
             >
               <XIcon className="h-4 w-4" />
             </button>
@@ -74,7 +74,7 @@ export const SearchField = ({
           className={size === "xl" ? "h-12 text-lg rounded-xl" : "h-[42px] rounded-xl"}
           type="button"
           variant="outline"
-          aria-label="Search"
+          aria-label={t("library.search")}
         >
           <SearchIcon className="h-4 w-4" />
         </Button>

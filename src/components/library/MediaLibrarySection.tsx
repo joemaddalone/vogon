@@ -7,19 +7,19 @@ import { LibraryError } from "@/components/library/LibraryError";
 import { Selectable, Media, ApiResponse } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
+import { useTranslations } from "next-intl";
 
 type MediaLibrarySectionProps = {
   libLoader: Promise<ApiResponse<Media[]>>;
-  totalLabel: string;
   type: "movie" | "show";
 };
 
 export const MediaLibrarySection = ({
   libLoader,
-  totalLabel,
   type,
 }: MediaLibrarySectionProps) => {
   const router = useRouter();
+  const t = useTranslations();
   const [error, setError] = useState<string | null>(null);
   const { data, error: libError } = use(libLoader);
 
@@ -33,7 +33,7 @@ export const MediaLibrarySection = ({
       router.refresh();
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Failed to reset library";
+        err instanceof Error ? err.message : t("common.failedToResetLibrary");
       setError(message);
     }
   };
@@ -42,15 +42,17 @@ export const MediaLibrarySection = ({
     return <LibraryError error={libError.message} />;
   }
 
+  const isMovie = type === "movie";
+
   return (
     <div className="max-w-7xl mx-auto mt-8 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">
-            {type === "movie" ? "Movie Library" : "Show Library"}
+            {t(isMovie ? "common.movieLibrary" : "common.showLibrary")}
           </h1>
           <p className="text-muted-foreground">
-            {data?.length} total {totalLabel}
+            {data?.length} {t("common.total")} {isMovie ? t("common.movie", { count: data?.length }) : t("common.show", { count: data?.length })}
           </p>
         </div>
       </div>
@@ -64,7 +66,7 @@ export const MediaLibrarySection = ({
 
       {data?.length > 0 && (
         <Button onClick={handleReset} variant="outline">
-          Empty this {type === "movie" ? "Movie" : "Show"} Library
+          {t(isMovie ? "common.emptyMovieLibrary" : "common.emptyShowLibrary")}
         </Button>
       )}
     </div>

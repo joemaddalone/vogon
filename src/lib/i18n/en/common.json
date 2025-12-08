@@ -11,5 +11,11 @@
 	"save": "Save",
 	"cancel": "Cancel",
 	"delete": "Delete",
-	"saving": "Saving..."
+	"saving": "Saving...",
+	"movieLibrary": "Movie Library",
+	"showLibrary": "Show Library",
+	"total": "total",
+	"emptyMovieLibrary": "Empty this Movie Library",
+	"emptyShowLibrary": "Empty this Show Library",
+	"failedToResetLibrary": "Failed to reset library"
 }

@@ -4,7 +4,7 @@ import ImageLoader from "@/components/ImageLoader";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react";
-
+import { useTranslations } from "next-intl";
 type PosterOptionProps = {
   posterUrl: string;
   previewUrl?: string;
@@ -22,6 +22,7 @@ export const PosterOption = ({
   isBusy,
   onSelect,
 }: PosterOptionProps) => {
+  const t = useTranslations();
   return (
     <motion.li
       initial={{ opacity: 0, y: 20 }}
@@ -43,7 +44,7 @@ export const PosterOption = ({
         <figcaption className="mt-5 text-center">
           {isCurrent ? (
             <span className="inline-flex items-center  bg-yellow-400/10 px-4 py-2.5 text-sm font-semibold dark:text-yellow-500 shadow-lg border border-yellow-400/30 backdrop-blur-md">
-              Current Poster
+              {t("library.currentPoster")}
             </span>
           ) : (
             <Button
@@ -56,11 +57,11 @@ export const PosterOption = ({
               {isBusy ? (
                 <>
                   <Spinner className="size-4" />
-                  Updating...
+                  {t("library.updating")}
                 </>
               ) : (
                 <>
-                  Use this poster
+                  {t("library.useThisPoster")}
                 </>
               )}
             </Button>

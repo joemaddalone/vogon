@@ -6,11 +6,12 @@ import { Spinner } from "@/components/ui/spinner";
 import { useMediaGrid } from "./MediaGridContext";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export const MediaGrid = ({ pending, itemType }: { pending: boolean, itemType: "movie" | "show" }) => {
   const { paginatedMovies, view, totalFilteredCount, items } = useMediaGrid();
   const router = useRouter();
-
+  const t = useTranslations();
   return (
     <div className="w-full">
       <MediaGridControl />
@@ -23,14 +24,14 @@ export const MediaGrid = ({ pending, itemType }: { pending: boolean, itemType: "
 
       {!pending && items.length === 0 && (
         <div className="text-center py-12">
-          <p className="mx-auto">No items in library</p>
+          <p className="mx-auto">{t("library.noItemsInLibrary")}</p>
           <Button className="mt-4" size="sm" onClick={() => router.push("/import")}>Import Libraries</Button>
         </div>
       )}
 
       {!pending && items.length > 0 && totalFilteredCount === 0 && (
         <div className="text-center py-12">
-          <p className="mx-auto">No items found matching your search</p>
+          <p className="mx-auto">{t("library.noItemsFound")}</p>
         </div>
       )}
 
