@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/joemaddalone/vogon/compare/v1.1.0...v1.2.0) (2025-12-08)
+
+
+### Features
+
+* **i18n:** i18n applied to config and import components ([fb1e661](https://github.com/joemaddalone/vogon/commit/fb1e6610f1dafe3a10aaab8a7c08686fe756735d))
+
 # [1.1.0](https://github.com/joemaddalone/vogon/compare/v1.0.0...v1.1.0) (2025-12-07)
 
 
