@@ -5,7 +5,6 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import { LayoutGridIcon, Rows3Icon, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { SearchField } from "./SearchField";
 import { useMediaGrid } from "./MediaGridContext";
-import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 export const MediaGridControl = () => {
