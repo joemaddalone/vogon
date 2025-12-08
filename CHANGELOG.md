@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/joemaddalone/vogon/compare/v1.2.1...v1.3.0) (2025-12-08)
+
+
+### Features
+
+* **i18n:** apply i18n to media components ([a37d589](https://github.com/joemaddalone/vogon/commit/a37d589d07fec2629796c8d7ca721f3034d47c24))
+
 ## [1.2.1](https://github.com/joemaddalone/vogon/compare/v1.2.0...v1.2.1) (2025-12-08)
 
 
