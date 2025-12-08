@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/joemaddalone/vogon/compare/v1.2.0...v1.2.1) (2025-12-08)
+
+
+### Bug Fixes
+
+* **summary:** fixed jellyfin summary not populating ([9768dbf](https://github.com/joemaddalone/vogon/commit/9768dbfc31b0d35e808a2f26594e7dca5bdb91c0))
+
 # [1.2.0](https://github.com/joemaddalone/vogon/compare/v1.1.0...v1.2.0) (2025-12-08)
 
 
