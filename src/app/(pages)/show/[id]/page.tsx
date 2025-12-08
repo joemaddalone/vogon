@@ -8,7 +8,7 @@ import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { getClients } from "@/lib/client/getClients";
 import { MediaServerClient } from "@/lib/client/mediaserver";
-
+import { ItemNotFound } from "@/components/libraryitem/ItemNotFound";
 export default async function ShowPage(props: PageProps<"/show/[id]">) {
   const { id } = await props.params;
   const config = await getClients();
@@ -18,9 +18,7 @@ export default async function ShowPage(props: PageProps<"/show/[id]">) {
   const mediaServer = new MediaServerClient(config.type!);
   const media = (await mediaServer.getLibraryItemDetails(id)) as NormalizedMovieDetails;
   if(!media) {
-    return <div className="flex items-center justify-center min-h-[30vh]">
-      Dang we could not find that one, perhaps it&apos;s in another server?
-    </div>
+    return <ItemNotFound />
   }
 
   const posterBuilder = buildPosters(id, "show");

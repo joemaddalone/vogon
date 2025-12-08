@@ -7,7 +7,7 @@ import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { dataManager as DM } from "@/lib/client/database";
-
+import { ItemNotFound } from "@/components/libraryitem/ItemNotFound";
 export default async function SeasonPage(
   props: PageProps<"/show/[id]/[season]">
 ) {
@@ -56,9 +56,7 @@ export default async function SeasonPage(
     );
   } catch (_) {
     return (
-      <div className="flex items-center justify-center min-h-[30vh]">
-        Dang we could not find that one, perhaps it&apos;s in another server?
-      </div>
+      <ItemNotFound />
     );
   }
 }
