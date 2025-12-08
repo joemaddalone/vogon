@@ -18,7 +18,6 @@ export const MediaGridControl = () => {
     sortDirection,
     setSortField,
     toggleSortDirection,
-    totalFilteredCount
   } = useMediaGrid();
   const t = useTranslations();
   const handleSortFieldChange = (field: "title" | "year") => {
@@ -91,16 +90,6 @@ export const MediaGridControl = () => {
           </ButtonGroup>
         </div>
       </div>
-
-      {/* Results count */}
-      <motion.div
-        className="mt-4 text-sm text-muted-foreground font-medium"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        {totalFilteredCount} {t("library.item", { count: totalFilteredCount })}
-      </motion.div>
     </div>
   );
 };

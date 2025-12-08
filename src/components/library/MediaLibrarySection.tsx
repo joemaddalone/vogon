@@ -51,9 +51,6 @@ export const MediaLibrarySection = ({
           <h1 className="text-4xl font-bold mb-2">
             {t(isMovie ? "common.movieLibrary" : "common.showLibrary")}
           </h1>
-          <p className="text-muted-foreground">
-            {data?.length} {t("common.total")} {isMovie ? t("common.movie", { count: data?.length }) : t("common.show", { count: data?.length })}
-          </p>
         </div>
       </div>
 
