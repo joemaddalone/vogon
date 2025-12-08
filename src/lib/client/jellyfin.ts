@@ -75,7 +75,7 @@ export class JellyfinClient {
       IncludeItemTypes: "Series,Movie",
       ParentId: libraryId,
       Recursive: "true",
-      // Fields: "ProviderIds,Overview,ImageTags,BackdropImageTags",
+      Fields: "Overview,ImageTags,BackdropImageTags",
     });
     const items = response.Items || [];
 
