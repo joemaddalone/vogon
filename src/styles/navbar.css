@@ -1,0 +1,11 @@
+.navbar-link-item {
+	@apply flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out;
+}
+
+.navbar-link-item.active {
+	@apply bg-primary text-primary-foreground shadow-lg shadow-primary/20;
+}
+
+.navbar-link-item.inactive {
+	@apply hover:bg-muted/50 text-foreground/70 hover:text-foreground;
+}

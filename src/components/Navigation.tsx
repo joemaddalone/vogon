@@ -7,7 +7,7 @@ import { TooltipElement } from "@/components/TooltipElement";
 import { ServerSelector } from "@/components/ServerSelect";
 import { Session, Selectable } from "@/lib/types";
 import { Server } from "@/lib/types";
-
+import { useTranslations } from "next-intl";
 export function Navigation({
   session,
   servers,
@@ -16,7 +16,7 @@ export function Navigation({
   servers?: Selectable<Server>[];
 }) {
   const pathname = usePathname();
-
+  const t = useTranslations();
   const isActive = (path: string) => {
     if (path === "/" && pathname === "/") return true;
     if (path !== "/" && pathname.startsWith(path)) return true;
@@ -39,56 +39,60 @@ export function Navigation({
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            <TooltipElement content="Movies">
+            <TooltipElement content={t("navigation.movies")}>
               <Link
+                data-testid="navigation-movies"
                 href="/movie"
-                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                className={`navbar-link-item ${
                   isActive("/movie")
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                    ? "active"
+                    : "inactive"
                 }`}
               >
                 <Film className="h-4 w-4" />
-                <span className="hidden lg:inline">Movies</span>
+                <span className="hidden lg:inline">{t("navigation.movies")}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content="Shows">
+            <TooltipElement content={t("navigation.shows")}>
               <Link
+                data-testid="navigation-shows"
                 href="/show"
-                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                className={`navbar-link-item ${
                   isActive("/show")
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                    ? "active"
+                    : "inactive"
                 }`}
               >
                 <TvIcon className="h-4 w-4" />
-                <span className="hidden lg:inline">Shows</span>
+                <span className="hidden lg:inline">{t("navigation.shows")}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content="Import Library">
+            <TooltipElement content={t("navigation.importLibrary")}>
               <Link
+                data-testid="navigation-import"
                 href="/import"
-                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                className={`navbar-link-item ${
                   isActive("/import")
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                    ? "active"
+                    : "inactive"
                 }`}
               >
                 <Library className="h-4 w-4" />
-                <span className="hidden lg:inline">Import Library</span>
+                <span className="hidden lg:inline">{t("navigation.importLibrary")}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content="Config">
+            <TooltipElement content={t("navigation.config")}>
               <Link
+                data-testid="navigation-config"
                 href="/config"
-                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-300 ease-out ${
+                className={`navbar-link-item ${
                   isActive("/config")
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "hover:bg-muted/50 text-foreground/70 hover:text-foreground"
+                    ? "active"
+                    : "inactive"
                 }`}
               >
                 <Settings className="h-4 w-4" />
-                <span className="hidden lg:inline">Config</span>
+                <span className="hidden lg:inline">{t("navigation.config")}</span>
               </Link>
             </TooltipElement>
           </div>

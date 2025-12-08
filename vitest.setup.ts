@@ -1,16 +1,20 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
-vi.mock('next/navigation', () => ({
-	useRouter: vi.fn(() => ({
-		push: vi.fn(),
-		replace: vi.fn(),
-		refresh: vi.fn(),
-		prefetch: vi.fn(),
-		back: vi.fn(),
-		forward: vi.fn(),
-	})),
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  })),
+  usePathname: vi.fn(() => '/'),
 }));
 
+vi.mock("next-intl", () => ({
+  useTranslations: vi.fn(() => vi.fn((key: string) => key)),
+}));
 
 class MockPointerEvent extends Event {
   button: number;
@@ -21,7 +25,7 @@ class MockPointerEvent extends Event {
     super(type, props);
     this.button = props.button || 0;
     this.ctrlKey = props.ctrlKey || false;
-    this.pointerType = props.pointerType || 'mouse';
+    this.pointerType = props.pointerType || "mouse";
   }
 }
 
