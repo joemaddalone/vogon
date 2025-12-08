@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Route } from "next";
+import { useTranslations } from "next-intl";
 
 export const MediaHeader = ({
   media,
@@ -20,6 +21,7 @@ export const MediaHeader = ({
 }) => {
   const router = useRouter();
   const { history, back } = useHistory();
+  const t = useTranslations();
   // get next to last item in history
   const nextToLast = history[history.length - 2];
   const backToLibrary =
@@ -131,7 +133,7 @@ export const MediaHeader = ({
                 variant="secondary"
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
-                <ArrowLeft className="w-4 h-4" /> Back to{" "}
+                <ArrowLeft className="w-4 h-4" /> {t("library.backTo")} {" "}
                 {(media as Media)?.parentTitle}
               </Button>
             )}
@@ -142,8 +144,8 @@ export const MediaHeader = ({
                 variant="secondary"
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
-                <ArrowLeft className="w-4 h-4" /> Back to{" "}
-                {mediaType === "movie" ? "Movies" : "Shows"}
+                <ArrowLeft className="w-4 h-4" />
+                {mediaType === "movie" ? t("library.backToMovies") : t("library.backToShows")}
               </Button>
             ) : mediaType !== "season" && (
               <Button
@@ -151,8 +153,8 @@ export const MediaHeader = ({
                 variant="secondary"
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
-                <ArrowLeft className="w-4 h-4" /> Back to{" "}
-                {mediaType === "movie" ? "Movies" : "Shows"}
+                <ArrowLeft className="w-4 h-4" />
+                {mediaType === "movie" ? t("library.backToMovies") : t("library.backToShows")}
               </Button>
 
             )}

@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useMediaGrid } from "./MediaGridContext";
 import { motion } from "motion/react";
-
+import { useTranslations } from "next-intl";
 export function PaginationControls() {
   const { currentPage, totalPages, setCurrentPage, totalFilteredCount, itemsPerPage } = useMediaGrid();
-
+  const t = useTranslations();
   if (totalPages <= 1) return null;
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -76,9 +76,9 @@ export function PaginationControls() {
     >
       {/* Results info */}
       <div className="results">
-        Showing <span>{startItem}</span> to{" "}
+        {t("library.showing")} <span>{startItem}</span> to{" "}
         <span>{endItem}</span> of{" "}
-        <span>{totalFilteredCount}</span> results
+        <span>{totalFilteredCount}</span> {t("library.results")}
       </div>
 
       {/* Pagination controls */}
@@ -89,7 +89,7 @@ export function PaginationControls() {
           size="sm"
           onClick={handleFirstPage}
           disabled={currentPage === 1}
-          aria-label="First page"
+          aria-label={t("library.firstPage")}
           className="pager"
         >
           <ChevronsLeft className="h-4 w-4" />
@@ -101,7 +101,7 @@ export function PaginationControls() {
           size="sm"
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          aria-label="Previous page"
+          aria-label={t("library.previousPage")}
           className="pager"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -130,7 +130,7 @@ export function PaginationControls() {
 
         {/* Mobile: current page indicator */}
         <div className="sm:hidden px-4 py-2 text-sm font-medium bg-muted/50 rounded-xl">
-          Page {currentPage} of {totalPages}
+          {t("library.page")} {currentPage} {t("library.of")} {totalPages}
         </div>
 
         {/* Next page */}
@@ -139,7 +139,7 @@ export function PaginationControls() {
           size="sm"
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          aria-label="Next page"
+          aria-label={t("library.nextPage")}
           className="pager"
         >
           <ChevronRight className="h-4 w-4" />
@@ -151,7 +151,7 @@ export function PaginationControls() {
           size="sm"
           onClick={handleLastPage}
           disabled={currentPage === totalPages}
-          aria-label="Last page"
+          aria-label={t("library.lastPage")}
           className="pager"
         >
           <ChevronsRight className="h-4 w-4" />

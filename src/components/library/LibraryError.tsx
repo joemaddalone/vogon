@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 type LibraryErrorProps = {
   error: string;
@@ -11,7 +12,7 @@ type LibraryErrorProps = {
 
 export const LibraryError = ({ error }: LibraryErrorProps) => {
   const router = useRouter();
-
+  const t = useTranslations();
   return (
     <div className="max-w-3xl mx-auto mt-12 p-8">
       <motion.div
@@ -24,7 +25,7 @@ export const LibraryError = ({ error }: LibraryErrorProps) => {
           <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400 shrink-0 mt-1" />
           <div>
             <h2 className="text-2xl font-bold text-red-900 dark:text-red-100 mb-3">
-              Error Loading Library
+              {t("library.errorLoadingLibrary")}
             </h2>
             <p className="text-lg text-red-700 dark:text-red-300 font-medium leading-relaxed">
               {error}
@@ -39,7 +40,7 @@ export const LibraryError = ({ error }: LibraryErrorProps) => {
           size="lg"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Home
+          {t("library.backToHome")}
         </Button>
       </motion.div>
     </div>

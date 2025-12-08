@@ -3,7 +3,7 @@ import { Selectable, Media } from "@/lib/types";
 import ImageLoader from "@/components/ImageLoader";
 import { motion } from "motion/react";
 import Link from "next/link";
-
+import { useTranslations } from "next-intl";
 export const MediaWidget = ({
   movieData,
   className = "",
@@ -15,6 +15,7 @@ export const MediaWidget = ({
   mode?: "grid" | "rows";
   itemType: "movie" | "show";
 }) => {
+  const t = useTranslations();
   // Full mode render
   return (
     <Link
@@ -45,7 +46,7 @@ export const MediaWidget = ({
         ) : (
           <div className="widget-image">
             <p className="flex items-center justify-center text-center text-3xl font-bold text-gray-700 dark:text-gray-300">
-              No poster available
+              {t("library.noPosterAvailable")}
             </p>
           </div>
         )}

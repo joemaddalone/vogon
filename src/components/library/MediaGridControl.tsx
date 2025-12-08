@@ -6,6 +6,7 @@ import { LayoutGridIcon, Rows3Icon, ArrowUpDown, ArrowUp, ArrowDown } from "luci
 import { SearchField } from "./SearchField";
 import { useMediaGrid } from "./MediaGridContext";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 export const MediaGridControl = () => {
   const {
@@ -19,7 +20,7 @@ export const MediaGridControl = () => {
     toggleSortDirection,
     totalFilteredCount
   } = useMediaGrid();
-
+  const t = useTranslations();
   const handleSortFieldChange = (field: "title" | "year") => {
     if (sortField === field) {
       toggleSortDirection();
@@ -57,7 +58,7 @@ export const MediaGridControl = () => {
               variant={sortField === "title" ? "default" : "outline"}
               onClick={() => handleSortFieldChange("title")}
             >
-              Title {getSortIcon("title")}
+              {t("library.title")} {getSortIcon("title")}
             </Button>
             <Button
               className="button-group-button"
@@ -65,7 +66,7 @@ export const MediaGridControl = () => {
               variant={sortField === "year" ? "default" : "outline"}
               onClick={() => handleSortFieldChange("year")}
             >
-              Year {getSortIcon("year")}
+              {t("library.year")} {getSortIcon("year")}
             </Button>
           </ButtonGroup>
 
@@ -77,7 +78,7 @@ export const MediaGridControl = () => {
               variant={view === "grid" ? "default" : "outline"}
               onClick={() => setView("grid")}
             >
-              Grid <LayoutGridIcon strokeWidth={1.5} className="ml-2 h-4 w-4" />
+              {t("library.grid")} <LayoutGridIcon strokeWidth={1.5} className="ml-2 h-4 w-4" />
             </Button>
             <Button
               className="button-group-button"
@@ -85,7 +86,7 @@ export const MediaGridControl = () => {
               variant={view === "rows" ? "default" : "outline"}
               onClick={() => setView("rows")}
             >
-              Rows <Rows3Icon strokeWidth={1.5} className="ml-2 h-4 w-4" />
+              {t("library.rows")} <Rows3Icon strokeWidth={1.5} className="ml-2 h-4 w-4" />
             </Button>
           </ButtonGroup>
         </div>
@@ -98,7 +99,7 @@ export const MediaGridControl = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        {totalFilteredCount} {totalFilteredCount === 1 ? "item" : "items"}
+        {totalFilteredCount} {t("library.item", { count: totalFilteredCount })}
       </motion.div>
     </div>
   );

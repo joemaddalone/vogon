@@ -4,7 +4,7 @@ import ImageLoader from "@/components/ImageLoader";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { motion } from "motion/react";
-
+import { useTranslations } from "next-intl";
 type BackdropOptionProps = {
   posterUrl: string;
   previewUrl?: string;
@@ -22,6 +22,7 @@ export const BackdropOption = ({
   isBusy,
   onSelect,
 }: BackdropOptionProps) => {
+  const t = useTranslations();
   return (
     <motion.li
       initial={{ opacity: 0, y: 20 }}
@@ -29,7 +30,7 @@ export const BackdropOption = ({
       transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       className="group"
     >
-      {source && <div className="flex w-full justify-center items-center text-xs pb-2">source: {source}</div>}
+      {source && <div className="flex w-full justify-center items-center text-xs pb-2">{t("library.source")}: {source}</div>}
       <figure className="relative">
         <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
           <ImageLoader
@@ -43,7 +44,7 @@ export const BackdropOption = ({
         <figcaption className="mt-5 text-center">
           {isCurrent ? (
             <span className="inline-flex items-center  bg-yellow-400/10 px-4 py-2.5 text-sm font-semibold dark:text-yellow-500 shadow-lg border border-yellow-400/30 backdrop-blur-md">
-              Current Backdrop
+              {t("library.currentBackdrop")}
             </span>
           ) : (
             <Button
@@ -56,11 +57,11 @@ export const BackdropOption = ({
               {isBusy ? (
                 <>
                   <Spinner className="size-4" />
-                  Updating...
+                  {t("library.updating")}
                 </>
               ) : (
                 <>
-                  Use this backdrop
+                  {t("library.useThisBackdrop")}
                 </>
               )}
             </Button>

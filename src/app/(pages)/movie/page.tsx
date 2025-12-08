@@ -17,7 +17,6 @@ export default async function MoviesPage() {
     >
       <MediaLibrarySection
         libLoader={libLoader}
-        totalLabel="movies"
         type="movie"
       />
     </Suspense>
