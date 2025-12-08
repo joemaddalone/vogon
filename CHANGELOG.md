@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/joemaddalone/vogon/compare/v1.3.0...v1.4.0) (2025-12-08)
+
+
+### Features
+
+* **component:** common ItemNotFound component ([2da9f90](https://github.com/joemaddalone/vogon/commit/2da9f90fa18e95ecabd3b75576cda421d36a4f18))
+
 # [1.3.0](https://github.com/joemaddalone/vogon/compare/v1.2.1...v1.3.0) (2025-12-08)
 
 
