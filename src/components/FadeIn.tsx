@@ -8,6 +8,7 @@ export const FadeIn = ({ children, className, component = 'div' }: { children: R
       className={className}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
     >
       {children}
     </Component>

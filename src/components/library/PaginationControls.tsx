@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useMediaGrid } from "./MediaGridContext";
-import { motion } from "motion/react";
+import { FadeIn } from "@/components/FadeIn";
+
 import { useTranslations } from "next-intl";
 export function PaginationControls() {
   const { currentPage, totalPages, setCurrentPage, totalFilteredCount, itemsPerPage } = useMediaGrid();
@@ -68,12 +69,7 @@ export function PaginationControls() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="pagination-controls"
-    >
+    <FadeIn className="pagination-controls">
       {/* Results info */}
       <div className="results">
         {t("library.showing")} <span>{startItem}</span> to{" "}
@@ -157,7 +153,7 @@ export function PaginationControls() {
           <ChevronsRight className="h-4 w-4" />
         </Button>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 }
 

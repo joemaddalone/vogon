@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { motion } from "motion/react";
+import { FadeIn } from "@/components/FadeIn";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -15,12 +15,7 @@ export const PlexConnectionError = ({ error }: { error: string }) => {
 
   return (
     <div className="max-w-3xl mx-auto mt-12 p-8">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-8"
-      >
+      <FadeIn className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-8">
         <div className="flex items-start gap-4 mb-6">
           <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400 shrink-0 mt-1" />
           <div>
@@ -47,7 +42,7 @@ export const PlexConnectionError = ({ error }: { error: string }) => {
           <RefreshCw className="w-4 h-4" />
           {t("import.retryConnection")}
         </Button>
-      </motion.div>
+      </FadeIn>
     </div>
   );
 };

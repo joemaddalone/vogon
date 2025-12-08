@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import { NormalizedLibrary } from "@/lib/types";
-import { motion } from "motion/react";
+import { FadeIn } from "@/components/FadeIn";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Film, TvIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, index: number }) => {
+export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: number }) => {
 	const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
@@ -43,12 +43,8 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
   const isMovie = library.type === "movie";
 
   return (
-    <motion.div
-      key={library.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative overflow-hidden border-border border-b rounded-2xl bg-secondary p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
+    <FadeIn key={library.id}
+      className="group relative overflow-hidden border-border border-b rounded-2xl bg-secondary p-8 transition-hover duration-100 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
     >
       <div className="absolute inset-0" />
 			{error && (
@@ -89,6 +85,6 @@ export const LibraryImport = ({ library, index }: { library: NormalizedLibrary, 
           )}
         </Button>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 };
