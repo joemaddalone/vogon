@@ -1,9 +1,8 @@
 export const dynamic = "force-dynamic";
-
 import { api } from "@/lib/api";
-import { Suspense } from "react";
 import ConfigForm from "./_components/ConfigForm";
 import { Servers } from "./_components/Servers";
+import { CommonSuspense } from "@/components/CommonSuspense";
 import { Configuration } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
 export default async function ConfigPage() {
@@ -12,7 +11,7 @@ export default async function ConfigPage() {
   const servers = await api.server.get();
   const t = await getTranslations();
   return (
-    <Suspense fallback={<div className="flex items-center justify-center">loading..</div>}>
+    <CommonSuspense>
       <div className="container max-w-2xl mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold mb-2">{t("config.title")}</h1>
         <p>
@@ -24,6 +23,6 @@ export default async function ConfigPage() {
       </div>
 
       <ConfigForm config={config} />
-    </Suspense>
+    </CommonSuspense>
   )
 }

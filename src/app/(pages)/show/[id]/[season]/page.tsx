@@ -1,13 +1,12 @@
 export const dynamic = "force-dynamic";
 import { Media } from "@/lib/types";
-import { Suspense } from "react";
 import { buildPosters } from "@/lib/buildPosterList";
-import { Spinner } from "@/components/ui/spinner";
 import { MediaDetail } from "@/components/libraryitem/MediaDetail";
 import { MediaHeader } from "@/components/libraryitem/MediaHeader";
 import { MediaBackdrop } from "@/components/libraryitem/MediaBackdrop";
 import { dataManager as DM } from "@/lib/client/database";
 import { ItemNotFound } from "@/components/libraryitem/ItemNotFound";
+import { CommonSuspense } from "@/components/CommonSuspense";
 export default async function SeasonPage(
   props: PageProps<"/show/[id]/[season]">
 ) {
@@ -26,13 +25,9 @@ export default async function SeasonPage(
     );
 
     return (
-      <Suspense
+      <CommonSuspense
         key="media-header"
-        fallback={
-          <div className="flex items-center justify-center min-h-[30vh]">
-            <Spinner className="size-16 text-gray-500" />
-          </div>
-        }
+        spinnerContainerHeight={30}
       >
         {/* @ts-expect-error - MediaBackdrop expects a Media */}
         <MediaBackdrop media={media} />
@@ -41,18 +36,14 @@ export default async function SeasonPage(
           logos={[]}
           mediaType="season"
         />
-        <Suspense
+        <CommonSuspense
           key="media-detail"
-          fallback={
-            <div className="flex items-center justify-center min-h-[25vh]">
-              <Spinner className="size-16 text-gray-500" />
-            </div>
-          }
+          spinnerContainerHeight={25}
         >
           {/** @ts-expect-error - MediaDetail expects a Promise<{ media: PlexMovieMetadata | PlexShowMetadata | PlexSeasonMetadata | null; knownIds: Record<string, string | null>; tmdbMedia: TMDBDetail | null; posters: { file_path: string; previewUrl?: string; source?: string }[]; backdrops?: { file_path: string; previewUrl?: string; source?: string }[]; logos: { file_path: string; source?: string }[]; mediaType?: "movie" | "show" | "season"; }> */}
           <MediaDetail posterBuilder={posterBuilder} id={season} />
-        </Suspense>
-      </Suspense>
+        </CommonSuspense>
+      </CommonSuspense>
     );
   } catch (_) {
     return (
