@@ -1,5 +1,9 @@
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
+
 export const LibrariesHeader = () => {
+  const t = useTranslations();
+
   return (
     <motion.div
       className="mb-12"
@@ -8,13 +12,10 @@ export const LibrariesHeader = () => {
       transition={{ duration: 0.5 }}
     >
       <h1>
-        Select a Library
+        {t("import.selectLibrary")}
       </h1>
       <p>
-        Choose a library to import and manage poster artwork. Be sure the
-        library actually contains movies or TV shows. If the library contains
-        other types of media you won&apos;t have much luck finding posters for
-        it.
+        {t("import.selectLibraryDescription")}
       </p>
     </motion.div>
   );

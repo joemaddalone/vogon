@@ -7,5 +7,9 @@
 	"noItemsInLibrary": "No items in library",
 	"importLibraries": "Import Libraries",
 	"importMovies": "Import Movies",
-	"importShows": "Import Shows"
+	"importShows": "Import Shows",
+	"save": "Save",
+	"cancel": "Cancel",
+	"delete": "Delete",
+	"saving": "Saving..."
 }
