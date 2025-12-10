@@ -22,7 +22,9 @@ export const EpisodesList = ({ episodes }: { episodes: NormalizedEpisode[] }) =>
               </div>
               <figcaption className="mt-5 text-center">
                 {episode.title}<br />
-								{t("library.season")}:{episode.parentIndex} {t("library.episode")}:{episode.index}
+                <span className="capitalize">
+								{t("common.season", {count: 1})}:{episode.parentIndex} {t("common.episode", {count: 1})}:{episode.index}
+                </span>
               </figcaption>
             </figure>
           </li>

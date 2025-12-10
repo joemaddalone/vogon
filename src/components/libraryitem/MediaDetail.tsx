@@ -50,33 +50,33 @@ export const MediaDetail = ({
       <Tabs defaultValue="posters">
         <TabsList className="mb-8 inline-flex w-full h-9 justify-start rounded-none p-0 bg-background/60 backdrop-blur-sm border-b shadow-lg">
           <TabsTrigger
-            className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+            className="capitalize border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
             value="posters"
           >
-            {mediaType === "season" ? t("library.seasonPosters") : t("library.posters")}
+            {t("common.poster", { count: 0 })}
           </TabsTrigger>
           {mediaType !== "season" && (
             <TabsTrigger
-              className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+              className="capitalize border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="backdrops"
             >
-              {t("library.backdrops")}
+              {t("common.backdrop", { count: 0 })}
             </TabsTrigger>
           )}
           {hasSeasons && (
             <TabsTrigger
-              className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+              className="capitalize border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="seasons"
             >
-              {t("library.seasons")}
+              {t("common.season", { count: 0 })}
             </TabsTrigger>
           )}
           {hasEpisodes && (
             <TabsTrigger
-              className="border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
+              className="capitalize border-r border-2 text-md font-bold max-w-[25%] data-[state=active]:bg-primary! data-[state=active]:text-primary-foreground! rounded-none"
               value="episodes"
             >
-              {t("library.episodes")}
+              {t("common.episode", { count: 0 })}
             </TabsTrigger>
           )}
         </TabsList>

@@ -133,7 +133,7 @@ export const MediaHeader = ({
                 variant="secondary"
                 className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
               >
-                <ArrowLeft className="w-4 h-4" /> {t("library.backTo")} {" "}
+                <ArrowLeft className="w-4 h-4" />
                 {(media as Media)?.parentTitle}
               </Button>
             )}
@@ -142,19 +142,19 @@ export const MediaHeader = ({
               <Button
                 onClick={back}
                 variant="secondary"
-                className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
+                className="mt-4 px-6 py-3 rounded-xl text-sm font-medium capitalize"
               >
                 <ArrowLeft className="w-4 h-4" />
-                {mediaType === "movie" ? t("library.backToMovies") : t("library.backToShows")}
+                {t(mediaType === "movie" ? "common.movie" : "common.show", { count: 0 }) }
               </Button>
             ) : mediaType !== "season" && (
               <Button
                 onClick={() => router.push(`/${mediaType}`)}
                 variant="secondary"
-                className="mt-4 px-6 py-3 rounded-xl text-sm font-medium"
+                className="mt-4 px-6 py-3 rounded-xl text-sm font-medium capitalize"
               >
                 <ArrowLeft className="w-4 h-4" />
-                {mediaType === "movie" ? t("library.backToMovies") : t("library.backToShows")}
+                {t(mediaType === "movie" ? "common.movie" : "common.show", { count: 0 })}
               </Button>
 
             )}

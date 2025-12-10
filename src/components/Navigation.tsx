@@ -39,7 +39,7 @@ export function Navigation({
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            <TooltipElement content={t("navigation.movies")}>
+            <TooltipElement content={t("common.movie", {count: 0})}>
               <Link
                 data-testid="navigation-movies"
                 href="/movie"
@@ -50,10 +50,10 @@ export function Navigation({
                 }`}
               >
                 <Film className="h-4 w-4" />
-                <span className="hidden lg:inline">{t("navigation.movies")}</span>
+                <span className="hidden lg:inline capitalize">{t("common.movie", {count: 0})}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content={t("navigation.shows")}>
+            <TooltipElement content={t("common.show", {count: 0})}>
               <Link
                 data-testid="navigation-shows"
                 href="/show"
@@ -64,10 +64,10 @@ export function Navigation({
                 }`}
               >
                 <TvIcon className="h-4 w-4" />
-                <span className="hidden lg:inline">{t("navigation.shows")}</span>
+                <span className="hidden lg:inline capitalize">{t("common.show", {count: 0})}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content={t("navigation.importLibrary")}>
+            <TooltipElement content={t("common.import")}>
               <Link
                 data-testid="navigation-import"
                 href="/import"
@@ -78,10 +78,10 @@ export function Navigation({
                 }`}
               >
                 <Library className="h-4 w-4" />
-                <span className="hidden lg:inline">{t("navigation.importLibrary")}</span>
+                <span className="hidden lg:inline capitalize">{t("common.import")}</span>
               </Link>
             </TooltipElement>
-            <TooltipElement content={t("navigation.config")}>
+            <TooltipElement content={t("common.configure")}>
               <Link
                 data-testid="navigation-config"
                 href="/config"
@@ -92,7 +92,7 @@ export function Navigation({
                 }`}
               >
                 <Settings className="h-4 w-4" />
-                <span className="hidden lg:inline">{t("navigation.config")}</span>
+                <span className="hidden lg:inline capitalize">{t("common.configure")}</span>
               </Link>
             </TooltipElement>
           </div>

@@ -60,3 +60,5 @@ memory-bank
 # local sqlite backups
 src/db/dev.db
 data
+
+public/cache

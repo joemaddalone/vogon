@@ -13,7 +13,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -81,13 +80,10 @@ export const ServerForm = ({
             <DialogTitle className="text-2xl! pb-0! mb-0! font-bold">
               {data?.name ? t("config.editServer") : t("config.addServer")}
             </DialogTitle>
-            <DialogDescription className="text-sm! mb-4!">
-              {data?.name ? t("config.editServerDescription") : t("config.addServerDescription")}
-            </DialogDescription>
           </DialogHeader>
 
           {JELLYFIN_ENABLED ? (
-            <Field className="mb-4">
+            <Field className="my-4">
               <FieldLabel htmlFor="type">{t("config.serverType")}</FieldLabel>
               <Select
                 name="type"
@@ -98,8 +94,8 @@ export const ServerForm = ({
                   <SelectValue placeholder={t("config.selectServerType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="plex">{t("config.plex")}</SelectItem>
-                  <SelectItem value="jellyfin">{t("config.jellyfin")}</SelectItem>
+                  <SelectItem value="plex">Plex</SelectItem>
+                  <SelectItem value="jellyfin">Jellyfin</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -168,9 +164,6 @@ export const ServerForm = ({
                 ) : null}
               </div>
               <div className="flex items-center gap-2">
-                {/* <DialogClose asChild>
-                  <Button variant="outline">Test Connection</Button>
-                </DialogClose> */}
                 <Button type="submit" disabled={pending}>
                   {pending ? <Spinner /> : t("common.save")}
                 </Button>

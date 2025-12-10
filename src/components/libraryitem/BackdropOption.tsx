@@ -44,7 +44,7 @@ export const BackdropOption = ({
         <figcaption className="mt-5 text-center">
           {isCurrent ? (
             <span className="inline-flex items-center  bg-yellow-400/10 px-4 py-2.5 text-sm font-semibold dark:text-yellow-500 shadow-lg border border-yellow-400/30 backdrop-blur-md">
-              {t("library.currentBackdrop")}
+              {t("common.current")}
             </span>
           ) : (
             <Button
@@ -57,11 +57,11 @@ export const BackdropOption = ({
               {isBusy ? (
                 <>
                   <Spinner className="size-4" />
-                  {t("library.updating")}
+                  {t("common.updating")}
                 </>
               ) : (
                 <>
-                  {t("library.useThisBackdrop")}
+                  {t("common.select")}
                 </>
               )}
             </Button>
