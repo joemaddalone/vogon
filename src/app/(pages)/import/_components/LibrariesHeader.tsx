@@ -8,11 +8,8 @@ export const LibrariesHeader = () => {
   return (
     <FadeIn className="mb-12">
       <h1>
-        {t("import.selectLibrary")}
+        {t("common.import")}
       </h1>
-      <p>
-        {t("import.selectLibraryDescription")}
-      </p>
     </FadeIn>
   );
 };

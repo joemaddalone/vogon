@@ -64,8 +64,8 @@ export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: 
             <h3>
               {library.name}
             </h3>
-            <p>
-              {t(isMovie ? "import.movieLibrary" : "import.tvShowLibrary")}
+            <p className="capitalize">
+              {t(isMovie ? "common.movie" : "common.show", { count: 0 })}
             </p>
           </div>
         </div>
@@ -78,10 +78,10 @@ export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: 
           {importing === library.id ? (
             <>
               <Spinner className="size-4" />
-              {t("import.importing")}
+              {t("common.importing")}
             </>
           ) : (
-            t(isMovie ? "import.importMovieLibrary" : "import.importTvShowLibrary")
+            t("common.import")
           )}
         </Button>
       </div>

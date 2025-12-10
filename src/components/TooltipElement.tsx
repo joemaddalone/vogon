@@ -8,7 +8,7 @@ export const TooltipElement = ({ children, content }: { children: React.ReactNod
   return (
     <Tooltip>
       <TooltipTrigger>{children}</TooltipTrigger>
-      <TooltipContent>{content}</TooltipContent>
+      <TooltipContent className="capitalize">{content}</TooltipContent>
     </Tooltip>
   );
 };

@@ -74,7 +74,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           <ConfigField
             configData={configData as Configuration}
             label={t("config.tmdb.label")}
-            hint={t("config.tmdb.hint")}
+            hint="env: TMDB_API_KEY"
             dataKey="tmdbApiKey"
             placeholder={t("config.tmdb.placeholder")}
             required
@@ -92,7 +92,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           <ConfigField
             configData={configData as Configuration}
             label={t("config.fanart.label")}
-            hint={t("config.fanart.hint")}
+            hint="env: FANART_API_KEY"
             dataKey="fanartApiKey"
             placeholder={t("config.fanart.placeholder")}
             required={false}
@@ -109,7 +109,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           <ConfigField
             configData={configData as Configuration}
             label={t("config.posterDb.label")}
-            hint={t("config.posterDb.hint")}
+            hint="env: THEPOSTERDB_EMAIL"
             dataKey="thePosterDbEmail"
             placeholder={t("config.posterDb.placeholder")}
             required={false}
@@ -118,7 +118,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
           <ConfigField
             configData={configData as Configuration}
             label={t("config.posterDbPassword.label")}
-            hint={t("config.posterDbPassword.hint")}
+            hint="env: THEPOSTERDB_PASSWORD"
             dataKey="thePosterDbPassword"
             placeholder={t("config.posterDbPassword.placeholder")}
             type="password"
@@ -137,7 +137,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
               <FieldLabel htmlFor="removeOverlays" className="mb-0!">
                 {t("config.overlays.label")}
                 <span className="text-xs text-muted-foreground">
-                  {t("config.overlays.hint")}
+                  env: REMOVE_OVERLAYS
                 </span>
               </FieldLabel>
             </div>
@@ -165,7 +165,7 @@ export default function ConfigForm({ config }: { config: Configuration }) {
                   {t("common.saving")}
                 </>
               ) : (
-                t("config.saveApi")
+                t("common.save")
               )}
             </Button>
           </div>

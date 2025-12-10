@@ -1,13 +1,6 @@
 {
 	"noLibrariesFound": "No libraries found in your server.",
-	"selectLibrary": "Select a Library",
-	"selectLibraryDescription": "Choose a library to import and manage poster artwork. Be sure the library actually contains movies or TV shows. If the library contains other types of media you won't have much luck finding posters for it.",
 	"importError": "well shit that didnt work..",
-	"movieLibrary": "Movie Library",
-	"tvShowLibrary": "TV Show Library",
-	"importing": "Importing...",
-	"importMovieLibrary": "Import Movie Library",
-	"importTvShowLibrary": "Import TV Show Library",
 	"connectionError": "Connection Error",
 	"connectionErrorInstructions": "Make sure you have set:",
 	"serverUrlRequired": "A server url",

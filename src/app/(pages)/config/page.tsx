@@ -13,10 +13,7 @@ export default async function ConfigPage() {
   return (
     <CommonSuspense>
       <div className="container max-w-2xl mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-2">{t("config.title")}</h1>
-        <p>
-          {t("config.description")}
-        </p>
+        <h1 className="text-3xl font-bold">{t("config.title")}</h1>
       </div>
       <div className="container max-w-2xl mx-auto">
         <Servers servers={servers?.data} />

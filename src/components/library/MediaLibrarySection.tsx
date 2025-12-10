@@ -48,8 +48,8 @@ export const MediaLibrarySection = ({
     <div className="max-w-7xl mx-auto mt-8 px-4">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-2">
-            {t(isMovie ? "common.movieLibrary" : "common.showLibrary")}
+          <h1 className="text-4xl font-bold mb-2 capitalize">
+            {t(isMovie ? "common.movie" : "common.show", { count: 0 })}
           </h1>
         </div>
       </div>
@@ -63,7 +63,7 @@ export const MediaLibrarySection = ({
 
       {data?.length > 0 && (
         <Button onClick={handleReset} variant="outline">
-          {t(isMovie ? "common.emptyMovieLibrary" : "common.emptyShowLibrary")}
+          {t("common.emptyLibrary")}
         </Button>
       )}
     </div>

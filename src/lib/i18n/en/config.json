@@ -1,6 +1,5 @@
 {
 	"title": "Configuration",
-	"description": "Configure your media server and API credentials. All values are stored securely in the local database.",
 	"servers": "Servers",
 	"server": "Server",
 	"serverUrl": "Server URL",
@@ -12,8 +11,6 @@
 	"savedSuccessfully": "Configuration saved successfully",
 	"addServer": "Add Server",
 	"editServer": "Edit Server",
-	"addServerDescription": "Add the server configuration.",
-	"editServerDescription": "Edit the server configuration.",
 	"serverType": "Server Type",
 	"selectServerType": "Select Server Type",
 	"serverName": "Server Name",
@@ -24,8 +21,6 @@
 	"userId": "User ID",
 	"userIdPlaceholder": "Enter your server user id",
 	"deleteServerConfirm": "Are you sure you want to delete this server?",
-	"plex": "Plex",
-	"jellyfin": "Jellyfin",
 	"tmdb": {
 		"label": "TMDB API Key (required)",
 		"hint": "env. TMDB_API_KEY",
@@ -33,22 +28,18 @@
 	},
 	"fanart": {
 		"label": "Fanart.tv API Key (optional)",
-		"hint": "env. FANART_API_KEY",
 		"placeholder": "Enter your Fanart.tv API key (optional)"
 	},
 	"posterDb": {
 		"label": "ThePosterDB Email (optional)",
-		"hint": "env. THEPOSTERDB_EMAIL",
 		"placeholder": "Enter your ThePosterDB email"
 	},
 	"posterDbPassword": {
 		"label": "ThePosterDB Password (optional)",
-		"hint": "env. THEPOSTERDB_PASSWORD",
 		"placeholder": "Enter your ThePosterDB password"
 	},
 	"overlays": {
 		"label": "Remove Overlays",
-		"hint": "env. REMOVE_OVERLAYS",
 		"description": "Remove Plex overlay labels when updating posters",
 		"description2": "useful for Kometa/PMM users"
 	}
