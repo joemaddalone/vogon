@@ -172,6 +172,47 @@ export class PlexClient {
     }
   }
 
+  async updateEpisodePoster(ratingKey: string, base64: string): Promise<void> {
+    const config = await this.config();
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}/posters`;
+
+    // Extract mime type and base64 data from data URL
+    // Data URL format: data:image/jpeg;base64,/9j/4AAQ...
+    let mimeType = "image/jpeg";
+    let base64Data = base64;
+
+    const dataUrlMatch = base64.match(/^data:(image\/[a-z]+);base64,(.+)$/);
+    if (dataUrlMatch) {
+      mimeType = dataUrlMatch[1];
+      base64Data = dataUrlMatch[2];
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": mimeType,
+          "X-Plex-Token": config?.serverToken || "",
+        },
+        body: Buffer.from(base64Data, 'base64')
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update poster: ${response.status} ${response.statusText}`
+        );
+      }
+    } catch (error) {
+      console.error("Failed to update movie poster:", error);
+      throw error;
+    }
+
+
+    // Lock the poster field to prevent Plex from overwriting it
+    await this.lockPosterField(ratingKey);
+  }
+
   /**
    * Update movie poster with a new image URL
    */
