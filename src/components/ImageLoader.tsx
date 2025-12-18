@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const ImageLoader = ({
   src,
@@ -13,6 +13,7 @@ const ImageLoader = ({
   priority = false,
   sizes = "",
   unoptimized = false,
+  index,
 }: {
   src: string;
   alt: string;
@@ -22,10 +23,21 @@ const ImageLoader = ({
   priority?: boolean;
   sizes?: string;
   unoptimized?: boolean;
+  index?: number;
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [canLoad, setCanLoad] = useState(index === undefined);
+
+  useEffect(() => {
+    if (index !== undefined) {
+      const timer = setTimeout(() => {
+        setCanLoad(true);
+      }, index * 200);
+      return () => clearTimeout(timer);
+    }
+  }, [index]);
 
   const cacheBustedSrc = useMemo(() => {
     if (retryCount === 0) {
@@ -55,20 +67,22 @@ const ImageLoader = ({
           </Button>
         </div>
       )}
-      <Image
-        key={retryCount}
-        src={cacheBustedSrc}
-        alt={alt}
-        className={className}
-        priority={priority}
-        sizes={sizes}
-        width={width}
-        height={height}
-        unoptimized={unoptimized}
-        onLoad={() => setImageLoaded(true)}
-        style={{ opacity: imageLoaded ? 1 : 0 }}
-        onError={() => setImageError(true)}
-      />
+      {canLoad && (
+        <Image
+          key={retryCount}
+          src={cacheBustedSrc}
+          alt={alt}
+          className={className}
+          priority={priority}
+          sizes={sizes}
+          width={width}
+          height={height}
+          unoptimized={unoptimized}
+          onLoad={() => setImageLoaded(true)}
+          style={{ opacity: imageLoaded ? 1 : 0 }}
+          onError={() => setImageError(true)}
+        />
+      )}
     </>
   );
 };

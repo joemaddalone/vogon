@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { PosterOption } from "@/components/libraryitem/PosterOption";
 
 type PosterPickerProps = {
-  posters: { file_path: string, previewUrl?: string, source?: string }[];
+  posters: { file_path: string, previewUrl?: string, source?: string; }[];
   ratingKey: string;
   mediaType: "movie" | "show" | "season";
 };
@@ -25,19 +25,19 @@ export const PosterPicker = ({
     setBusyIndex(index);
 
     await api.mediaserver.poster(ratingKey, posterUrl);
-    if(mediaType === "movie") {
+    if (mediaType === "movie") {
       const movie = await api.mediaserver.movieDetail(ratingKey);
-      if(movie) {
+      if (movie) {
         await api.data.plex.updatePoster(mediaType, ratingKey, posterUrl || "");
       }
-    } else if(mediaType === "show") {
+    } else if (mediaType === "show") {
       const show = await api.mediaserver.showDetail(ratingKey);
-      if(show) {
+      if (show) {
         await api.data.plex.updatePoster(mediaType, ratingKey, show.data?.thumbUrl || "");
       }
-    } else if(mediaType === "season") {
+    } else if (mediaType === "season") {
       const season = await api.mediaserver.seasonDetail(ratingKey);
-      if(season) {
+      if (season) {
         await api.data.plex.updatePoster(mediaType, ratingKey, season.data?.thumbUrl || "");
       }
     }
@@ -52,6 +52,7 @@ export const PosterPicker = ({
       {posters?.map((poster, index) => (
         <PosterOption
           key={`${poster.file_path}-${index}`}
+          index={index}
           posterUrl={poster.file_path}
           previewUrl={poster.previewUrl}
           source={poster.source}
