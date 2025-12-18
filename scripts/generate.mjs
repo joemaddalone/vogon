@@ -14,7 +14,7 @@ const dbDir = dirname(dbPath);
 
 // Ensure directory exists
 if (!existsSync(dbDir)) {
-    await mkdir(dbDir, { recursive: true });
+	await mkdir(dbDir, { recursive: true });
 }
 
 const dialect = new SqliteDialect({
@@ -39,6 +39,7 @@ await db.schema.createTable('Media').ifNotExists()
 	.addColumn('parentTitle', 'text')
 	.addColumn('rating', 'real')
 	.addColumn('ratingKey', 'text')
+	.addColumn('releaseDate', 'text')
 	.addColumn('summary', 'text')
 	.addColumn('thumbUrl', 'text')
 	.addColumn('title', 'text')
@@ -48,6 +49,19 @@ await db.schema.createTable('Media').ifNotExists()
 		col.references('server.id').onDelete('cascade').notNull(),
 	)
 	.execute();
+
+
+// If Media does not have column: releaseDate, add it
+try {
+	await db.schema.alterTable('Media')
+		.addColumn('releaseDate', 'text')
+		.execute();
+} catch (e) {
+	// nothing
+}
+
+
+
 
 await db.schema.createTable('Configuration').ifNotExists()
 	.addColumn('id', 'integer', (col) => col.primaryKey().autoIncrement())

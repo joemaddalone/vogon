@@ -28,6 +28,7 @@ export type Media = {
     parentTitle: string | null;
     rating: number | null;
     ratingKey: string;
+    releaseDate: string | null;
     summary: string | null;
     thumbUrl: string | null;
     title: string;

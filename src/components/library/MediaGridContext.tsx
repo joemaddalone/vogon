@@ -11,7 +11,7 @@ const removeArticle = (title: string) => {
 };
 
 // Types
-type SortField = "title" | "year";
+type SortField = "title" | "releaseDate";
 type SortDirection = "asc" | "desc";
 
 interface MediaGridState {
@@ -97,7 +97,7 @@ export function MediaGridProvider({
 
   const sortField = useMemo(() => {
     const sort = searchParams.get("sort") as SortField;
-    return sort === "year" ? "year" : "title";
+    return sort === "releaseDate" ? "releaseDate" : "title";
   }, [searchParams]);
 
   const sortDirection = useMemo(() => {
@@ -211,9 +211,9 @@ export function MediaGridProvider({
 
       if (sortField === "title") {
         comparison = removeArticle(a.title).localeCompare(removeArticle(b.title));
-      } else if (sortField === "year") {
-        const yearA = a.year || 0;
-        const yearB = b.year || 0;
+      } else if (sortField === "releaseDate") {
+        const yearA = a.releaseDate ? new Date(a.releaseDate).getTime() : 0;
+        const yearB = b.releaseDate ? new Date(b.releaseDate).getTime() : 0;
         comparison = yearA - yearB;
       }
 
