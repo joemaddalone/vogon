@@ -9,6 +9,7 @@ if [ ! -f /app/src/db/dev.db ] || [ ! -s /app/src/db/dev.db ]; then
   echo "Database initialized."
 else
   echo "Database already exists, skipping initialization."
+  npm run db:generate
 fi
 
 # Start the application
