@@ -1,5 +1,6 @@
-import { ThePosterDbClient } from "@/lib/client/theposterdb";
-import { ThePosterDbPoster, ThePosterDbSearchOptions, FetchedMedia } from "@/lib/types";
+import { ThePosterDbClient } from "theposterdb-ts";
+import type { ThePosterDbPoster, ThePosterDbSearchOptions } from "theposterdb-ts";
+import type { FetchedMedia } from "@/lib/types";
 
 export const images = async (
   theposterdb: ThePosterDbClient,
@@ -12,7 +13,7 @@ export const images = async (
       theposterdbPosters.forEach((poster: ThePosterDbPoster) => {
         p.push({
           file_path: poster.url,
-          previewUrl: poster.url.replace("/download", "/view"),
+          previewUrl: poster.optimizedUrl || poster.viewUrl,
           source: "theposterdb",
         });
       });
@@ -23,3 +24,9 @@ export const images = async (
     return { theposterdb_posters: [] };
   }
 };
+
+
+// previewUrl
+
+// https://theposterdb.com/api/assets/71820/view?performed_by=joemaddalone
+// https://images.theposterdb.com/prod/public/images/posters/optimized/movies/7894/tz3d9BCT5yqAf3ZsujPnJBJErQDoFUWfasWXkCDt.jpg"

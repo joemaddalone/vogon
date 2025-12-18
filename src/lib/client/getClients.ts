@@ -1,7 +1,7 @@
 import { getSession, createSession, getConfiguration, getServers, getServer } from "./database";
 import { FanartClient } from "./fanart";
 import { TMDBWithFind } from "./tmdb";
-import { ThePosterDbClient } from "./theposterdb";
+import { ThePosterDbClient } from "theposterdb-ts";
 import type { MediaServerType } from "./mediaserver";
 
 export async function getClients() {
@@ -27,15 +27,15 @@ export async function getClients() {
     }
   });
 
-  if(envConfig.removeOverlays) {
+  if (envConfig.removeOverlays) {
     envConfig.removeOverlays = envConfig.removeOverlays === "true" ? 1 : 0;
   }
 
   const dbConfig = (await getConfiguration()) || {};
   const dbSession = await getSession();
-  if(dbSession?.serverId) {
+  if (dbSession?.serverId) {
     const dbServer = await getServer(dbSession.serverId);
-    if(!dbServer) {
+    if (!dbServer) {
       return null;
     }
     envConfig.serverUrl = dbServer.url;
@@ -45,7 +45,7 @@ export async function getClients() {
   }
   else {
     const dbServers = (await getServers()) || [];
-    if(dbServers.length > 0) {
+    if (dbServers.length > 0) {
       envConfig.serverUrl = dbServers[0].url;
       envConfig.serverToken = dbServers[0].token;
       envConfig.userid = dbServers[0].userid;
@@ -56,15 +56,15 @@ export async function getClients() {
   }
   const finalConfig = { ...dbConfig, ...envConfig };
 
-  if(finalConfig.fanartApiKey) {
+  if (finalConfig.fanartApiKey) {
     finalConfig.fanart = new FanartClient(finalConfig.fanartApiKey) as FanartClient;
   }
 
-  if(finalConfig.tmdbApiKey) {
+  if (finalConfig.tmdbApiKey) {
     finalConfig.tmdb = new TMDBWithFind(finalConfig.tmdbApiKey) as TMDBWithFind;
   }
 
-  if(finalConfig.thePosterDbEmail && finalConfig.thePosterDbPassword) {
+  if (finalConfig.thePosterDbEmail && finalConfig.thePosterDbPassword) {
     finalConfig.thePosterDb = new ThePosterDbClient(finalConfig.thePosterDbEmail, finalConfig.thePosterDbPassword) as ThePosterDbClient;
   }
 

@@ -12,6 +12,7 @@ type PosterOptionProps = {
   isCurrent: boolean;
   isBusy: boolean;
   onSelect: () => void;
+  index: number;
 };
 
 export const PosterOption = ({
@@ -21,6 +22,7 @@ export const PosterOption = ({
   isCurrent,
   isBusy,
   onSelect,
+  index,
 }: PosterOptionProps) => {
   const t = useTranslations();
   return (
@@ -34,6 +36,7 @@ export const PosterOption = ({
       <figure className="relative">
         <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
           <ImageLoader
+            index={index}
             src={previewUrl || posterUrl}
             alt={previewUrl || posterUrl}
             width={500}

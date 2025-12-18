@@ -7,7 +7,7 @@ import {
   FetchedMedia,
   NormalizedMovieDetails,
 } from "@/lib/types";
-import { ThePosterDbClient } from "@/lib/client/theposterdb";
+import { ThePosterDbClient } from "theposterdb-ts";
 import { determineTmdbId } from "./determineTmdbId";
 import { fetchTmdbDetails } from "./fetchTmdbDetails";
 import * as fanart from "./fanart";
@@ -76,14 +76,14 @@ export const buildPosters = async (
 
   let knownIds;
   // @ts-expect-error - media.guid is not defined in the type
-  if(media.Guid) {
+  if (media.Guid) {
     // @ts-expect-error - media.guid is not defined in the type
     knownIds = extractKnownIds(media.Guid);
   } else {
     knownIds = media.providerIds;
   }
 
-  const tmdbId = await determineTmdbId(knownIds as { tmdb?: string; imdb?: string; tvdb?: string });
+  const tmdbId = await determineTmdbId(knownIds as { tmdb?: string; imdb?: string; tvdb?: string; });
   const tmdbMedia = await fetchTmdbDetails(
     tmdbId as string,
     type,

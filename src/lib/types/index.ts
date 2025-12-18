@@ -2,7 +2,6 @@ export type { Selectable, Insertable, Updateable } from 'kysely';
 export * from './types_generated';
 export * from './tmdb';
 export * from './fanart';
-export * from './theposterdb';
 export * from './errors';
 export * from './plex';
 export * from './jellyfin';

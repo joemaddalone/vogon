@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin"
+import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n.ts");
 
@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
         hostname: "theposterdb.com",
         pathname: "/api/assets/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.theposterdb.com",
+        pathname: "/**",
+      }
     ],
   },
   experimental: {
