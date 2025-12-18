@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/joemaddalone/vogon/compare/v1.4.0...v1.4.1) (2025-12-18)
+
+
+### Bug Fixes
+
+* **episode:** clean up episodes when resetting show lib ([11b4ff8](https://github.com/joemaddalone/vogon/commit/11b4ff862406643615d372ae2b5b489f60c1e688))
+
 # [1.4.0](https://github.com/joemaddalone/vogon/compare/v1.3.0...v1.4.0) (2025-12-08)
 
 
