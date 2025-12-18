@@ -19,7 +19,7 @@ export type NormalizedMediaItem = {
   rating?: number; // Plex: rating, Jellyfin: CommunityRating
   contentRating?: string; // Plex: contentRating, Jellyfin: OfficialRating
   duration?: number; // Plex: duration (seconds), Jellyfin: RunTimeTicks (convert to seconds)
-  originallyAvailableAt?: string; // Plex: originallyAvailableAt, Jellyfin: PremiereDate
+  releaseDate?: string; // Plex: originallyAvailableAt, Jellyfin: PremiereDate
 };
 
 export type NormalizedSeason = {
@@ -32,7 +32,7 @@ export type NormalizedSeason = {
   parentThumb?: string;
   summary?: string; // Plex: summary, Jellyfin: Overview
   year?: number; // Plex: year, Jellyfin: ProductionYear
-
+  releaseDate?: string; // Plex: originallyAvailableAt, Jellyfin: PremiereDate
 };
 
 export type NormalizedEpisode = {
@@ -43,7 +43,7 @@ export type NormalizedEpisode = {
   thumbUrl?: string;
   summary?: string; // Plex: summary, Jellyfin: Overview
   rating?: number; // Plex: audienceRating, Jellyfin: CommunityRating
-  originallyAvailableAt?: string; // Plex: originallyAvailableAt, Jellyfin: PremiereDate
+  releaseDate?: string; // Plex: originallyAvailableAt, Jellyfin: PremiereDate
   duration?: number; // Plex: duration (seconds), Jellyfin: RunTimeTicks (convert to seconds)
   parentIndex?: number; // Plex: parentIndex, Jellyfin: ParentIndexNumber
 };

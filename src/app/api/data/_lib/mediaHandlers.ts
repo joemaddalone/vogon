@@ -121,9 +121,8 @@ export async function handleMediaUpdate(
     revalidatePath(config.cachePath, "page");
 
     return NextResponse.json({
-      data: `${mediaType} ${
-        thumbUrl ? "thumbnail" : "art"
-      } updated successfully`,
+      data: `${mediaType} ${thumbUrl ? "thumbnail" : "art"
+        } updated successfully`,
     });
   } catch (error) {
     console.error(`Error updating ${mediaType}:`, error);
@@ -161,14 +160,15 @@ export async function handleMediaImport(
       artUrl: item.artUrl ?? null,
       duration: item.duration ?? null,
       rating: item.rating ?? null,
+      releaseDate: item.releaseDate ?? null,
       contentRating: item.contentRating ?? null,
       guid: item.guid ?? null,
       type:
         mediaType === "movie"
           ? MediaTypeEnum.MOVIE
           : mediaType === "show"
-          ? MediaTypeEnum.SHOW
-          : MediaTypeEnum.SEASON,
+            ? MediaTypeEnum.SHOW
+            : MediaTypeEnum.SEASON,
       serverId,
     }));
 
