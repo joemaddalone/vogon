@@ -80,6 +80,7 @@ export async function handleMediaReset(mediaType: MediaTypeString) {
     await config.reset();
     if (mediaType === "show") {
       await DM.plex.season.reset();
+      await DM.plex.episode.reset();
     }
     return NextResponse.json({
       data: `${config.label} reset successfully`,
