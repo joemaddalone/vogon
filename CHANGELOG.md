@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/joemaddalone/vogon/compare/v1.4.1...v1.5.0) (2025-12-18)
+
+
+### Features
+
+* **lib:** switch to theposterdb-ts library ([b592e0f](https://github.com/joemaddalone/vogon/commit/b592e0f5b03f64464af6c44a120aa4cbd4548746))
+
 ## [1.4.1](https://github.com/joemaddalone/vogon/compare/v1.4.0...v1.4.1) (2025-12-18)
 
 
