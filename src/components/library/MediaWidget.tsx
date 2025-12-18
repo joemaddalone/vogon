@@ -16,6 +16,8 @@ export const MediaWidget = ({
   itemType: "movie" | "show";
 }) => {
   const t = useTranslations();
+
+  const releaseDate = movieData.releaseDate ? new Date(movieData.releaseDate).toLocaleDateString() : movieData.year?.toString();
   // Full mode render
   return (
     <Link
@@ -69,9 +71,9 @@ export const MediaWidget = ({
         </h4>
 
         {/* Release Date */}
-        {movieData.year && (
+        {releaseDate && (
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-            🗓️ {movieData.year.toString()}
+            🗓️ {releaseDate}
           </p>
         )}
 

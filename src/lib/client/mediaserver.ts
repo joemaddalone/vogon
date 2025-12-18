@@ -91,7 +91,7 @@ export class MediaServerClient {
       rating: item.rating,
       contentRating: item.contentRating,
       duration: item.duration ? Math.floor(item.duration / 1000) : undefined, // Convert ms to seconds
-      originallyAvailableAt: item.originallyAvailableAt,
+      releaseDate: item.originallyAvailableAt ?? undefined,
     };
   }
 
@@ -105,6 +105,7 @@ export class MediaServerClient {
       ratingKey: item.Id,
       title: item.Name,
       year: item.ProductionYear,
+      releaseDate: item.PremiereDate ?? undefined,
       thumbUrl: item.thumbUrl,
       artUrl: item.artUrl,
       summary: item.Overview,
@@ -113,7 +114,6 @@ export class MediaServerClient {
       duration: item.RunTimeTicks
         ? Math.floor(item.RunTimeTicks / 10_000_000)
         : undefined, // Convert ticks (100ns) to seconds
-      originallyAvailableAt: item.PremiereDate,
     };
   }
 
@@ -166,7 +166,7 @@ export class MediaServerClient {
       thumbUrl: episode.thumbUrl,
       summary: episode.summary,
       rating: episode.audienceRating,
-      originallyAvailableAt: episode.originallyAvailableAt,
+      releaseDate: episode.originallyAvailableAt ?? undefined,
       duration: episode.duration
         ? Math.floor(episode.duration / 1000)
         : undefined,
@@ -188,7 +188,7 @@ export class MediaServerClient {
       thumbUrl: episode.thumbUrl,
       summary: episode.Overview,
       rating: episode.CommunityRating,
-      originallyAvailableAt: episode.PremiereDate,
+      releaseDate: episode.PremiereDate ?? undefined,
       duration: episode.RunTimeTicks
         ? Math.floor(episode.RunTimeTicks / 10_000_000)
         : undefined,

@@ -19,7 +19,7 @@ export const MediaGridControl = () => {
     toggleSortDirection,
   } = useMediaGrid();
   const t = useTranslations();
-  const handleSortFieldChange = (field: "title" | "year") => {
+  const handleSortFieldChange = (field: "title" | "releaseDate") => {
     if (sortField === field) {
       toggleSortDirection();
     } else {
@@ -27,7 +27,7 @@ export const MediaGridControl = () => {
     }
   };
 
-  const getSortIcon = (field: "title" | "year") => {
+  const getSortIcon = (field: "title" | "releaseDate") => {
     if (sortField !== field) {
       return <ArrowUpDown className="h-3 w-3 ml-1" />;
     }
@@ -61,10 +61,10 @@ export const MediaGridControl = () => {
             <Button
               className="button-group-button"
               size="sm"
-              variant={sortField === "year" ? "default" : "outline"}
-              onClick={() => handleSortFieldChange("year")}
+              variant={sortField === "releaseDate" ? "default" : "outline"}
+              onClick={() => handleSortFieldChange("releaseDate")}
             >
-              {t("library.year")} {getSortIcon("year")}
+              {t("library.releaseDate")} {getSortIcon("releaseDate")}
             </Button>
           </ButtonGroup>
 
