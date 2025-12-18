@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/joemaddalone/vogon/compare/v1.5.0...v1.5.1) (2025-12-18)
+
+
+### Bug Fixes
+
+* make sure db:generate is run in order to catch migrations ([b4dbee1](https://github.com/joemaddalone/vogon/commit/b4dbee19a3937c519f42c9e4ab3f16375593a55f))
+
 # [1.5.0](https://github.com/joemaddalone/vogon/compare/v1.4.1...v1.5.0) (2025-12-18)
 
 
