@@ -204,16 +204,16 @@ export class MediaServerClient {
     const base = this.normalizePlexMediaItem(details as PlexMovieResponse);
     const guid = Array.isArray(details.Guid)
       ? details.Guid.reduce((acc, g) => {
-          const id = g.id;
-          if (id?.startsWith("tmdb://")) {
-            acc.tmdb = id.replace("tmdb://", "");
-          } else if (id?.startsWith("imdb://")) {
-            acc.imdb = id.replace("imdb://", "");
-          } else if (id?.startsWith("tvdb://")) {
-            acc.tvdb = id.replace("tvdb://", "");
-          }
-          return acc;
-        }, {} as { tmdb?: string; imdb?: string; tvdb?: string })
+        const id = g.id;
+        if (id?.startsWith("tmdb://")) {
+          acc.tmdb = id.replace("tmdb://", "");
+        } else if (id?.startsWith("imdb://")) {
+          acc.imdb = id.replace("imdb://", "");
+        } else if (id?.startsWith("tvdb://")) {
+          acc.tvdb = id.replace("tvdb://", "");
+        }
+        return acc;
+      }, {} as { tmdb?: string; imdb?: string; tvdb?: string; })
       : undefined;
 
     return {
@@ -240,10 +240,10 @@ export class MediaServerClient {
       genres: details.Genres?.map((g) => g.Name),
       providerIds: details.ProviderIds
         ? {
-            tmdb: details.ProviderIds.Tmdb,
-            imdb: details.ProviderIds.Imdb,
-            tvdb: details.ProviderIds.Tvdb,
-          }
+          tmdb: details.ProviderIds.Tmdb,
+          imdb: details.ProviderIds.Imdb,
+          tvdb: details.ProviderIds.Tvdb,
+        }
         : undefined,
     };
   }
@@ -336,9 +336,19 @@ export class MediaServerClient {
   }
 
   /**
+   * Update episode poster with a new image URL
+   */
+  async updateEpisodePoster(itemId: string, base64: string): Promise<void> {
+    return this.client.updateEpisodePoster(itemId, base64);
+  }
+
+  /**
    * Update movie backdrop with a new image URL
    */
-  async updateMovieBackdrop( itemId: string, backdropUrl: string ): Promise<void> {
+  async updateMovieBackdrop(
+    itemId: string,
+    backdropUrl: string
+  ): Promise<void> {
     return this.client.updateMovieBackdrop(itemId, backdropUrl);
   }
 

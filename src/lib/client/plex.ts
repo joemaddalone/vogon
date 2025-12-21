@@ -9,7 +9,7 @@ import {
 import { getClients } from "./getClients";
 
 export class PlexClient {
-  constructor() {}
+  constructor() { }
 
   private async config() {
     return await getClients();
@@ -137,6 +137,46 @@ export class PlexClient {
         ? `${config?.serverUrl}${episode.art}?X-Plex-Token=${config?.serverToken}`
         : undefined,
     }));
+  }
+
+
+  async updateEpisodePoster(ratingKey: string, base64: string): Promise<void> {
+    const config = await this.config();
+    const url = `${config?.serverUrl}/library/metadata/${ratingKey}/posters`;
+
+    let mimeType = "image/jpeg";
+    let base64Data = base64;
+
+    const dataUrlMatch = base64.match(/^data:(image\/[a-z]+);base64,(.+)$/);
+    if (dataUrlMatch) {
+      mimeType = dataUrlMatch[1];
+      base64Data = dataUrlMatch[2];
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": mimeType,
+          "X-Plex-Token": config?.serverToken || "",
+        },
+        body: Buffer.from(base64Data, 'base64')
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update poster: ${response.status} ${response.statusText}`
+        );
+      }
+    } catch (error) {
+      console.error("Failed to update movie poster:", error);
+      throw error;
+    }
+
+
+    // Lock the poster field to prevent Plex from overwriting it
+    await this.lockPosterField(ratingKey);
   }
 
   /**
@@ -269,7 +309,7 @@ export class PlexClient {
       PlexResponse<
         PlexMovieResponse & {
           librarySectionID: string;
-          Label?: Array<{ tag: string }>;
+          Label?: Array<{ tag: string; }>;
         }
       >
     >(`/library/metadata/${ratingKey}`);
@@ -524,9 +564,8 @@ export class PlexClient {
       console.error("Error removing Overlay:", error);
       return {
         success: false,
-        message: `ERROR: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`,
+        message: `ERROR: ${error instanceof Error ? error.message : "Unknown error"
+          }`,
       };
     }
   }
@@ -537,7 +576,7 @@ export class PlexClient {
   async testConnection(): Promise<boolean> {
     try {
       const response = await this.request<{
-        MediaContainer: { machineIdentifier: string };
+        MediaContainer: { machineIdentifier: string; };
       }>("/");
       return !!response.MediaContainer.machineIdentifier;
     } catch {
