@@ -11,7 +11,7 @@ import {
 import { getClients } from "./getClients";
 
 export class JellyfinClient {
-  constructor() {}
+  constructor() { }
 
   private async config() {
     return await getClients();
@@ -142,8 +142,8 @@ export class JellyfinClient {
       artUrl: season.BackdropImageTags?.[0]
         ? `${config?.serverUrl}/Items/${season.Id}/Images/Backdrop/0?api_key=${config?.serverToken}`
         : season.ParentBackdropImageTags?.[0]
-        ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Backdrop/0?api_key=${config?.serverToken}`
-        : undefined,
+          ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Backdrop/0?api_key=${config?.serverToken}`
+          : undefined,
       parentThumb: season.SeriesPrimaryImageTag
         ? `${config?.serverUrl}/Items/${season.SeriesId}/Images/Primary?api_key=${config?.serverToken}`
         : undefined,
@@ -171,6 +171,43 @@ export class JellyfinClient {
         ? `${config?.serverUrl}/Items/${episode.Id}/Images/Primary?api_key=${config?.serverToken}`
         : undefined,
     }));
+  }
+
+  async updateEpisodePoster(itemId: string, base64: string): Promise<void> {
+    const config = await this.config();
+    const url = `${config?.serverUrl}/Items/${itemId}/Images/Primary`;
+
+    let mimeType = "image/jpeg";
+    let base64Data = base64;
+
+    const dataUrlMatch = base64.match(/^data:(image\/[a-z]+);base64,(.+)$/);
+    if (dataUrlMatch) {
+      mimeType = dataUrlMatch[1];
+      base64Data = dataUrlMatch[2];
+    }
+
+    // Upload to Jellyfin
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": mimeType,
+          "X-Emby-Authorization": `MediaBrowser Token="${config?.serverToken}"`,
+        },
+        body: base64Data
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update poster: ${response.status} ${response.statusText}`
+        );
+      }
+
+    } catch (error) {
+      console.error("Failed to update movie poster:", error);
+      throw error;
+    }
   }
 
   /**
