@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.theposterdb.com",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "fonts.googleapis.com",
+        pathname: "/**",
       }
     ],
   },
