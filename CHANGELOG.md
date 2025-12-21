@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/joemaddalone/vogon/compare/v1.5.1...v1.6.0) (2025-12-21)
+
+
+### Features
+
+* **titlecards:** initial api for titlecards ([3d5dfa8](https://github.com/joemaddalone/vogon/commit/3d5dfa8b23a969c390cd1df00ed90c2fd481f2c9))
+
 ## [1.5.1](https://github.com/joemaddalone/vogon/compare/v1.5.0...v1.5.1) (2025-12-18)
 
 
