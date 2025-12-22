@@ -21,7 +21,7 @@ export const CanvasImage = ({
       const maxWidth = 500;
       const maxHeight = 200;
       const img = new Image();
-      img.src = src || `/cache/episodes/${episode.ratingKey}.jpg`;
+      img.src = src || `/api/assets?ratingKey=${episode.ratingKey}`;
       img.onload = () => {
         if (canvasRef.current) {
           // Calculate scaling factor
@@ -62,6 +62,6 @@ export const CanvasImage = ({
     <canvas ref={canvasRef} />
   ) : (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={`/cache/episodes/${episode.ratingKey}.jpg`} alt={episode.title} />
+    <img src={`/api/assets?ratingKey=${episode.ratingKey}`} alt={episode.title} />
   );
 };
