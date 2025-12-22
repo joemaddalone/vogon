@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/joemaddalone/vogon/compare/v1.6.0...v1.7.0) (2025-12-22)
+
+
+### Features
+
+* **titlecards:** Adds title card functionality ([0a56e82](https://github.com/joemaddalone/vogon/commit/0a56e820a11b9eca9bb454b5ea7de72fdc6acf9e))
+
 # [1.6.0](https://github.com/joemaddalone/vogon/compare/v1.5.1...v1.6.0) (2025-12-21)
 
 
