@@ -4,19 +4,18 @@
 ![VOGON](https://img.shields.io/badge/VOGON-Art%20Management-blue?style=for-the-badge)
 [![Buy Me A Coffee](https://img.shields.io/badge/Support-Buy%20Me%20A%20Coffee-orange?style=for-the-badge)](https://buymeacoffee.com/joemaddalone)
 
-
 </div>
 
 > **Note**
 > This application connects to one or more Plex or Jellyfin Media Servers, imports movie and TV show libraries, and lets you replace movie, show and season artwork with alternatives from TMDB, Fanart.tv, and other sources.
 
-
 ## Key Features
 
 - **Handles Multiple Servers**: Add as many Plex and Jellyfin servers as you like
 - **Fast Import**: Vogon does not store image files so reset your libraries as often as you like
-- **Sourcing**: Vogon currently supports TMDB, Fanart.tv, and ThePosterDB.  Plenty of options to choose from.
+- **Sourcing**: Vogon currently supports TMDB, Fanart.tv, and ThePosterDB. Plenty of options to choose from.
 - **Update Everything**: Update Movie posters and backdrops, TV Show posters and backdrops, and Season posters.
+- **Title Cards**: Generate title cards for TV Show Episodes
 
 ## Usage
 
@@ -29,9 +28,8 @@
 - **TMDB API key**: [Get an API key](https://www.themoviedb.org/settings/api)
 - **Local network access** to Plex
 - OPTIONAL
-   - **Fanart.tv API Key** [Get an API key](https://fanart.tv/get-an-api-key/)
-   - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
-
+  - **Fanart.tv API Key** [Get an API key](https://fanart.tv/get-an-api-key/)
+  - **ThePosterDB Credentials** [Create a free account](https://theposterdb.com/)
 
 ## Deployment Guide
 
@@ -55,6 +53,7 @@ services:
     #   - THEPOSTERDB_EMAIL=
     #   - THEPOSTERDB_PASSWORD=
     #   - REMOVE_OVERLAYS=true
+    #   - ENABLE_EPISODES=true
 ```
 
 ## Local Guide
@@ -74,7 +73,6 @@ docker compose -f docker-compose-dev.yml up -d --build
 ### Local Development Requirements
 
 - **Node v20+**
-
 
 ### Production Build
 
@@ -119,10 +117,11 @@ npm run dev
 # Open your browser at http://localhost:3000
 ```
 
+---
 
-[Support Open Source](https://buymeacoffee.com/joemaddalone)
+## Contributing
 
-
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
@@ -131,53 +130,3 @@ npm run dev
 Your support helps maintain and improve this project! Please consider:
 
 - [Buy me a coffee](https://www.buymeacoffee.com/joemaddalone)
-
----
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Development Workflow
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes and add tests if applicable
-4. Run tests: `npm test`
-5. Commit your changes using [Conventional Commits](#commit-message-format)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-### Commit Message Format
-
-This project uses [Conventional Commits](https://www.conventionalcommits.org/) for automated versioning and changelog generation.
-
-**Format:** `<type>(<scope>): <description>`
-
-**Types:**
-- `feat:` - A new feature (triggers **minor** version bump, e.g., 1.0.0 → 1.1.0)
-- `fix:` - A bug fix (triggers **patch** version bump, e.g., 1.0.0 → 1.0.1)
-- `docs:` - Documentation only changes
-- `style:` - Code style changes (formatting, semicolons, etc.)
-- `refactor:` - Code changes that neither fix bugs nor add features
-- `perf:` - Performance improvements
-- `test:` - Adding or updating tests
-- `chore:` - Maintenance tasks, dependency updates
-
-**Breaking Changes:**
-- Add `BREAKING CHANGE:` in the commit footer or `!` after type to trigger **major** version bump (e.g., 1.0.0 → 2.0.0)
-
-**Examples:**
-```bash
-feat(library): add filter by genre
-fix(import): resolve duplicate detection issue
-docs: update deployment instructions
-feat!: redesign navigation structure
-```
-
-### Release Process
-
-Releases are automated via semantic-release:
-- Merging to `main` triggers tests, semantic versioning, and Docker image publishing
-- Version numbers and changelogs are generated automatically from commit messages
-- GitHub releases are created with release notes
