@@ -41,7 +41,7 @@ export async function GET(request: Request) {
   }
 
   // return base64 image form imagePath
-	const imageBase64 = fs.readFileSync(imagePath, 'base64');
+  const imageBase64 = fs.readFileSync(imagePath, "base64");
 
   return NextResponse.json({ data: `data:image/jpeg;base64,${imageBase64}` });
 }

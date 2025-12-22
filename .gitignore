@@ -59,6 +59,8 @@ memory-bank
 
 # local sqlite backups
 src/db/dev.db
+src/db/cache/**/*.jpg
 
 # cache
 public/cache
+

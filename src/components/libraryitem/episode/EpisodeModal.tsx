@@ -92,7 +92,7 @@ export const EpisodeModal = ({
     await api.mediaserver.posterEpisode(episode?.ratingKey || "", base64);
 
     // @ts-expect-error - ratingKey is a string
-    await api.config.revalidate(`/cache/episodes/${episode.ratingKey}.jpg`);
+    await api.config.revalidate(`/api/assets?ratingKey=${episode.ratingKey}`);
     setCurrentIndex(index);
     setBusyIndex(-1);
     router.refresh();
