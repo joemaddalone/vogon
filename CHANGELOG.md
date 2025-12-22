@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/joemaddalone/vogon/compare/v1.7.0...v1.7.1) (2025-12-22)
+
+
+### Bug Fixes
+
+* **cache:** add api to fetch uploaded image ([6b67b82](https://github.com/joemaddalone/vogon/commit/6b67b82d21781bb89f6aad5ad17e4fa77501bad5))
+
 # [1.7.0](https://github.com/joemaddalone/vogon/compare/v1.6.0...v1.7.0) (2025-12-22)
 
 
