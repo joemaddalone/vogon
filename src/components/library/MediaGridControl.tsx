@@ -51,6 +51,7 @@ export const MediaGridControl = () => {
           {/* Sort Controls */}
           <ButtonGroup className="button-group">
             <Button
+              data-testid="sort-title"
               className="button-group-button"
               size="sm"
               variant={sortField === "title" ? "default" : "outline"}
@@ -59,6 +60,7 @@ export const MediaGridControl = () => {
               {t("library.title")} {getSortIcon("title")}
             </Button>
             <Button
+              data-testid="sort-release-date"
               className="button-group-button"
               size="sm"
               variant={sortField === "releaseDate" ? "default" : "outline"}
@@ -71,6 +73,7 @@ export const MediaGridControl = () => {
           {/* View Controls */}
           <ButtonGroup className="button-group">
             <Button
+              data-testid="view-grid"
               className="button-group-button"
               size="sm"
               variant={view === "grid" ? "default" : "outline"}
@@ -79,6 +82,7 @@ export const MediaGridControl = () => {
               {t("library.grid")} <LayoutGridIcon strokeWidth={1.5} className="ml-2 h-4 w-4" />
             </Button>
             <Button
+              data-testid="view-rows"
               className="button-group-button"
               size="sm"
               variant={view === "rows" ? "default" : "outline"}

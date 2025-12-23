@@ -19,10 +19,10 @@ export const LibraryError = ({ error }: LibraryErrorProps) => {
         <div className="flex items-start gap-4 mb-6">
           <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400 shrink-0 mt-1" />
           <div>
-            <h2 className="text-2xl font-bold text-red-900 dark:text-red-100 mb-3">
+            <h2 data-testid="error-title" className="text-2xl font-bold text-red-900 dark:text-red-100 mb-3">
               {t("library.errorLoadingLibrary")}
             </h2>
-            <p className="text-lg text-red-700 dark:text-red-300 font-medium leading-relaxed">
+            <p data-testid="error-message" className="text-lg text-red-700 dark:text-red-300 font-medium leading-relaxed">
               {error}
             </p>
           </div>
@@ -35,7 +35,7 @@ export const LibraryError = ({ error }: LibraryErrorProps) => {
           size="lg"
         >
           <ArrowLeft className="w-4 h-4" />
-          {t("library.backToHome")}
+          <span data-testid="back-to-home">{t("library.backToHome")}</span>
         </Button>
       </FadeIn>
     </div>

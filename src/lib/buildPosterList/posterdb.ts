@@ -24,9 +24,3 @@ export const images = async (
     return { theposterdb_posters: [] };
   }
 };
-
-
-// previewUrl
-
-// https://theposterdb.com/api/assets/71820/view?performed_by=joemaddalone
-// https://images.theposterdb.com/prod/public/images/posters/optimized/movies/7894/tz3d9BCT5yqAf3ZsujPnJBJErQDoFUWfasWXkCDt.jpg"

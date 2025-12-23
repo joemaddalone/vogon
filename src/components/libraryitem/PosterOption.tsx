@@ -32,7 +32,7 @@ export const PosterOption = ({
       transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       className="group"
     >
-      {source && <div className="flex w-full justify-center items-center text-xs pb-2">source: {source}</div>}
+      {source && <div data-testid="source" className="flex w-full justify-center items-center text-xs pb-2">source: {source}</div>}
       <figure className="relative">
         <div className="relative overflow-hidden rounded-[12px] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-foreground/10">
           <ImageLoader
@@ -46,12 +46,12 @@ export const PosterOption = ({
         </div>
         <figcaption className="mt-5 text-center">
           {isCurrent ? (
-            <span className="inline-flex items-center  bg-yellow-400/10 px-4 py-2.5 text-sm font-semibold dark:text-yellow-500 shadow-lg border border-yellow-400/30 backdrop-blur-md">
+            <span data-testid="current-poster" className="inline-flex items-center  bg-yellow-400/10 px-4 py-2.5 text-sm font-semibold dark:text-yellow-500 shadow-lg border border-yellow-400/30 backdrop-blur-md">
               {t("common.current")}
             </span>
           ) : (
             <Button
-              variant="secondary"
+              data-testid="select-poster"
               size="sm"
               onClick={onSelect}
               disabled={isBusy}

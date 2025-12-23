@@ -10,14 +10,14 @@ export const images = async (tmdbMedia: TMDBDetail) => {
         source: "tmdb",
       });
     });
-    if (tmdbMedia.images.backdrops && tmdbMedia.images.backdrops.length > 0) {
-      tmdbMedia.images.backdrops.forEach((backdrop: { file_path: string }) => {
-        b.push({
-          file_path: `https://image.tmdb.org/t/p/w500/${backdrop.file_path}`,
-          source: "tmdb",
-        });
+  }
+  if (tmdbMedia.images.backdrops && tmdbMedia.images.backdrops.length > 0) {
+    tmdbMedia.images.backdrops.forEach((backdrop: { file_path: string }) => {
+      b.push({
+        file_path: `https://image.tmdb.org/t/p/w500/${backdrop.file_path}`,
+        source: "tmdb",
       });
-    }
+    });
   }
 	return { tmdb_posters: p, tmdb_backdrops: b };
 }
