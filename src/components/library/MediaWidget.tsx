@@ -21,9 +21,8 @@ export const MediaWidget = ({
   // Full mode render
   return (
     <Link
-      href={`/${itemType === "movie" ? "movie" : "show"}/${
-        movieData.ratingKey
-      }`}
+      href={`/${itemType === "movie" ? "movie" : "show"}/${movieData.ratingKey
+        }`}
       scroll={true}
       className={`bg-white dark:bg-black/50 rounded-lg shadow-md overflow-hidden ${className} w-full widget-block`}
     >
@@ -72,7 +71,7 @@ export const MediaWidget = ({
 
         {/* Release Date */}
         {releaseDate && (
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+          <p data-testid="release-date" className="text-sm text-gray-700 dark:text-gray-300 mb-3">
             🗓️ {releaseDate}
           </p>
         )}

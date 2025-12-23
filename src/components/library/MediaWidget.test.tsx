@@ -96,27 +96,27 @@ describe("MediaWidget", () => {
   });
 
   it("should render release date", () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
       <MediaWidget
         movieData={mockMovieData}
         itemType="movie"
       />
     );
 
-    expect(getByText("🗓️ 12/31/2022")).toBeDefined();
+    expect(getByTestId("release-date")).toHaveTextContent("🗓️ 12/31/2022");
   });
 
   it("should render year when release date is not available", () => {
     const movieWithoutDate = { ...mockMovieData, releaseDate: null };
 
-    const { getByText } = render(
+    const { getByTestId } = render(
       <MediaWidget
         movieData={movieWithoutDate}
         itemType="movie"
       />
     );
 
-    expect(getByText("🗓️ 2023")).toBeDefined();
+    expect(getByTestId("release-date")).toHaveTextContent("🗓️ 2023");
   });
 
   it("should render summary in grid mode on hover", () => {
