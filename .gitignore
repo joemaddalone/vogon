@@ -48,19 +48,20 @@ next-env.d.ts
 # vscode
 .vscode
 
-# cursor
+# # cursor
 .cursor
+
+# antigravity
+.agent
 
 # memory-bank
 memory-bank
 
-# cursor
-.cursor
-
 # local sqlite backups
 src/db/dev.db
-src/db/cache/**/*.jpg
 
 # cache
 public/cache
+
+AGENTS.md
 

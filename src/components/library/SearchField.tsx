@@ -36,7 +36,7 @@ export const SearchField = ({
   // But don't overwrite if the change came from within this component
   useEffect(() => {
     startTransition(() => {
-    if (!isInternalChangeRef.current && searchQuery !== localQuery) {
+      if (!isInternalChangeRef.current && searchQuery !== localQuery) {
         setLocalQuery(searchQuery);
       }
     });
@@ -52,6 +52,7 @@ export const SearchField = ({
       <ButtonGroup className="flex-1">
         <div className="relative flex-1">
           <Input
+            data-testid="search-input"
             className={size === "xl" ? "h-12 text-lg w-full rounded-xl rounded-r-none" : "w-full h-[42px] rounded-xl px-4 rounded-r-none"}
             type="text"
             name="query"
@@ -61,6 +62,7 @@ export const SearchField = ({
           />
           {localQuery && (
             <button
+              data-testid="clear-button"
               type="button"
               onClick={handleClear}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-110"
@@ -71,6 +73,7 @@ export const SearchField = ({
           )}
         </div>
         <Button
+          data-testid="search-button"
           className={size === "xl" ? "h-12 text-lg rounded-xl" : "h-[42px] rounded-xl"}
           type="button"
           variant="outline"
@@ -81,4 +84,4 @@ export const SearchField = ({
       </ButtonGroup>
     </div>
   );
-}
+};

@@ -1,4 +1,6 @@
 import { vi } from "vitest";
+import '@testing-library/jest-dom/vitest';
+
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => ({
@@ -10,6 +12,7 @@ vi.mock("next/navigation", () => ({
     forward: vi.fn(),
   })),
   usePathname: vi.fn(() => '/'),
+  useSearchParams: vi.fn(() => new URLSearchParams()),
 }));
 
 vi.mock("next-intl", () => ({
