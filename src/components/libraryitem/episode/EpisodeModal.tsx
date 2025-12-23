@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { fontManager } from "@/lib/cards/helpers/fontManager";
+import { cardTypes } from "@/lib/cards";
 
 export const EpisodeModal = ({
   episode,
@@ -26,6 +27,10 @@ export const EpisodeModal = ({
     {
       label: "Original",
       value: "original",
+    },
+    {
+      label: "Bars",
+      value: "bars",
     },
     {
       label: "Frame",
@@ -130,7 +135,7 @@ export const EpisodeModal = ({
               <div>{card.label}</div>
               <figure>
                 <div ref={getRef(index)}>
-                  <CanvasImage episode={episode} mode={card.value as "original" | "frame"} />
+                  <CanvasImage episode={episode} mode={card.value as cardTypes} />
                 </div>
                 <figcaption className="mt-5 text-center">
                   {currentIndex === index ? (
