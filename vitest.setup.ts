@@ -1,17 +1,7 @@
-import { afterEach, vi } from "vitest";
+import { vi } from "vitest";
 import '@testing-library/jest-dom/vitest';
 
-const originalLocaleDateString = Date.prototype.toLocaleDateString;
 
-vi.spyOn(Date.prototype, 'toLocaleDateString').mockImplementation(function () {
-  // @ts-ignore
-  return originalLocaleDateString.call(this, 'en-US');
-});
-
-afterEach(() => {
-  vi.restoreAllMocks(); // Restores spies created with vi.spyOn
-
-});
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => ({
