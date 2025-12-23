@@ -1,3 +1,12 @@
+## [1.7.2](https://github.com/joemaddalone/vogon/compare/v1.7.1...v1.7.2) (2025-12-23)
+
+
+### Bug Fixes
+
+* fix test MediaWidget.tsx ([291ea89](https://github.com/joemaddalone/vogon/commit/291ea893be64ec0823b86300446459032a8c1ae5))
+* just remove the dumb test ([4cf3a59](https://github.com/joemaddalone/vogon/commit/4cf3a594db4e8614496f70ca5868bff6d37fec5d))
+* mock toLocaleDateString in tests ([9d97db3](https://github.com/joemaddalone/vogon/commit/9d97db348816cdd3f8e966512fdf1d85da743f10))
+
 ## [1.7.1](https://github.com/joemaddalone/vogon/compare/v1.7.0...v1.7.1) (2025-12-22)
 
 
