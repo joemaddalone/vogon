@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/joemaddalone/vogon/compare/v1.7.2...v1.8.0) (2025-12-23)
+
+
+### Features
+
+* bar title cards, easier card management ([14fde79](https://github.com/joemaddalone/vogon/commit/14fde79539d205838aa89a6ca7d7b99d1ac4d5da))
+
 ## [1.7.2](https://github.com/joemaddalone/vogon/compare/v1.7.1...v1.7.2) (2025-12-23)
 
 
