@@ -1,8 +1,6 @@
 import { NormalizedEpisode } from "@/lib/types";
 import { useEffect, useRef } from "react";
-import { createCard } from "@/lib/cards";
-
-type cardTypes = "original" | "frame" | "standard" | "minimalDigital" | "vhs";
+import { createCard, cardTypes } from "@/lib/cards";
 
 export const CanvasImage = ({
   episode,
@@ -42,7 +40,7 @@ export const CanvasImage = ({
               seasonNumber: episode.parentIndex || 0,
               episodeNumber: episode.index || 0,
             },
-            mode as cardTypes,
+            mode,
             offScreenCanvas
           );
 

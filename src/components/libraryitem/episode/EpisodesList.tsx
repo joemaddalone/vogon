@@ -31,7 +31,7 @@ export const EpisodesList = ({
     null
   );
 
-  const [titleCardTemplate, setTitleCardTemplate] = useState("current");
+  const [titleCardTemplate, setTitleCardTemplate] = useState<cardTypes>("current");
   const [busy, setBusy] = useState(false);
 
   const canvasRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -81,7 +81,7 @@ export const EpisodesList = ({
         <Select
           name="type"
           defaultValue={titleCardTemplate}
-          onValueChange={setTitleCardTemplate}
+          onValueChange={(value) => setTitleCardTemplate(value as cardTypes)}
         >
           <SelectTrigger className="bg-orange-500 rounded-md">
             <SelectValue
@@ -94,6 +94,7 @@ export const EpisodesList = ({
               <SelectLabel>Title Cards</SelectLabel>
               <SelectItem value="current">Current Images</SelectItem>
               <SelectItem value="original">Original Images</SelectItem>
+              <SelectItem value="bars">Bars Template</SelectItem>
               <SelectItem value="standard">Standard Template</SelectItem>
               <SelectItem value="minimalDigital">
                 Minimal Digital Template
@@ -126,13 +127,13 @@ export const EpisodesList = ({
                   {titleCardTemplate === "current" ? (
                     <CanvasImage
                       episode={episode}
-                      mode={titleCardTemplate as cardTypes}
+                      mode={titleCardTemplate}
                       src={episode.thumbUrl || ""}
                     />
                   ) : (
                     <CanvasImage
                       episode={episode}
-                      mode={titleCardTemplate as cardTypes}
+                      mode={titleCardTemplate}
                     />
                   )}
                 </div>
