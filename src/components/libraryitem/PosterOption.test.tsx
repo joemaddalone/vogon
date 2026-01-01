@@ -10,7 +10,7 @@ describe('PosterOption', () => {
 	const source = 'TMDB';
 
 	it('renders poster image and source text', () => {
-		const { getByTestId, getByAltText } = render(
+		const { getByTestId } = render(
 			<PosterOption
 				index={0}
 				posterUrl={posterUrl}

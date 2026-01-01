@@ -1,4 +1,4 @@
-import { render, fireEvent, cleanup, getByTestId } from "@testing-library/react";
+import { render, fireEvent, cleanup } from "@testing-library/react";
 import { SearchField } from "@/components/library/SearchField";
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 

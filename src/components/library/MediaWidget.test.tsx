@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, cleanup } from "@testing-library/react";
 import { MediaWidget } from "@/components/library/MediaWidget";
 import { Selectable, Media } from "@/lib/types";
