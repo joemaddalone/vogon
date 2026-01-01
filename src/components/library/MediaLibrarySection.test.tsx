@@ -52,7 +52,7 @@ afterEach(() => {
 
 // Mock media data
 const mockMedia: Media = {
-  // @ts-ignore
+  // @ts-expect-error: type is not a valid property of Media
   id: 1,
   title: "Test Movie",
   ratingKey: "1",
@@ -73,9 +73,9 @@ const mockMedia: Media = {
   parentTitle: null,
   rating: null,
   summary: null,
-  // @ts-ignore
+  // @ts-expect-error: type is not a valid property of Media
   type: 1,
-  // @ts-ignore
+  // @ts-expect-error: serverId is not a valid property of Media
   serverId: 1,
 };
 
