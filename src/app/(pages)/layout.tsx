@@ -5,6 +5,7 @@ import { getMessages, getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import "@/styles/globals.css";
 import { api } from "@/lib/api";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "vogon",
@@ -32,11 +33,12 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body>
+      <body className="min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>
             <Navigation session={session?.data} servers={servers?.data} />
-            <main className="container mx-auto px-4 py-8">{children}</main>
+            <main className="container mx-auto px-4 py-8 flex-1">{children}</main>
+            <Footer />
           </Providers>
         </NextIntlClientProvider>
       </body>
