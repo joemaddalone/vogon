@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/joemaddalone/vogon/compare/v1.8.0...v1.9.0) (2026-01-01)
+
+
+### Features
+
+* **ui:** footer version ([b344ab5](https://github.com/joemaddalone/vogon/commit/b344ab5bcca6f71f07ed235d081762d192eb6f5c))
+
 # [1.8.0](https://github.com/joemaddalone/vogon/compare/v1.7.2...v1.8.0) (2025-12-23)
 
 
