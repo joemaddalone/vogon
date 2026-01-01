@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/joemaddalone/vogon/compare/v1.9.0...v1.10.0) (2026-01-01)
+
+
+### Features
+
+* **api:** move data api to elysia ([c8085f4](https://github.com/joemaddalone/vogon/commit/c8085f49e6646032047621916da6dae356b35d79))
+
 # [1.9.0](https://github.com/joemaddalone/vogon/compare/v1.8.0...v1.9.0) (2026-01-01)
 
 
