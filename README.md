@@ -95,7 +95,7 @@ npm start
 # Open your browser at http://localhost:3000
 ```
 
-https://github.com/user-attachments/assets/d9803c83-92da-44b0-9332-5e4aaa1683fe
+[https://github.com/user-attachments/assets/d9803c83-92da-44b0-9332-5e4aaa1683fe](https://github.com/user-attachments/assets/36b3703a-a9c0-4aca-a239-6061840b3502)
 
 ---
 
