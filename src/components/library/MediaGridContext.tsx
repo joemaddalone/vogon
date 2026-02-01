@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useCallback, useMemo, useReducer, ReactNode, useRef, useEffect, useTransition } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import type { Media,Selectable } from "@/lib/types";
+import type { Media, Selectable } from "@/lib/types";
 import { Route } from "next";
 
 
@@ -11,7 +11,7 @@ const removeArticle = (title: string) => {
 };
 
 // Types
-type SortField = "title" | "releaseDate";
+type SortField = "title" | "releaseDate" | "addedAt";
 type SortDirection = "asc" | "desc";
 
 interface MediaGridState {
@@ -44,8 +44,8 @@ interface MediaGridContextValue extends MediaGridState {
 
 // Actions (simplified - only for local state)
 type Action =
-  | { type: "SET_ITEMS"; payload: Selectable<Media>[] }
-  | { type: "SET_ITEMS_PER_PAGE"; payload: number };
+  | { type: "SET_ITEMS"; payload: Selectable<Media>[]; }
+  | { type: "SET_ITEMS_PER_PAGE"; payload: number; };
 
 // Reducer (simplified - only handles local state)
 function mediaGridReducer(state: MediaGridState, action: Action): MediaGridState {
@@ -97,7 +97,10 @@ export function MediaGridProvider({
 
   const sortField = useMemo(() => {
     const sort = searchParams.get("sort") as SortField;
-    return sort === "releaseDate" ? "releaseDate" : "title";
+    if (sort === "releaseDate" || sort === "addedAt") {
+      return sort;
+    }
+    return "title";
   }, [searchParams]);
 
   const sortDirection = useMemo(() => {
@@ -215,6 +218,10 @@ export function MediaGridProvider({
         const yearA = a.releaseDate ? new Date(a.releaseDate).getTime() : 0;
         const yearB = b.releaseDate ? new Date(b.releaseDate).getTime() : 0;
         comparison = yearA - yearB;
+      } else if (sortField === "addedAt") {
+        const dateA = a.addedAt ? new Date(parseInt(a.addedAt)).getTime() : 0;
+        const dateB = b.addedAt ? new Date(parseInt(b.addedAt)).getTime() : 0;
+        comparison = dateA - dateB;
       }
 
       return sortDirection === "asc" ? comparison : -comparison;

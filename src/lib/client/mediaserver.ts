@@ -92,6 +92,7 @@ export class MediaServerClient {
       contentRating: item.contentRating,
       duration: item.duration ? Math.floor(item.duration / 1000) : undefined, // Convert ms to seconds
       releaseDate: item.originallyAvailableAt ?? undefined,
+      addedAt: String(new Date(item.addedAt).getTime()),
     };
   }
 
@@ -106,6 +107,7 @@ export class MediaServerClient {
       title: item.Name,
       year: item.ProductionYear,
       releaseDate: item.PremiereDate ?? undefined,
+      addedAt: String(new Date(item?.DateCreated || item?.DateLastMediaAdded || 0).getTime()),
       thumbUrl: item.thumbUrl,
       artUrl: item.artUrl,
       summary: item.Overview,
@@ -167,6 +169,7 @@ export class MediaServerClient {
       summary: episode.summary,
       rating: episode.audienceRating,
       releaseDate: episode.originallyAvailableAt ?? undefined,
+      addedAt: episode.addedAt,
       duration: episode.duration
         ? Math.floor(episode.duration / 1000)
         : undefined,
@@ -189,6 +192,7 @@ export class MediaServerClient {
       summary: episode.Overview,
       rating: episode.CommunityRating,
       releaseDate: episode.PremiereDate ?? undefined,
+      addedAt: undefined,
       duration: episode.RunTimeTicks
         ? Math.floor(episode.RunTimeTicks / 10_000_000)
         : undefined,

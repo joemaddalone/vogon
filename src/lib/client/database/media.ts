@@ -9,7 +9,7 @@ const getServerId = async () => {
   }
   return session.serverId;
 
-}
+};
 
 // Common operations for all media types
 export const list = async (type?: MediaTypeEnum): Promise<Selectable<Media>[]> => {
