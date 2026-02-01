@@ -1,8 +1,8 @@
 import { render, renderHook, cleanup } from "@testing-library/react";
 import { MediaGridProvider, useMediaGrid } from "@/components/library/MediaGridContext";
-import { Media, Selectable } from "@/lib/types";
-import { ReactNode } from "react";
-import { useSearchParams, ReadonlyURLSearchParams } from "next/navigation";
+import type { Media, Selectable } from "@/lib/types";
+import type { ReactNode } from "react";
+import { useSearchParams, type ReadonlyURLSearchParams } from "next/navigation";
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 
 
@@ -22,6 +22,7 @@ describe("MediaGridContext", () => {
       thumbUrl: null,
       releaseDate: "2023-01-01",
       year: 2023,
+      addedAt: "2023-01-01",
       artUrl: null,
       contentRating: null,
       duration: null,
@@ -141,6 +142,30 @@ describe("MediaGridContext", () => {
       { ...mockMedia[0], title: "Media A", releaseDate: "2023-01-01" },
       { ...mockMedia[1], title: "Media B", releaseDate: "2023-02-01" },
       { ...mockMedia[2], title: "Media C", releaseDate: "2023-03-01" },
+    ];
+
+    const wrapper = ({ children }: { children: ReactNode; }) => (
+      <MediaGridProvider initialItems={mediaWithDates}>
+        {children}
+      </MediaGridProvider>
+    );
+
+    const { result } = renderHook(() => useMediaGrid(), { wrapper });
+
+    expect(result.current.filteredAndSortedItems[0].title).toBe("Media A");
+    expect(result.current.filteredAndSortedItems[1].title).toBe("Media B");
+    expect(result.current.filteredAndSortedItems[2].title).toBe("Media C");
+  });
+
+  it("should sort items by added date", () => {
+    const mockUseSearchParams = vi.mocked(useSearchParams);
+    mockUseSearchParams.mockReturnValue(new URLSearchParams("sort=addedAt&dir=asc") as unknown as ReadonlyURLSearchParams);
+
+    // Create media with different added dates
+    const mediaWithDates = [
+      { ...mockMedia[0], title: "Media A", addedAt: "2023-01-01" },
+      { ...mockMedia[1], title: "Media B", addedAt: "2023-02-01" },
+      { ...mockMedia[2], title: "Media C", addedAt: "2023-03-01" },
     ];
 
     const wrapper = ({ children }: { children: ReactNode; }) => (

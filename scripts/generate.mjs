@@ -1,10 +1,10 @@
 // Generate the tables using kysely
-import SQLite from 'better-sqlite3';
 import { Kysely, SqliteDialect } from 'kysely';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
+import { mkdir } from 'fs/promises';
+import SQLite from 'better-sqlite3';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,7 +56,16 @@ try {
 	await db.schema.alterTable('Media')
 		.addColumn('releaseDate', 'text')
 		.execute();
-} catch (e) {
+} catch (_e) {
+	// nothing
+}
+
+// If Media does not have column: addedAt, add it
+try {
+	await db.schema.alterTable('Media')
+		.addColumn('addedAt', 'text')
+		.execute();
+} catch (_e) {
 	// nothing
 }
 

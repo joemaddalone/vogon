@@ -19,7 +19,7 @@ export const MediaGridControl = () => {
     toggleSortDirection,
   } = useMediaGrid();
   const t = useTranslations();
-  const handleSortFieldChange = (field: "title" | "releaseDate") => {
+  const handleSortFieldChange = (field: "title" | "releaseDate" | "addedAt") => {
     if (sortField === field) {
       toggleSortDirection();
     } else {
@@ -27,7 +27,7 @@ export const MediaGridControl = () => {
     }
   };
 
-  const getSortIcon = (field: "title" | "releaseDate") => {
+  const getSortIcon = (field: "title" | "releaseDate" | "addedAt") => {
     if (sortField !== field) {
       return <ArrowUpDown className="h-3 w-3 ml-1" />;
     }
@@ -67,6 +67,15 @@ export const MediaGridControl = () => {
               onClick={() => handleSortFieldChange("releaseDate")}
             >
               {t("library.releaseDate")} {getSortIcon("releaseDate")}
+            </Button>
+            <Button
+              data-testid="sort-added-at"
+              className="button-group-button"
+              size="sm"
+              variant={sortField === "addedAt" ? "default" : "outline"}
+              onClick={() => handleSortFieldChange("addedAt")}
+            >
+              {t("library.addedAt")} {getSortIcon("addedAt")}
             </Button>
           </ButtonGroup>
 

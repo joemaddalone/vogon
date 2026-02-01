@@ -71,7 +71,6 @@ export async function POST(request: Request) {
       thePosterDbPassword: thePosterDbPassword !== null ? thePosterDbPassword : existingConfig?.thePosterDbPassword,
     };
 
-    console.log(configToSave);
     const config = await upsertConfiguration(configToSave);
 
     return NextResponse.json({

@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { getClients } from "@/lib/client/getClients";
-import {
+import type {
   FanartMovieResponse,
   FanartShowResponse,
   ApiResponse,

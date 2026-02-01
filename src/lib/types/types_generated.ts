@@ -30,6 +30,7 @@ export type Media = {
     rating: number | null;
     ratingKey: string;
     releaseDate: string | null;
+    addedAt: string | null;
     summary: string | null;
     thumbUrl: string | null;
     title: string;

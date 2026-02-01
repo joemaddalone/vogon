@@ -8,13 +8,13 @@ import { useRouter } from "next/navigation";
 import { Film, TvIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: number }) => {
-	const [importing, setImporting] = useState<string | null>(null);
+export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: number; }) => {
+  const [importing, setImporting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-	const router = useRouter();
-	const t = useTranslations();
+  const router = useRouter();
+  const t = useTranslations();
 
-	const importLibrary = async (libraryKey: string, libraryType: string) => {
+  const importLibrary = async (libraryKey: string, libraryType: string) => {
     setImporting(libraryKey);
     setError(null);
 
@@ -47,7 +47,7 @@ export const LibraryImport = ({ library }: { library: NormalizedLibrary, index: 
       className="group relative overflow-hidden border-border border-b rounded-2xl bg-secondary p-8 transition-hover duration-100 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
     >
       <div className="absolute inset-0" />
-			{error && (
+      {error && (
         <div className="text-red-500">
           {t("import.importError")}
         </div>

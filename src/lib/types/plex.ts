@@ -9,7 +9,7 @@ export type PlexLibraryResponse = {
   updatedAt: number;
   createdAt: number;
   scannedAt: number;
-}
+};
 
 export type PlexMovieResponse = {
   ratingKey: string;
@@ -26,11 +26,11 @@ export type PlexMovieResponse = {
   art?: string;
   duration: number;
   originallyAvailableAt?: string;
-  addedAt: number;
-  updatedAt: number;
+  addedAt: string;
+  updatedAt: string;
   thumbUrl?: string;
   artUrl?: string;
-}
+};
 
 export type PlexShowResponse = {
   ratingKey: string;
@@ -47,11 +47,11 @@ export type PlexShowResponse = {
   art?: string;
   duration: number;
   originallyAvailableAt?: string;
-  addedAt: number;
-  updatedAt: number;
+  addedAt: string;
+  updatedAt: string;
   thumbUrl?: string;
   artUrl?: string;
-}
+};
 
 export type PlexSeasonResponse = {
   ratingKey: string;
@@ -76,7 +76,7 @@ export type PlexSeasonResponse = {
   artUrl?: string;
   parentThumb?: string;
   parentTheme?: string;
-}
+};
 
 export type PlexEpisodeResponse = {
   ratingKey: string;
@@ -108,13 +108,13 @@ export type PlexEpisodeResponse = {
   grandparentTheme?: string;
   duration?: number;
   originallyAvailableAt?: string;
-  addedAt?: number;
-  updatedAt?: number;
+  addedAt?: string;
+  updatedAt?: string;
   audienceRatingImage?: string;
   chapterSource?: string;
   thumbUrl?: string;
   artUrl?: string;
-}
+};
 
 export type PlexResponse<T> = {
   MediaContainer: {
@@ -126,31 +126,31 @@ export type PlexResponse<T> = {
     Directory?: T[];
     Metadata?: T[];
   };
-}
+};
 
 export type PlexLibrary = {
   key: string;
   title: string;
   type: string;
-}
+};
 
 export type PlexMovieMetadata = PlexMovieResponse & {
   Guid: Record<string, string>[],
   librarySectionTitle: string;
   librarySectionID: number;
   librarySectionKey: string;
-}
+};
 
 export type PlexShowMetadata = PlexShowResponse & {
   Guid: Record<string, string>[],
   librarySectionTitle: string;
   librarySectionID: number;
   librarySectionKey: string;
-}
+};
 
 export type PlexSeasonMetadata = PlexSeasonResponse & {
   Guid: Record<string, string>[],
   librarySectionTitle: string;
   librarySectionID: number;
   librarySectionKey: string;
-}
+};
