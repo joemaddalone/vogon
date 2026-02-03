@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/joemaddalone/vogon/compare/v1.10.0...v1.11.0) (2026-02-03)
+
+
+### Features
+
+* addedAt data capture and sort ([ae22ec0](https://github.com/joemaddalone/vogon/commit/ae22ec0a89efb07057f0667311e3510d1ed33ea6))
+
 # [1.10.0](https://github.com/joemaddalone/vogon/compare/v1.9.0...v1.10.0) (2026-01-01)
 
 
