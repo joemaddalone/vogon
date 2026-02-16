@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/joemaddalone/vogon/compare/v1.11.0...v1.12.0) (2026-02-16)
+
+
+### Features
+
+* default sorting direction for all fields ([ebea768](https://github.com/joemaddalone/vogon/commit/ebea7686caf8ee127c7de991fdacc66e11ba2b3c))
+
 # [1.11.0](https://github.com/joemaddalone/vogon/compare/v1.10.0...v1.11.0) (2026-02-03)
 
 
