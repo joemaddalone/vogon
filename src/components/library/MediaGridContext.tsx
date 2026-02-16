@@ -14,6 +14,12 @@ const removeArticle = (title: string) => {
 type SortField = "title" | "releaseDate" | "addedAt";
 type SortDirection = "asc" | "desc";
 
+const DEFAULT_SORT_DIRECTION: Record<SortField, SortDirection> = {
+  title: "asc",
+  releaseDate: "desc",
+  addedAt: "desc",
+};
+
 interface MediaGridState {
   items: Selectable<Media>[];
   itemsPerPage: number;
@@ -105,8 +111,8 @@ export function MediaGridProvider({
 
   const sortDirection = useMemo(() => {
     const dir = searchParams.get("dir") as SortDirection;
-    return dir === "desc" ? "desc" : "asc";
-  }, [searchParams]);
+    return dir || DEFAULT_SORT_DIRECTION[sortField];
+  }, [searchParams, sortField]);
 
   const view = useMemo(() => {
     const viewParam = searchParams.get("view");
@@ -163,15 +169,16 @@ export function MediaGridProvider({
     if (field === sortField) {
       return; // No change, do nothing
     }
-    updateUrl({ sort: field === "title" ? null : field, page: null }); // Reset to page 1 when sorting
+    updateUrl({ sort: field === "title" ? null : field, page: null, dir: null }); // Reset to page 1 and default dir when sorting
   }, [updateUrl, sortField]);
 
   const setSortDirection = useCallback((direction: SortDirection) => {
     if (direction === sortDirection) {
       return; // No change, do nothing
     }
-    updateUrl({ dir: direction === "asc" ? null : direction });
-  }, [updateUrl, sortDirection]);
+    const isDefault = direction === DEFAULT_SORT_DIRECTION[sortField];
+    updateUrl({ dir: isDefault ? null : direction });
+  }, [updateUrl, sortDirection, sortField]);
 
   const toggleSortDirection = useCallback(() => {
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");

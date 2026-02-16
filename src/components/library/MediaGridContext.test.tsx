@@ -85,6 +85,34 @@ describe("MediaGridContext", () => {
     expect(result.current.view).toBe("grid");
   });
 
+  it("should provide default sort direction based on field when not in URL", () => {
+    const mockUseSearchParams = vi.mocked(useSearchParams);
+
+    const wrapper = ({ children }: { children: ReactNode; }) => (
+      <MediaGridProvider initialItems={mockMedia}>
+        {children}
+      </MediaGridProvider>
+    );
+
+    // Mock search params with addedAt sort but no dir
+    mockUseSearchParams.mockReturnValue(new URLSearchParams("sort=addedAt") as unknown as ReadonlyURLSearchParams);
+    const { result: resultAddedAt, unmount: unmountAddedAt } = renderHook(() => useMediaGrid(), { wrapper });
+    expect(resultAddedAt.current.sortDirection).toBe("desc");
+    unmountAddedAt();
+
+    // Mock search params with releaseDate sort but no dir
+    mockUseSearchParams.mockReturnValue(new URLSearchParams("sort=releaseDate") as unknown as ReadonlyURLSearchParams);
+    const { result: resultReleaseDate, unmount: unmountReleaseDate } = renderHook(() => useMediaGrid(), { wrapper });
+    expect(resultReleaseDate.current.sortDirection).toBe("desc");
+    unmountReleaseDate();
+
+    // Mock search params with title sort but no dir
+    mockUseSearchParams.mockReturnValue(new URLSearchParams("sort=title") as unknown as ReadonlyURLSearchParams);
+    const { result: resultTitle, unmount: unmountTitle } = renderHook(() => useMediaGrid(), { wrapper });
+    expect(resultTitle.current.sortDirection).toBe("asc");
+    unmountTitle();
+  });
+
   it("should filter items based on search query", () => {
     const mockUseSearchParams = vi.mocked(useSearchParams);
     mockUseSearchParams.mockReturnValue(new URLSearchParams("q=Media 03") as unknown as ReadonlyURLSearchParams);
